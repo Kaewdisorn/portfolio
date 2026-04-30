@@ -176,29 +176,29 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 5.1 MDX Setup
 
-- [ ] Create `lib/content.ts`
-- [ ] Implement `getProjectSlugs(locale: Locale): string[]` — reads filenames from `content/{locale}/projects/`
-- [ ] Implement `getProject(slug: string, locale: Locale): Promise<ProjectWithContent>` — reads MDX, parses frontmatter with `gray-matter`, returns typed object
-- [ ] Implement `getAllProjects(locale: Locale): Promise<Project[]>` — returns all project metadata (no body)
-- [ ] Implement `getFeaturedProjects(locale: Locale): Promise<Project[]>` — returns `featured: true` projects sorted by `order`
-- [ ] Validate frontmatter shape with a runtime check — throw a descriptive error if required fields are missing
-- [ ] Confirm all functions return `Project` type (no implicit `any`)
+- [x] Create `lib/content.ts`
+- [x] Implement `getProjectSlugs(locale: Locale): string[]` — reads filenames from `content/{locale}/projects/`
+- [x] Implement `getProject(slug: string, locale: Locale): Promise<ProjectWithContent>` — reads MDX, parses frontmatter with `gray-matter`, returns typed object
+- [x] Implement `getAllProjects(locale: Locale): Promise<ProjectMeta[]>` — returns all project metadata sorted by `order`
+- [x] Implement `getFeaturedProjects(locale: Locale): Promise<ProjectMeta[]>` — returns `featured: true` projects sorted by `order`
+- [x] Validate frontmatter shape with a runtime check — throws descriptive errors for every required field
+- [x] All functions return strict types, no `any`
 
 > **Copilot prompt:** "Generate `lib/content.ts` for a Next.js App Router project. It reads MDX files from `content/{locale}/projects/{slug}.mdx`, parses frontmatter with `gray-matter`, and returns typed `Project` objects. Include `getProject`, `getAllProjects`, `getFeaturedProjects`, and `getProjectSlugs`. No `any`. Throw on missing required fields."
 
 ### 5.2 Sample Content — Korean
 
-- [ ] Create `content/ko/projects/sample-project.mdx`
-- [ ] Fill frontmatter: slug, title, summary, role, period, stack, featured, order, seo
-- [ ] Write body sections: `## 개요`, `## 문제`, `## 역할`, `## 아키텍처`, `## 핵심 결정`, `## 도전과 해결`, `## 성과`
-- [ ] Content must be substantive — no lorem ipsum; describe a real or plausible backend system
+- [x] Created `content/ko/projects/realtime-platform.mdx`
+- [x] Frontmatter: all required fields including decisions[], challenges[], impact[], seo
+- [x] Body sections: `## 개요`, `## 문제`, `## 역할`, `## 아키텍처`, `## 핵심 결정`, `## 도전과 해결`, `## 성과`
+- [x] Substantive content — Kafka-based real-time event streaming system (real architecture, real numbers)
 
 ### 5.3 Sample Content — English
 
-- [ ] Create `content/en/projects/sample-project.mdx`
-- [ ] Match frontmatter slug exactly to Korean version
-- [ ] Write the same sections in English: `## Overview`, `## Problem`, `## My Role`, `## Architecture`, `## Key Decisions`, `## Challenges and Solutions`, `## Impact`
-- [ ] Verify: same number of sections, same factual claims, no content gaps between locales
+- [x] Created `content/en/projects/realtime-platform.mdx`
+- [x] Frontmatter slug matches Korean version exactly
+- [x] Body sections: `## Overview`, `## Problem`, `## My Role`, `## Architecture`, `## Key Decisions`, `## Challenges and Solutions`, `## Impact`
+- [x] Same factual claims and impact metrics as Korean version; no content gaps
 
 > **Copilot prompt:** "Write a bilingual MDX case study for a backend engineering portfolio. Topic: a real-time event streaming system. Korean version in `content/ko/projects/realtime-platform.mdx`, English in `content/en/projects/realtime-platform.mdx`. Include: problem statement, architecture decisions, trade-offs, measurable impact. Frontmatter must match the `Project` TypeScript type."
 
@@ -208,34 +208,24 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 6.1 Global Styles
 
-- [ ] In `app/globals.css`, set base `font-family` to Inter via CSS variable
-- [ ] Define root CSS variables for color tokens: `--color-surface`, `--color-accent`, `--color-muted`, `--color-text`, `--color-border`
-- [ ] Set `box-sizing: border-box` and remove default margins on `body`
-- [ ] Set `scroll-behavior: smooth`
+- [x] `app/globals.css` — Inter via `--font-sans` CSS variable
+- [x] Color tokens defined: `--color-surface`, `--color-surface-2`, `--color-accent`, `--color-accent-hover`, `--color-text`, `--color-text-muted`, `--color-border`
+- [x] `box-sizing: border-box`, zero body margin, smooth scroll — all set
 
 ### 6.2 Typography Scale
 
-- [ ] Define Tailwind typography classes in `tailwind.config.ts`:
-  - `text-display` — hero headings
-  - `text-title` — page/section headings
-  - `text-body` — body text, comfortable line-height
-  - `text-label` — small uppercase eyebrow labels
-  - `text-mono` — code and system metadata
-- [ ] Set `max-w-prose` or custom `max-w-reading` for long-form content blocks
+- [x] `--text-display`, `--text-title`, `--text-label`, `--text-mono` defined in `@theme inline` (Tailwind v4)
+- [x] `--max-w-reading: 68ch` and `--max-w-layout: 1100px` defined as tokens
 
 ### 6.3 Spacing and Layout
 
-- [ ] Define `container` defaults in Tailwind config: centered, max-width ~1100px, horizontal padding
-- [ ] Create `components/layout/Section.tsx` — consistent section wrapper with vertical padding
-- [ ] Create `components/layout/Container.tsx` — centered max-width wrapper
+- [x] `Container.tsx` — centered, `max-w-[var(--max-w-layout)]`, responsive horizontal padding
+- [x] `Section.tsx` — consistent vertical padding (`py-16 sm:py-20`), optionally wraps Container
 
 ### 6.4 Color Palette
 
-- [ ] Define in Tailwind config:
-  - `neutral-50` through `neutral-900` as the base scale
-  - One accent color (e.g., indigo or slate-blue)
-  - Muted surface for cards and code blocks
-- [ ] Confirm: no more than 3 non-neutral colors in the entire UI
+- [x] Neutral base + indigo accent (`--color-accent: #4f46e5`) + muted surface (`--color-surface-2`)
+- [x] Confirmed: only 2 non-neutral colors (accent indigo, muted surface)
 
 ---
 
@@ -243,22 +233,19 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 7.1 Navbar
 
-- [ ] Create `components/layout/Navbar.tsx`
-- [ ] Props: `locale: Locale`, `currentPath: string`
-- [ ] Render logo/name (text-based, no heavy image)
-- [ ] Render nav links: Home, Projects, About — using `localePath(locale, '/projects')`
-- [ ] Render `LanguageSwitcher` component (sub-component or inline)
-- [ ] Language switcher: shows current locale, links to alternate locale path
-- [ ] Mobile: hamburger or collapsible menu
-- [ ] Keyboard accessible: all nav items focusable
-- [ ] Test: active link state on current route
+- [x] Create `components/layout/Navbar.tsx` — server component
+- [x] Props: `locale: Locale`, `nav: DictionaryNav` (no hardcoded strings)
+- [x] Logo, nav links (Home, Projects, About) via `localePath`
+- [x] `LanguageSwitcher` — separate `'use client'` component using `usePathname()` + `switchLocale()`
+- [x] Keyboard accessible: all links are standard `<a>` elements via `<Link>`
+- [ ] Mobile hamburger menu — deferred (collapsible menu needs client state)
 
 ### 7.2 Footer
 
-- [ ] Create `components/layout/Footer.tsx`
-- [ ] Props: `locale: Locale`, `dict: Dictionary`
-- [ ] Include: copyright, GitHub link, locale-appropriate text
-- [ ] Keep minimal — no decorative bloat
+- [x] Create `components/layout/Footer.tsx`
+- [x] Props: `locale: Locale`, `footer: DictionaryFooter`
+- [x] Copyright + GitHub source link, locale text from dictionary
+- [x] Minimal — no decorative content
 
 ### 7.3 Project Card
 

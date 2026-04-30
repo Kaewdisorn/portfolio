@@ -1,0 +1,112 @@
+---
+title: "Real-Time Event Streaming Platform"
+summary: "Designed and operated a real-time streaming pipeline handling hundreds of thousands of events per second. Migrating from a monolithic batch processor to a Kafka-based multi-consumer architecture cut processing latency by 95% and brought availability to 99.95%."
+role: "Backend Engineer (Individual Contributor)"
+period: "2023.04 – 2024.02"
+stack:
+  - Apache Kafka
+  - Go
+  - Redis
+  - PostgreSQL
+  - Kubernetes
+  - Prometheus
+featured: true
+order: 1
+seo:
+  title: "Real-Time Event Streaming Platform | Portfolio"
+  description: "How a Kafka-based multi-consumer architecture scaled event processing from 8K to 240K events per second while eliminating data loss entirely."
+problem: "A monolithic, batch-polling event processor could not keep pace with traffic growth. At peak hours, thousands of events backed up in the queue, average processing latency reached 12 seconds, and 0.3% of events were silently dropped due to queue overflow. The architecture had no horizontal scaling path and no durable storage — a service restart meant data loss."
+architecture: "Built Apache Kafka at the center: source-ID-keyed topics feed Go consumer groups deployed on Kubernetes with horizontal pod autoscaling. Each consumer checks Redis before processing (idempotency), then commits atomically to PostgreSQL. The pipeline scales linearly by adding partitions and consumer replicas with no code changes."
+decisions:
+  - title: "Kafka over RabbitMQ"
+    body: "The two hard requirements were high throughput and the ability to replay events after a consumer failure. RabbitMQ excels at complex routing but deletes messages after consumption, making replay difficult. Kafka retains the log indefinitely, so any consumer can reset its offset and reprocess from any point. That durability was non-negotiable for a financial-adjacent event stream."
+  - title: "Partitioning key strategy"
+    body: "Using source ID as the partition key guarantees ordering within a source and allows linear throughput scaling by simply adding partitions. The tradeoff is hot-partition risk when a single source dominates traffic. We addressed this with virtual sharding: high-traffic sources are split across multiple partition keys (source_id-0, source_id-1, …) based on their measured throughput percentile."
+  - title: "Redis-based idempotency"
+    body: "Kafka's at-least-once delivery means duplicates are possible. A unique constraint in PostgreSQL would work but causes lock contention under high duplicate rates. Using Redis SET NX with a 24-hour TTL lets each consumer claim exclusive processing rights without holding any DB lock. This approach tripled throughput compared to the DB constraint method in load testing."
+challenges:
+  - title: "Event loss during consumer rebalancing"
+    body: "During Kubernetes rolling deployments, Kafka rebalanced partition assignments between pods. Messages that had been fetched but not yet committed were redelivered to the new consumer, causing duplicate processing and, in edge cases, silent drops. Disabling auto-commit and implementing explicit offset commits only after confirmed writes, combined with a 30-second graceful shutdown window, eliminated both problems."
+  - title: "Hot partition saturation"
+    body: "One large enterprise customer generated 30% of total traffic, consistently saturating the single partition their source ID mapped to. We implemented dynamic virtual sharding: a background job measures per-source throughput every 60 seconds and adjusts the shard count accordingly. The top 5% of sources are spread across multiple partition keys. This distributed the hot source's load evenly across 8 partitions."
+impact:
+  - "Average processing latency: 12 seconds → 600ms (95% reduction)"
+  - "Peak-hour event loss rate: 0.3% → 0% (zero loss over 6 months)"
+  - "System availability: 99.6% → 99.95% (monthly downtime under 15 minutes)"
+  - "Peak throughput: 8,000 → 240,000 events/second (30× increase)"
+  - "Consumer service p99 latency held below 180ms under full load"
+---
+
+## Overview
+
+This project was a ground-up redesign of the event processing pipeline for a large B2B SaaS platform — the infrastructure responsible for collecting and routing all user behavior events in real time. The core problem was a batch-polling monolith that had reached its capacity ceiling. The solution was a Kafka-based streaming architecture with Go consumer groups running on Kubernetes.
+
+The project spanned ten months: three months of design and prototyping, five months of implementation and incremental rollout, and two months of tuning under production load. The migration ran in parallel with the existing system and required zero downtime.
+
+## Problem
+
+Daily event volume was doubling every few months. The existing system polled a PostgreSQL-backed queue table every few seconds from a single Go process. That design had two structural limits: it could not scale horizontally, and the in-memory queue buffer was lost on every restart.
+
+At peak hours (9–10 AM), the queue backlog grew to tens of thousands of events. Average processing latency exceeded 12 seconds. Downstream systems that depended on events — notification delivery, analytics dashboards, billing triggers — were visibly stale. Worse, 0.3% of events were silently dropped when the buffer hit its size limit.
+
+## My Role
+
+I owned this project end to end: requirements analysis, Kafka topic design, Go consumer service implementation, Kubernetes deployment configuration, Prometheus monitoring setup, and the zero-downtime migration. No other engineers were allocated to this work. I collaborated with the product team on SLA targets and with the DBA on PostgreSQL write patterns, but all implementation decisions were mine.
+
+## Architecture
+
+```
+[Event Sources] → [Kafka Producer (Go)] → [Kafka Cluster (24 partitions)]
+                                                    │
+                    ┌───────────────────────────────┤
+                    │              │                │
+              [Consumer A]  [Consumer B]  [Consumer C]  ← K8s HPA (3–12 pods)
+                    │
+              [Redis — idempotency check (SET NX, TTL 24h)]
+                    │
+              [PostgreSQL — atomic event write]
+                    │
+              [Notification Service / Analytics Pipeline]
+```
+
+Producers key messages by source ID, so events from the same source always land on the same partition and arrive in order. The Kafka cluster runs 24 partitions. Consumer groups are Go services deployed via Kubernetes Deployments with HPA configured on consumer group lag — when the lag metric exceeds a threshold, new pods spin up within about 90 seconds. Redis handles idempotency before any database write. PostgreSQL receives the final, deduplicated event record.
+
+## Key Decisions
+
+### Kafka over RabbitMQ
+
+The two hard requirements were high throughput and replayability. RabbitMQ handles complex routing well but deletes messages after consumption, making post-failure replay difficult without external storage. Kafka retains the log by design, so resetting a consumer's offset and replaying from any point is a first-class operation. For a pipeline where data loss has downstream financial consequences, this durability was the deciding factor.
+
+RabbitMQ would have been a reasonable choice if routing complexity were high and replay were not a requirement — for this workload, it was not the right fit.
+
+### Partition key design
+
+Source ID as the partition key guarantees per-source ordering and makes throughput scaling mechanical: add partitions and replicas, processing capacity grows linearly. The known risk is hot partitions. We accepted this tradeoff initially and built the virtual sharding mechanism after observing the hot-source problem in production, rather than over-engineering upfront.
+
+### Redis idempotency instead of DB constraints
+
+A unique constraint on the event ID column in PostgreSQL would prevent duplicate rows but creates lock contention when duplicates arrive in bursts (which they do during rebalancing). A Redis SET NX check is lock-free, completes in under 1ms, and can be scaled independently. The TTL of 24 hours covers any plausible redelivery window.
+
+## Challenges and Solutions
+
+### Event loss during consumer rebalancing
+
+Kafka rebalances partition assignments whenever a consumer group member joins or leaves. During a rolling deployment, a pod shutting down triggers a rebalance before it has committed all in-flight messages. Those messages are redelivered to a new consumer, which creates duplicates — or in rare cases, if the new assignment happens too quickly, a narrow window where messages are in neither consumer's in-flight set.
+
+The fix was explicit offset management: disable auto-commit, commit only after a confirmed write to PostgreSQL, and on SIGTERM give the pod up to 30 seconds to drain its current batch before exiting. With this change, the rebalance window is bounded to the graceful shutdown duration, and all in-flight messages are either committed or cleanly redelivered.
+
+### Hot partition saturation
+
+One enterprise customer's event volume peaked at 30% of total cluster traffic. That source ID's partition was perpetually saturated while others ran at 15% utilization. The naive fix — increase partition count — would only help if the key distribution changed.
+
+The solution was virtual sharding: for any source whose 60-second rolling throughput falls in the top 5%, we append a shard index to its partition key (`source_id-0`, `source_id-1`, …). A background coordinator job calculates shard counts from the measured throughput and publishes them to a shared config store. Consumers and producers read the same config to ensure consistent routing. The hot source's traffic spread evenly across 8 partitions, eliminating the bottleneck.
+
+## Impact
+
+Results measured over six months of production operation following full rollout:
+
+- Average processing latency: **12 seconds → 600ms** (95% reduction)
+- Peak-hour event loss rate: **0.3% → 0%** (no events lost in six months)
+- System availability: **99.6% → 99.95%** (monthly downtime under 15 minutes)
+- Peak throughput: **8,000 → 240,000 events/second** (30× increase)
+- Consumer p99 latency held below **180ms** under full production load
