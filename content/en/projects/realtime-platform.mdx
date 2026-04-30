@@ -2,7 +2,7 @@
 title: "Real-Time Mobility Tracking Platform"
 summary: "Designed and built a real-time fleet tracking platform at Fatos across mobile, web, backend, database, infrastructure, and CI/CD layers. Defined the end-to-end workflow for roughly 20-30 active devices reporting GPS every second, including offline backfill after reconnect, Protobuf/Gzip transport for GeoJSON-heavy payloads, live browser monitoring, and downloadable driving-data reports in Azure."
 role: "Senior Software Engineer"
-period: "2022.01 – 2025.10"
+period: "2024.01 – 2025.10"
 stack:
   - Flutter / Flutter Web
   - Dart Shelf
@@ -54,11 +54,26 @@ impact:
 
 ## Overview
 
-Built at Fatos across 2022–2025, this platform tracked vehicle fleets in real time. Roughly 20-30 active devices reported GPS every second from the field. The mobile app transmitted location data, buffered it locally during connectivity loss, and replayed missed points after reconnect. A browser dashboard showed live vehicle positions, and the backend also generated downloadable driving reports such as driving score, driving data, and sudden-stop history.
+Built at Fatos across 2024–2025, this platform tracked vehicle fleets in real time. Roughly 20-30 active devices reported GPS every second from the field. The mobile app transmitted location data, buffered it locally during connectivity loss, and replayed missed points after reconnect. A browser dashboard showed live vehicle positions, and the backend also generated downloadable driving reports such as driving score, driving data, and sudden-stop history.
 
 The engineering challenge was not any single hard problem. It was the combination: a constant ingest stream that could not afford to stall, delayed telemetry arriving after reconnect, live monitoring that needed to stay fresh, and GeoJSON-heavy payloads that were too expensive to move around as plain JSON. I owned the full platform within a three-person team: client code, API design, database schema, proxy rules, cache behavior, CI/CD, and cross-service contracts.
 
 Source code cannot be shared. This case study focuses on architecture and design decisions.
+
+### At a Glance
+
+- Scale: roughly 20-30 active devices sending GPS every second
+- Ownership: mobile client flow, backend services, database design, infrastructure, and CI/CD
+- Key constraints: offline replay after reconnect, live monitoring freshness, GeoJSON-heavy payloads, and mixed traffic profiles
+- Strongest outcome: Protobuf plus Gzip reduced network transfer volume by ~60%
+
+### Product Surface
+
+- Live fleet monitoring in the browser
+- Offline GPS buffering and replay after reconnect
+- ETA-specific service path
+- Cache-aware map serving through HAProxy and Varnish
+- Downloadable driving reports for score, driving data, and sudden-stop history
 
 ## Problem
 
@@ -165,7 +180,7 @@ This is the kind of work that does not fit neatly into a task list. It is the ju
 
 ## Impact
 
-Operating the platform at Fatos from 2022 to 2025:
+Operating the platform at Fatos from 2024 to 2025:
 
 - Sustained a realtime GPS pipeline for roughly 20-30 concurrently active devices reporting every second
 - Established a clean flow from mobile ingest to live browser monitoring, with Redis as the explicit handoff layer between them

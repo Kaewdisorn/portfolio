@@ -88,10 +88,10 @@ export default async function ProjectDetailPage(
               <span aria-hidden="true">·</span>
               <span>{project.period}</span>
             </div>
-            <h1 className="mb-4 text-3xl font-semibold leading-tight text-[var(--color-text)] sm:text-4xl">
+            <h1 className="mb-4 text-3xl font-semibold leading-tight text-[var(--color-text)] [overflow-wrap:anywhere] sm:text-4xl">
               {project.title}
             </h1>
-            <p className="mb-5 max-w-[52ch] text-base text-[var(--color-text-muted)] leading-relaxed">
+            <p className="mb-5 max-w-[52ch] text-base text-[var(--color-text-muted)] leading-relaxed [overflow-wrap:anywhere]">
               {project.summary}
             </p>
             {project.stack.length > 0 && (

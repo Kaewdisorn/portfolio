@@ -14,7 +14,7 @@ const components = {
     return (
       <h2
         id={id}
-        className="mt-10 mb-4 text-xl font-semibold text-[var(--color-text)] scroll-mt-20"
+        className="mt-10 mb-4 text-xl font-semibold text-[var(--color-text)] scroll-mt-20 [overflow-wrap:anywhere]"
         {...props}
       />
     );
@@ -30,31 +30,31 @@ const components = {
     return (
       <h3
         id={id}
-        className="mt-8 mb-3 text-base font-semibold text-[var(--color-text)] scroll-mt-20"
+        className="mt-8 mb-3 text-base font-semibold text-[var(--color-text)] scroll-mt-20 [overflow-wrap:anywhere]"
         {...props}
       />
     );
   },
   p: (props: ComponentPropsWithoutRef<"p">) => (
     <p
-      className="mb-4 text-sm leading-relaxed text-[var(--color-text-muted)]"
+      className="mb-4 text-sm leading-relaxed text-[var(--color-text-muted)] [overflow-wrap:anywhere]"
       {...props}
     />
   ),
   ul: (props: ComponentPropsWithoutRef<"ul">) => (
     <ul
-      className="mb-4 list-disc pl-5 space-y-1.5 text-sm text-[var(--color-text-muted)] leading-relaxed"
+      className="mb-4 list-disc pl-5 space-y-1.5 text-sm text-[var(--color-text-muted)] leading-relaxed [overflow-wrap:anywhere]"
       {...props}
     />
   ),
   ol: (props: ComponentPropsWithoutRef<"ol">) => (
     <ol
-      className="mb-4 list-decimal pl-5 space-y-1.5 text-sm text-[var(--color-text-muted)] leading-relaxed"
+      className="mb-4 list-decimal pl-5 space-y-1.5 text-sm text-[var(--color-text-muted)] leading-relaxed [overflow-wrap:anywhere]"
       {...props}
     />
   ),
   li: (props: ComponentPropsWithoutRef<"li">) => (
-    <li className="pl-1" {...props} />
+    <li className="pl-1 [overflow-wrap:anywhere]" {...props} />
   ),
   code: (props: ComponentPropsWithoutRef<"code">) => (
     <code
@@ -103,7 +103,7 @@ interface MdxContentProps {
 
 export default function MdxContent({ source }: MdxContentProps) {
   return (
-    <div className="w-full max-w-[var(--max-w-reading)] overflow-x-hidden">
+    <div className="w-full max-w-[var(--max-w-reading)] overflow-x-hidden [overflow-wrap:anywhere]">
       <MDXRemote source={source} components={components} />
     </div>
   );
