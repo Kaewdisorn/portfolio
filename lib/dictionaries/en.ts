@@ -27,7 +27,8 @@ const en: Dictionary = {
       "Production projects delivered in company environments, focused on system design, operational constraints, and measurable impact.",
     eyebrow: "Projects & Case studies",
     readMore: "View project details",
-    productionLabel: "Production",
+    companyLabel: "Company",
+    personalLabel: "Personal",
   },
   project: {
     overviewHeading: "Overview",

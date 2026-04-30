@@ -30,7 +30,8 @@ export interface DictionaryProjects {
   pageDescription: string;
   eyebrow: string;
   readMore: string;
-  productionLabel: string;
+  companyLabel: string;
+  personalLabel: string;
 }
 
 export interface DictionaryProject {

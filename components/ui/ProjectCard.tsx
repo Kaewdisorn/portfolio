@@ -8,7 +8,8 @@ interface ProjectCardProps {
   locale: Locale;
   headingLevel?: 2 | 3;
   readMoreLabel?: string;
-  productionLabel?: string;
+  companyLabel?: string;
+  personalLabel?: string;
 }
 
 export default function ProjectCard({
@@ -16,7 +17,8 @@ export default function ProjectCard({
   locale,
   headingLevel = 3,
   readMoreLabel,
-  productionLabel,
+  companyLabel,
+  personalLabel,
 }: ProjectCardProps) {
   const href = localePath(locale, `/projects/${project.slug}`);
   const Heading = `h${headingLevel}` as "h2" | "h3";
@@ -42,9 +44,14 @@ export default function ProjectCard({
 
       {/* Label row */}
       <div className="relative mb-5 flex flex-wrap items-center gap-2.5">
-        {productionLabel && (
-          <span className="rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
-            {productionLabel}
+        {project.type === "company" && companyLabel && (
+          <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-400">
+            {companyLabel}
+          </span>
+        )}
+        {project.type === "personal" && personalLabel && (
+          <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-400">
+            {personalLabel}
           </span>
         )}
         <span className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text)]/88">

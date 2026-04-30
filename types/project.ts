@@ -15,6 +15,8 @@ export interface Challenge {
   body: string;
 }
 
+export type ProjectType = "company" | "personal";
+
 /** Metadata-only shape — used for project listing pages. */
 export interface ProjectMeta {
   slug: string;
@@ -24,6 +26,7 @@ export interface ProjectMeta {
   role: string;
   period: string;
   stack: string[];
+  type: ProjectType;
   featured: boolean;
   order: number;
   seo: ProjectSeo;

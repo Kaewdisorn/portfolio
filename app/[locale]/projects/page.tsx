@@ -82,7 +82,8 @@ export default async function ProjectsPage(
                     locale={locale}
                     headingLevel={2}
                     readMoreLabel={dict.projects.readMore}
-                    productionLabel={dict.projects.productionLabel}
+                    companyLabel={dict.projects.companyLabel}
+                    personalLabel={dict.projects.personalLabel}
                   />
                 </li>
               ))}
