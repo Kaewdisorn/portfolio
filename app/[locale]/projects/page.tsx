@@ -57,7 +57,7 @@ export default async function ProjectsPage(
             <ul className="grid gap-4 sm:grid-cols-2" role="list">
               {projects.map((project) => (
                 <li key={project.slug}>
-                  <ProjectCard project={project} locale={locale} />
+                  <ProjectCard project={project} locale={locale} headingLevel={2} />
                 </li>
               ))}
             </ul>

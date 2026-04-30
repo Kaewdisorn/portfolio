@@ -1,5 +1,6 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
-import type { ComponentPropsWithoutRef } from "react";
+import { isValidElement, type ComponentPropsWithoutRef, type ReactElement } from "react";
+import MermaidChart from "@/components/ui/MermaidChart";
 
 const components = {
   h2: (props: ComponentPropsWithoutRef<"h2">) => {
@@ -61,12 +62,26 @@ const components = {
       {...props}
     />
   ),
-  pre: (props: ComponentPropsWithoutRef<"pre">) => (
-    <pre
-      className="mb-4 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 text-xs font-mono leading-relaxed text-[var(--color-text)]"
-      {...props}
-    />
-  ),
+  pre: (props: ComponentPropsWithoutRef<"pre">) => {
+    // Detect mermaid fenced code block and render as diagram
+    const child = props.children;
+    if (isValidElement(child)) {
+      const codeEl = child as ReactElement<{ className?: string; children?: string }>;
+      if (
+        typeof codeEl.props?.className === "string" &&
+        codeEl.props.className.includes("language-mermaid") &&
+        typeof codeEl.props?.children === "string"
+      ) {
+        return <MermaidChart chart={codeEl.props.children.trim()} />;
+      }
+    }
+    return (
+      <pre
+        className="mb-4 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 text-xs font-mono leading-relaxed text-[var(--color-text)]"
+        {...props}
+      />
+    );
+  },
   a: (props: ComponentPropsWithoutRef<"a">) => {
     const isExternal =
       typeof props.href === "string" && props.href.startsWith("http");

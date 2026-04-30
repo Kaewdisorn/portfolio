@@ -55,18 +55,14 @@ I owned this project end to end: requirements analysis, Kafka topic design, Go c
 
 ## Architecture
 
-```
-[Event Sources] → [Kafka Producer (Go)] → [Kafka Cluster (24 partitions)]
-                                                    │
-                    ┌───────────────────────────────┤
-                    │              │                │
-              [Consumer A]  [Consumer B]  [Consumer C]  ← K8s HPA (3–12 pods)
-                    │
-              [Redis — idempotency check (SET NX, TTL 24h)]
-                    │
-              [PostgreSQL — atomic event write]
-                    │
-              [Notification Service / Analytics Pipeline]
+```mermaid
+flowchart TD
+    SRC["Event Sources\nIoT / Web"] -->|"Partition key: source ID"| KP["Kafka Producer\n(Go)"]
+    KP --> KC["Kafka Cluster\n24 partitions"]
+    KC --> CG["Go Consumer Group\nK8s HPA · 3-12 pods"]
+    CG --> RD["Redis\nIdempotency check SET NX"]
+    RD --> PG["PostgreSQL\nAtomic event write"]
+    PG --> DS["Notification Service\nAnalytics Pipeline"]
 ```
 
 Producers key messages by source ID, so events from the same source always land on the same partition and arrive in order. The Kafka cluster runs 24 partitions. Consumer groups are Go services deployed via Kubernetes Deployments with HPA configured on consumer group lag — when the lag metric exceeds a threshold, new pods spin up within about 90 seconds. Redis handles idempotency before any database write. PostgreSQL receives the final, deduplicated event record.

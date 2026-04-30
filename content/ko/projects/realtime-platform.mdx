@@ -53,18 +53,14 @@ impact:
 
 ## 아키텍처
 
-```
-[이벤트 소스들] → [Kafka Producer (Go)] → [Kafka Cluster]
-                                              │
-                    ┌─────────────────────────┤
-                    │         │               │
-               [Consumer A] [Consumer B] [Consumer C]  ← Kubernetes Deployment (HPA)
-                    │
-              [Redis (멱등성 체크)]
-                    │
-              [PostgreSQL (이벤트 저장)]
-                    │
-              [Notification Service / Analytics]
+```mermaid
+flowchart TD
+    SRC["이벤트 소스\nIoT / Web"] -->|"파티션 키: 소스 ID"| KP["Kafka Producer\n(Go)"]
+    KP --> KC["Kafka Cluster\n24 파티션"]
+    KC --> CG["Go 컨슈머 그룹\nK8s HPA · 3~12 pods"]
+    CG --> RD["Redis\n멱등성 체크 SET NX"]
+    RD --> PG["PostgreSQL\n이벤트 저장"]
+    PG --> DS["알림 서비스\n분석 파이프라인"]
 ```
 
 프로듀서는 이벤트 소스 ID를 파티셔닝 키로 설정하여 Kafka에 발행합니다. Kafka 클러스터는 24개 파티션으로 구성하고, Go로 작성한 컨슈머 그룹을 Kubernetes HPA를 통해 트래픽에 따라 3~12개 파드로 자동 확장합니다. 각 컨슈머는 이벤트를 처리하기 전 Redis에 이벤트 ID를 확인해 중복을 걸러내고, 처리 완료 후 PostgreSQL에 원자적으로 기록합니다.

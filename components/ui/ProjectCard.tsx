@@ -6,10 +6,12 @@ import { localePath } from "@/lib/locale";
 interface ProjectCardProps {
   project: ProjectMeta;
   locale: Locale;
+  headingLevel?: 2 | 3;
 }
 
-export default function ProjectCard({ project, locale }: ProjectCardProps) {
+export default function ProjectCard({ project, locale, headingLevel = 3 }: ProjectCardProps) {
   const href = localePath(locale, `/projects/${project.slug}`);
+  const Heading = `h${headingLevel}` as "h2" | "h3";
 
   return (
     <Link
@@ -26,9 +28,9 @@ export default function ProjectCard({ project, locale }: ProjectCardProps) {
         </span>
       </div>
 
-      <h3 className="mb-2 text-lg font-semibold text-[var(--color-text)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">
+      <Heading className="mb-2 text-lg font-semibold text-[var(--color-text)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">
         {project.title}
-      </h3>
+      </Heading>
 
       <p className="mb-4 text-sm text-[var(--color-text-muted)] leading-relaxed">
         {project.summary}

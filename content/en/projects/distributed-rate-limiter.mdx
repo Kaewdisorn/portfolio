@@ -55,6 +55,20 @@ Tech lead responsible for architecture design and core Go implementation. Worked
 
 ## Architecture
 
+```mermaid
+flowchart LR
+    subgraph R1["Region (us-east)"]
+        GW1["API Gateway"] --> SC1["Go Sidecar"]
+        SC1 <-->|"Lua SET NX"| RC1["Redis Cluster"]
+    end
+    subgraph R2["Region (eu-west)"]
+        GW2["API Gateway"] --> SC2["Go Sidecar"]
+        SC2 <-->|"Lua SET NX"| RC2["Redis Cluster"]
+    end
+    SC1 <-->|"gRPC sync 5s"| GA["Global Aggregator"]
+    SC2 <-->|"gRPC sync 5s"| GA
+```
+
 The system is a two-tier design with regional local decisions as the default path.
 
 **Local tier**: Each region has an independent Redis Cluster. A Go sidecar proxy runs alongside each service pod and intercepts all inbound requests. Token bucket operations execute atomically via a Lua script on Redis. This path adds under 1ms to request latency.
