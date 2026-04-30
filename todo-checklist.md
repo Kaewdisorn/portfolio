@@ -124,12 +124,14 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] Add Inter font via `next/font/google`
 - [x] Import `globals.css`
 
+> Note: `lang` attribute moved to `LangSetter` client component in locale layout (removed `headers()` from root layout to enable static generation).
+
 ### 3.3 Locale Layout
 
 - [x] Create `app/[locale]/layout.tsx` — receives `params: { locale: Locale }`
 - [x] Validate `locale` param against the `locales` array; call `notFound()` for invalid locales
-- [ ] Render `<Navbar>` and `<Footer>` inside this layout — deferred to step 7
-- [ ] Pass `locale` as a prop to `Navbar` for language switcher — deferred to step 7
+- [x] Render `<Navbar>` and `<Footer>` inside this layout
+- [x] Pass `locale` as a prop to `Navbar` for language switcher
 
 ### 3.4 Type Definitions
 
@@ -158,17 +160,17 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] Define a shared `Dictionary` interface in `types/locale.ts`
 - [x] Include keys for: nav labels, page titles, section headings, CTA labels, footer text, 404 message
 - [x] Create `lib/getDictionary.ts` — returns the correct dictionary object given a `Locale`
-- [ ] Use this dictionary everywhere — no hardcoded strings in components (enforced as pages are built)
+- [x] Use this dictionary everywhere — no hardcoded strings in components (enforced as pages are built)
 
 > **Copilot prompt:** "Generate a type-safe dictionary system for a Next.js i18n app with locales `ko` and `en`. Create a `Dictionary` interface, two locale files, and a `getDictionary(locale)` function. All keys must be present in both files."
 
 ### 4.3 ⚠️ Language Switcher Logic
 
-- [ ] In `Navbar`, receive `locale` and `currentPathname` as props — deferred to step 7
+- [x] In `Navbar`, receive `locale` and `currentPathname` as props
 - [x] `switchLocale()` from `lib/locale.ts` implemented and ready for Navbar
-- [ ] Render a `<Link>` to the alternate URL — deferred to step 7
-- [ ] Test: switching language from `/ko/projects/foo` goes to `/en/projects/foo` — deferred to step 7
-- [ ] Test: switching from `/ko` goes to `/en` — deferred to step 7
+- [x] Render a `<Link>` to the alternate URL
+- [ ] Test: switching language from `/ko/projects/foo` goes to `/en/projects/foo`
+- [ ] Test: switching from `/ko` goes to `/en`
 
 ---
 
@@ -238,7 +240,7 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] Logo, nav links (Home, Projects, About) via `localePath`
 - [x] `LanguageSwitcher` — separate `'use client'` component using `usePathname()` + `switchLocale()`
 - [x] Keyboard accessible: all links are standard `<a>` elements via `<Link>`
-- [ ] Mobile hamburger menu — deferred (collapsible menu needs client state)
+- [x] Mobile hamburger menu — `MobileMenu.tsx` client component with open/close state, closes on route change
 
 ### 7.2 Footer
 
@@ -310,10 +312,10 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 8.4 About Page
 
-- [ ] Create `app/[locale]/about/page.tsx`
-- [ ] Content: background, engineering focus areas, what you value in system design
-- [ ] Keep it short — no full resume dump
-- [ ] Store content in `lib/dictionaries` or a dedicated content file, not hardcoded in component
+- [x] Create `app/[locale]/about/page.tsx`
+- [x] Content: background, engineering focus areas, what you value in system design
+- [x] Keep it short — no full resume dump
+- [x] Store content in `lib/dictionaries` — not hardcoded in component
 
 ---
 
@@ -345,7 +347,7 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 11.1 Metadata
 
-- [ ] Implement `generateMetadata` in `app/[locale]/layout.tsx` — base title template
+- [x] Implement `generateMetadata` in `app/[locale]/layout.tsx` — base title template
 - [x] Implement `generateMetadata` in `app/[locale]/page.tsx` — home page title/description per locale
 - [x] Implement `generateMetadata` in `app/[locale]/projects/page.tsx`
 - [x] Implement `generateMetadata` in `app/[locale]/projects/[slug]/page.tsx` — use `project.seo`
@@ -361,9 +363,9 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 11.3 Static Generation
 
-- [ ] Confirm all content pages (`[locale]/page.tsx`, `[locale]/projects/page.tsx`, `[locale]/projects/[slug]/page.tsx`) have no `dynamic = 'force-dynamic'`
-- [ ] Run `npm run build` — confirm all pages are statically generated (shown as `○` in build output)
-- [ ] Confirm no `console.error` during build
+- [x] Confirm all content pages have no `dynamic = 'force-dynamic'`
+- [x] Run `npm run build` — all 12 pages statically generated (`○`/`●` SSG) after adding `generateStaticParams` to locale layout and removing `headers()` from root layout
+- [x] Confirm no `console.error` during build
 
 ### 11.4 Lighthouse
 

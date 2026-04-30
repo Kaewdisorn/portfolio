@@ -40,6 +40,11 @@ export interface DictionaryProject {
 export interface DictionaryAbout {
   pageTitle: string;
   pageDescription: string;
+  intro: string;
+  focusTitle: string;
+  focus: string[];
+  valuesTitle: string;
+  values: string[];
 }
 
 export interface DictionaryFooter {

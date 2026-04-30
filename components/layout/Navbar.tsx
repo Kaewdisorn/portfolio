@@ -4,6 +4,7 @@ import type { Locale } from "@/types/locale";
 import type { DictionaryNav } from "@/types/locale";
 import Container from "./Container";
 import LanguageSwitcher from "./LanguageSwitcher";
+import MobileMenu from "./MobileMenu";
 
 interface NavbarProps {
   locale: Locale;
@@ -32,8 +33,8 @@ export default function Navbar({ locale, nav }: NavbarProps) {
             Portfolio
           </Link>
 
-          {/* Page links */}
-          <ul className="flex items-center gap-1" role="list">
+          {/* Desktop page links */}
+          <ul className="hidden sm:flex items-center gap-1" role="list">
             {links.map(({ href, label }) => (
               <li key={href}>
                 <Link
@@ -46,10 +47,16 @@ export default function Navbar({ locale, nav }: NavbarProps) {
             ))}
           </ul>
 
-          {/* Language switcher */}
-          <LanguageSwitcher locale={locale} />
+          <div className="flex items-center gap-2">
+            {/* Language switcher */}
+            <LanguageSwitcher locale={locale} />
+
+            {/* Mobile menu button + dropdown */}
+            <MobileMenu links={links} />
+          </div>
         </nav>
       </Container>
     </header>
   );
 }
+

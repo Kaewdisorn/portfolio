@@ -35,6 +35,23 @@ const en: Dictionary = {
   about: {
     pageTitle: "About",
     pageDescription: "Engineering philosophy and technical interests",
+    intro:
+      "I'm a backend engineer with 5+ years of experience building real-time systems, distributed infrastructure, and performance-critical services. My focus is on systems that are not just correct, but operationally trustworthy at scale.",
+    focusTitle: "Technical Focus",
+    focus: [
+      "Real-time data pipelines and event streaming",
+      "High-availability distributed system design",
+      "Database performance optimization and query tuning",
+      "Kubernetes-based container infrastructure",
+      "Observability design and SLO engineering",
+    ],
+    valuesTitle: "Engineering Philosophy",
+    values: [
+      "Simplicity first: complexity is only justified when it solves a real problem.",
+      "Measurement-driven decisions: performance improvements start with profiling, not guesses.",
+      "Design for operations: systems are built to be run, not just deployed.",
+      "Explicit trade-offs: every design choice has alternatives that were considered and rejected.",
+    ],
   },
   footer: {
     copyright: "© 2025. All rights reserved.",
