@@ -1,0 +1,150 @@
+Name : 카디슨
+
+Primary Role:
+Product-focused Engineer specializing in real-time systems, distributed architecture, and infrastructure performance
+
+Location:
+Suwon, Gyeonggi-do, South Korea
+
+Work Authorization:
+D-10 (eligible to change to F-2 or E-7)
+
+---
+
+Professional Summary
+
+Product-focused engineer with over 5 years of hands-on development experience, specializing in building and operating real-time, high-throughput systems.
+
+Designed and optimized distributed architectures processing real-time GPS data, reducing network transfer by approximately 60% and improving deployment speed by about 70% in production environments.
+
+Experienced in owning backend, infrastructure, and data systems end-to-end, with a strong focus on performance, scalability, reliability, and product impact.
+
+---
+
+Core Strengths
+
+- Real-time data systems using WebSocket streaming and event-driven architectures
+- Distributed system design and microservices-based architecture
+- Multi-cloud and on-prem infrastructure operations (GCP, Azure)
+- CI/CD automation and containerized deployments (Docker, Jenkins)
+- Performance optimization across network transfer, APIs, and geospatial data processing
+- End-to-end ownership in small, high-impact engineering teams
+
+---
+
+Key Tech Stack
+
+Backend:
+- Node.js (NestJS, Express), FastAPI, Dart (Shelf)
+
+Frontend / Mobile:
+- Flutter, Swift, Kotlin, React.js
+
+Data:
+- PostgreSQL (PostGIS), Redis, MySQL, SQLite
+
+Infrastructure:
+- Docker, Docker Swarm, Jenkins, GitHub Actions
+- Nginx, HAProxy, Varnish
+
+Communication:
+- REST, WebSocket, gRPC
+
+Platform:
+- GCP, Azure, On-premise, Vercel, Render
+
+Architecture:
+- Microservices, Distributed Systems, DDD
+
+AI / LLM:
+- OpenAI API, LLM integration
+
+---
+
+Career Summary
+
+Fatos | Senior Full-stack Engineer | Seoul, South Korea  
+2022.01 - 2025.10
+
+Led backend, infrastructure, and database development across B2B mobility, navigation, and operational platforms, contributing to real-time control systems and data-driven product features.
+
+Key Contributions:
+- Designed and operated a WebSocket-based system to handle high-frequency GPS streaming with low latency
+- Optimized geospatial data processing using PostgreSQL (PostGIS) and Redis for improved performance
+- Reduced network transfer volume by ~60% using Protobuf serialization and Gzip compression
+- Improved system availability under traffic growth using HAProxy load balancing and Varnish caching
+- Built health check and alerting systems to reduce incident detection and response time
+- Designed and operated infrastructure across GCP, Azure, and on-premise environments
+- Implemented CI/CD pipelines with Docker and Jenkins, reducing deployment time by ~70%
+- Built FastAPI-based ETA and driving behavior analysis (e.g., braking, speed patterns)
+- Improved large GeoJSON response performance by resolving serialization and compression bottlenecks
+- Replaced hardcoded frontend logic with API-driven dynamic messaging for better product flexibility
+- Owned backend, infrastructure, and database design for a multi-tenant B2B system within a small team
+
+Selected Projects:
+- Real-time mobility platform (control, navigation, driving analytics)
+- Map-based matching and navigation system
+- Corporate taxi ERP platform
+
+---
+
+Mathpresso (QANDA) | Contract | Seoul, South Korea  
+2020.07 - 2021.12
+
+Supported global service operations and improved product quality through user issue analysis and data-driven insights.
+
+- Investigated and reproduced issues across multiple regional environments
+- Analyzed user behavior in the Thailand market to improve DAU/MAU
+- Translated operational insights into technical requirements for engineering teams
+
+---
+
+Leonics | Full-stack Engineer | Bangkok, Thailand  
+2016.08 - 2017.10
+
+Built and operated a solar monitoring system, focusing on data collection, system reliability, and deployment efficiency.
+
+- Developed LabVIEW-based UI for equipment configuration and monitoring
+- Built data ingestion pipelines from hardware to MySQL-backed systems
+- Developed web-based monitoring interfaces
+- Improved deployment efficiency using Raspberry Pi-based systems
+
+---
+
+Education
+
+Dongguk University  
+Global MBA (2019.09 - 2021.08)
+
+Bangkok University  
+B.S. in Computer Science (2012.06 - 2016.05)
+
+---
+
+Languages
+
+- Thai: Native
+- Korean: Business proficiency
+- English: Business proficiency
+
+---
+
+Portfolio Themes
+
+- Real-time data streaming and low-latency systems
+- Distributed architecture and scalability
+- Mobility and geospatial platforms
+- Multi-tenant B2B systems
+- Infrastructure reliability and traffic handling
+- CI/CD automation and deployment stability
+- Performance optimization with measurable impact
+
+---
+
+Key Impact Highlights
+
+- Reduced network transfer by ~60% through efficient serialization and compression
+- Reduced deployment time by ~70% via CI/CD and containerized workflows
+- Owned backend, infrastructure, and database layers end-to-end
+- Operated systems across GCP, Azure, and on-premise environments
+- Hands-on experience with WebSocket, PostGIS, Redis, HAProxy, Varnish, and Jenkins
