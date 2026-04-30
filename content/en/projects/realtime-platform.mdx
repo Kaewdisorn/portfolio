@@ -4,12 +4,10 @@ summary: "Designed and built a real-time fleet tracking platform at Fatos across
 role: "Senior Software Engineer"
 period: "2022.01 – 2025.10"
 stack:
-  - Flutter (GetX)
-  - Flutter Web (GetX)
+  - Flutter
   - Dart Shelf
-  - Dart Workers
   - FastAPI
-  - Node.js (Express)
+  - Node.js (Express, NestJs)
   - WebSocket
   - Redis
   - PostgreSQL
@@ -49,34 +47,34 @@ impact:
 
 ## Overview
 
-This case study covers a real-time mobility tracking platform built at Fatos. The source code cannot be shared, so the focus here is on architecture, workflow design, and operational ownership rather than implementation details.
+Built at Fatos across 2022–2025, this platform tracked vehicle fleets in real time. A Flutter mobile app reported GPS every second. A browser-based dashboard showed live vehicle positions. Multiple backend services, a Redis pipeline, PostgreSQL, and a proxy/cache stack wired it all together in Azure.
 
-The system was broader than a backend service. It included a Flutter mobile client sending GPS updates every second, a Flutter web monitoring interface receiving live vehicle movement, multiple backend services for ingest, ETA, and map workloads, a Redis-backed realtime pipeline, PostgreSQL persistence, and Azure-based delivery infrastructure. The project was delivered by a three-person team: me, one frontend engineer, and the CTO. My contribution spanned the cross-stack workflow and most of the platform architecture and implementation.
+The engineering challenge was not any single hard problem — it was the combination. Ingest that could not afford to be slow. A live feed and a durable history that needed to coexist without coupling. Three fundamentally different traffic profiles — streaming writes, CPU-bound computation, cacheable tile requests — sharing one infrastructure. I owned the full platform within a three-person team: client code, API design, database schema, proxy rules, cache behavior, CI/CD.
+
+Source code cannot be shared. This case study focuses on architecture and design decisions.
 
 ## Problem
 
-The core problem was coordinating three different needs in one product flow.
+**GPS arrives every second and cannot wait.** Mobile devices sent location updates at a fixed 1-second interval. At that frequency, any latency introduced inside the websocket handler compounds immediately across every active device. The ingest server had to receive and hand off data — not process, persist, or fan out inline.
 
-**High-frequency ingest.** Mobile devices sent GPS updates every second. That meant the websocket entry server needed to accept and hand off data quickly instead of doing heavy processing inline.
+**The same data needs to go two places simultaneously.** Every GPS frame had to end up in PostgreSQL as authoritative history and reach a live browser dashboard as fast as possible. The obvious approach — write to the database, then push to monitoring — directly ties dashboard latency to database write latency. That was not acceptable.
 
-**Dual output paths.** The same GPS stream needed to become durable history in PostgreSQL and live movement in the monitoring web app.
-
-**Uneven request profiles.** Realtime API traffic, ETA logic, and map requests had different behavior patterns, so they should not all be treated identically at either the application or proxy layer.
-
-## Constraints
-
-The system also had practical delivery constraints.
-
-- The realtime ingest path had to stay simple enough to absorb continuous mobile updates without coupling directly to database write latency.
-- Map requests were cacheable and operationally different from websocket and business-logic traffic, so routing needed to reflect that difference.
-- The project was operated in Azure, which meant proxy, cache, and deployment behavior had to be repeatable rather than manually coordinated.
-- Because I was working across frontend, backend, database, and infrastructure, interface boundaries had to stay explicit enough to be maintained by one engineer across multiple stacks.
+**Three traffic types, one infrastructure.** Realtime API, ETA calculations, and map tile requests behaved so differently that treating them identically at the application or proxy layer would cause them to interfere with each other. Map tiles are cacheable and large. Websocket frames are tiny and continuous. ETA logic is CPU-bound. Mixing them without routing discipline means a slow day on one path becomes a slow day everywhere.
 
 ## My Role
 
-This was not a backend-only role. Within a three-person team made up of me, one frontend engineer, and the CTO, I planned and developed the API services, designed the PostgreSQL schema, set up and configured Nginx, HAProxy, Varnish, Jenkins, and Azure infrastructure, and handled the delivery process end to end. I also implemented the websocket communication path in the Flutter mobile app and the GPS-data receiving path in the Flutter web monitoring app.
+Within a three-person team — me, one frontend engineer, the CTO — I designed and built:
 
-In practical terms, I owned the system as a product workflow rather than as a single service: client communication, backend boundaries, persistence design, traffic routing, cache behavior, and deployment automation.
+- The main Dart Shelf API server and its Redis ingest pipeline
+- Dart workers for queue consumption, database writes, and Pub/Sub publishing
+- The FastAPI ETA service and the Node/Express map server
+- PostgreSQL schema design
+- Nginx, HAProxy, and Varnish configuration
+- Jenkins CI/CD and Azure infrastructure setup
+- The WebSocket path in the Flutter mobile app
+- The GPS data receiving path in the Flutter web dashboard
+
+In practice, I was responsible for the system as a coherent product flow, not just a backend service.
 
 ## Architecture
 
@@ -97,81 +95,68 @@ flowchart TD
     HP -->|ETA request| ETA["FastAPI ETA Server"]
 ```
 
-The realtime path is intentionally decoupled. The Dart Shelf server accepts websocket GPS frames from the mobile app and immediately pushes them into Redis. Dart workers consume that queue, persist records to PostgreSQL, and publish live updates through Redis Pub/Sub. A monitoring server subscribes to those updates and pushes them to the Flutter web dashboard over WebSocket.
+GPS leaves the phone every second over WebSocket. The Dart Shelf server receives the frame, immediately queues it in Redis with LPUSH, and does nothing else. Dart workers pull from that queue with BRPOP, write to PostgreSQL, and publish to Redis Pub/Sub in the same processing step. The monitoring server subscribes and pushes to the Flutter web dashboard.
 
-The HTTP path is also explicit. Nginx fronts the system, HAProxy applies routing logic, map requests are checked by Varnish first, and only cache misses reach the Node/Express map server. ETA requests go to FastAPI, while other API traffic continues to the Dart server. This split keeps realtime ingest, business logic, and cacheable map traffic from collapsing into one operational surface.
+The HTTP path runs separately. Nginx receives requests, HAProxy routes them by type, and traffic splits from there. Map requests hit Varnish first — cache hits return immediately, misses continue to Node/Express. ETA requests go to FastAPI. Everything else reaches the Dart server.
+
+The separation matters because these two paths have nothing in common operationally. One is a continuous stream of small, high-frequency writes where latency compounds fast. The other is a mix of CPU-bound computation and large, infrequently-changing responses. Routing them into the same surface would make each one harder to understand and tune.
 
 ## Key Decisions
 
-### Redis queue between websocket ingest and database writes
+### Keeping the websocket server out of the write path
 
-The websocket entrypoint should acknowledge and hand off data, not become the place where persistence and live fan-out compete for time. I therefore made the Dart server write incoming GPS frames into Redis Lists with LPUSH and left database work to consumers using BRPOP.
+The most straightforward design has the ingest server write GPS to PostgreSQL and push to the monitoring server before acknowledging. That works fine at low volume. At a 1-second reporting interval with a real fleet, write latency and monitoring fan-out latency both become your ingest latency — directly.
 
-That design increased moving parts, but it gave the system a better failure boundary. Database latency or live monitoring load no longer had to slow down the websocket handler directly.
+I made the Dart server a handoff point instead. Receive the frame, LPUSH to Redis, done. Workers handle everything else with BRPOP. This added components, but it created a meaningful fault boundary: database slowdowns and monitoring subscriber load can no longer pull down GPS reception. The ingest server's job became simple enough that it rarely has bad days.
 
-### Separate services for ingest, ETA, and maps
+### Running three separate services instead of one
 
-I used different runtimes for different jobs: Dart Shelf for the main API and realtime ingest path, FastAPI for ETA-specific logic, and Node/Express for the map server. That was a deliberate boundary choice, not accidental heterogeneity.
+Combining realtime ingest, ETA logic, and map serving into one backend was an option. Deployment would have been simpler. I chose against it because the failure modes and scaling characteristics are genuinely different.
 
-The alternative would have been pushing multiple workloads into one server and one deployment surface. I rejected that because realtime sockets, ETA computation, and map-serving behavior fail differently and scale differently.
+A websocket server under continuous GPS load behaves differently from a FastAPI service doing route calculations. Map serving is dominated by cache hit rates, not CPU or I/O in the usual sense. Running them together means any one workload can degrade the others in ways that are hard to isolate during an incident. Separate services made each component's behavior independently observable and tunable.
 
-### Infrastructure-level map caching and routing
+### Putting cache logic in the infrastructure layer, not the application
 
-Map traffic deserved its own routing and caching policy. I put that logic in Nginx, HAProxy, and Varnish rather than embedding it inside the API server. HAProxy identified the request type, Varnish returned cache hits immediately, and Node/Express handled only the misses.
+Map tiles are cacheable. I could have implemented caching inside the Node/Express server. I put it in Varnish instead, sitting behind HAProxy.
 
-That kept the cache boundary explicit, reduced unnecessary load on the map server, and let the realtime API remain focused on its own path.
+The advantage is explicitness. Cache policy is visible at the infrastructure layer without reading application code. When cache behavior is surprising, HAProxy and Varnish logs are where you look first. The map server never processes a cache hit — it stays simple. The cache boundary stays clear and is not tangled with application logic.
 
-## Alternatives Considered
+## Challenges
 
-I avoided designs that looked simpler at first but produced a blurrier operational boundary.
+### The ingest path cannot have bad days
 
-- Writing directly from the websocket server to PostgreSQL would have reduced components, but it would also have coupled ingest stability to storage latency.
-- Handling map caching inside the API layer would have mixed cache policy with business logic and made proxy behavior harder to reason about.
-- Combining ETA, map, and realtime processing into one server would have simplified the service list but made ownership boundaries and operational tuning worse.
+A 1-second interval is unforgiving. If the ingest server slows down — because it is waiting on the database, because a downstream subscriber is backed up, because a worker is lagging — that latency compounds across every active device, immediately.
 
-## Challenges and Solutions
+The solution was architectural. Moving work out of the websocket handler and into Redis-backed workers made the handler's job trivially simple: accept bytes, push to queue. That job does not slow down unless Redis itself has a problem, which is a much narrower failure surface than "everything that happens after receiving GPS."
 
-### Keeping the realtime ingest path lightweight
+### Live and durable, without coupling them
 
-At a 1-second reporting interval, the most important rule was not to turn the websocket server into a bottleneck. The solution was architectural rather than algorithmic: accept the frame, enqueue it, and let separate consumers perform persistence and live publishing.
+The dashboard needed to feel live. The database needed authoritative records. These are easy to satisfy independently; the tension appears when you try to satisfy both from one code path.
 
-That made the ingest path easier to keep stable and made worker behavior independently tunable when storage or downstream consumers needed attention.
+The resolution was to never route live updates through the database read path. Workers write to PostgreSQL and publish to Pub/Sub in the same step. The monitoring server subscribes to Pub/Sub, not to database queries. The dashboard stays close to real time; the database accumulates a clean history. Neither path has to wait for the other.
 
-### Aligning live monitoring with durable storage
+### Maintaining coherence across six technology layers alone
 
-The system needed both a durable history in PostgreSQL and an immediate live feed to the monitoring interface. I used worker-side persistence plus Redis Pub/Sub so the monitoring server could react to new updates quickly without reading them back from the database first.
+The hardest operational challenge was keeping contracts consistent across Flutter, Dart, Python, Node, PostgreSQL, and the proxy stack — inside a three-person team where I owned most of it. A WebSocket message format change, a schema migration, a HAProxy rule update: each had to propagate consistently across the entire chain.
 
-That separation kept the browser dashboard close to realtime while preserving a clean authoritative write path for stored GPS history.
-
-### Owning cross-stack integration
-
-Because I was responsible for parts of the Flutter mobile app, Flutter web app, API services, database, proxies, cache layer, CI/CD, and Azure setup inside a small three-person team, the real challenge was maintaining clean contracts between layers. WebSocket formats, Redis usage, database schema assumptions, HAProxy rules, Varnish behavior, and Jenkins deployment steps all had to stay consistent.
-
-That is the part of the project that most clearly reflects senior ownership: not just writing one service, but making the system understandable and operable across the full delivery chain.
-
-## Reliability and Operations Notes
-
-This project mattered because it established an operating model, not just a set of services.
-
-- Redis created an explicit handoff between realtime ingest and downstream processing.
-- HAProxy and Varnish made routing and cache policy observable at the infrastructure layer instead of implicit in application code.
-- Jenkins gave the platform a repeatable deployment path across the services and proxy layers.
-- Azure infrastructure, proxy settings, and service boundaries were configured as one system rather than as separate ad hoc servers.
+This is the kind of work that does not fit neatly into a task list. It is the judgment required to keep a multi-stack system understandable when there is no large team to catch drift.
 
 ## Impact
 
-Observed across delivery and operation at Fatos (2022–2025):
+Operating the platform at Fatos from 2022 to 2025:
 
-- Realtime GPS flow: established from mobile websocket ingest to browser-based live monitoring
-- System boundaries: ingest, persistence, live fan-out, ETA logic, and map serving were separated into explicit responsibilities
-- Traffic handling: cacheable map requests were isolated behind Varnish and the Node/Express map server rather than burdening the main API path
-- Delivery ownership: backend services, database design, infrastructure routing, Jenkins CI/CD, and Azure setup were built and operated as one system
-- Cross-stack execution: mobile, web, backend, and operational layers were designed to work as one coherent product workflow
+- Established a clean GPS pipeline from mobile ingest to live browser monitoring, with Redis as the explicit handoff layer between them
+- Separated five distinct concerns — ingest, persistence, live fan-out, ETA logic, map serving — into services with clear operational boundaries
+- Isolated cacheable map traffic behind Varnish and Node/Express, keeping the main API path unaffected by map load
+- Owned backend services, database design, proxy configuration, Jenkins CI/CD, and Azure infrastructure as one integrated system
+- Delivered the platform as a coherent product workflow: mobile, web, backend, and operations designed together from the start
 
 ## What I Would Improve Next
 
-If I extended this system further, I would focus on three things.
+Three things I would focus on if the system continued evolving:
 
-- Add stronger observability around queue depth, worker lag, websocket connection health, and per-route cache behavior so capacity decisions become measurement-driven.
-- Introduce more formal failure-handling around the Redis queue path, such as retry policy, dead-letter handling, and clearer replay operations.
-- Tighten service contracts and deployment automation further so cross-runtime changes across Dart, Python, Node, and Flutter are safer to evolve together.
+**Observability.** Queue depth, worker lag, websocket connection health, and per-route cache hit rates should be continuously visible. Right now, capacity decisions rely more on inference than measurement.
+
+**Fault handling around the queue path.** If a worker fails mid-processing, the current design has limited explicit behavior. A retry policy, dead-letter queue, and documented replay procedure would make the system more defensible in production.
+
+**Cross-runtime deployment safety.** Changes that span Dart, Python, Node, and Flutter are manageable but require care. Better contract validation and more automated deployment coordination would reduce the risk of inconsistent rollouts.

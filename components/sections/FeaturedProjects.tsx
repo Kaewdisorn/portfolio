@@ -125,7 +125,7 @@ export default function FeaturedProjects({
                   {/* Stack tags */}
                   {project.stack.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
-                      {project.stack.slice(0, 6).map((tech) => (
+                      {project.stack.map((tech) => (
                         <span
                           key={tech}
                           className="rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-2.5 py-1 font-sans text-xs text-[var(--color-text)]"

@@ -65,7 +65,7 @@ export default function ProjectCard({
       {/* Stack tags */}
       {project.stack.length > 0 && (
         <div className="relative mb-5 flex flex-wrap gap-1.5">
-          {project.stack.slice(0, 5).map((tech) => (
+          {project.stack.map((tech) => (
             <span
               key={tech}
               className="rounded-md px-2.5 py-1 text-xs font-sans bg-[var(--color-surface-3)] text-[var(--color-text)] border border-[var(--color-border-strong)]"
