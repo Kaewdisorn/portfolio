@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import Hero from "@/components/sections/Hero";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
 import SkillsSnapshot from "@/components/sections/SkillsSnapshot";
-import ContactSection from "@/components/sections/ContactSection";
 
 export async function generateMetadata(
   props: PageProps<"/[locale]">,
@@ -47,7 +46,6 @@ export default async function HomePage(props: PageProps<"/[locale]">) {
       <Hero locale={locale} home={dict.home} />
       <FeaturedProjects locale={locale} home={dict.home} projects={featured} />
       <SkillsSnapshot home={dict.home} />
-      <ContactSection home={dict.home} />
     </main>
   );
 }

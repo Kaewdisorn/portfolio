@@ -9,6 +9,7 @@ export interface DictionaryNav {
   home: string;
   projects: string;
   about: string;
+  contact: string;
 }
 
 export interface DictionaryHome {

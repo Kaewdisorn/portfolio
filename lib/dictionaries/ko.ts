@@ -5,6 +5,7 @@ const ko: Dictionary = {
     home: "홈",
     projects: "프로젝트",
     about: "소개",
+    contact: "연락",
   },
   home: {
     eyebrow: "프로덕트 엔지니어 · 실시간 시스템",

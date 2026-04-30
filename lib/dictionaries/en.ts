@@ -5,6 +5,7 @@ const en: Dictionary = {
     home: "Home",
     projects: "Projects",
     about: "About",
+    contact: "Contact",
   },
   home: {
     eyebrow: "Product Engineer · Real-time Systems",

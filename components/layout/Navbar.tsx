@@ -17,6 +17,7 @@ export default function Navbar({ locale, nav }: NavbarProps) {
     { href: localePath(locale, "/"), label: nav.home },
     { href: localePath(locale, "/projects"), label: nav.projects },
     { href: localePath(locale, "/about"), label: nav.about },
+    { href: localePath(locale, "/contact"), label: nav.contact },
   ];
 
   return (
