@@ -13,7 +13,7 @@ const en: Dictionary = {
     headline: "Building scalable\nproducts with\nreal-time data",
     subheadline:
       "Focused on distributed systems and real-time pipelines, building and operating scalable systems in production.",
-    cta: "View Project Case Studies",
+    cta: "View Projects",
     ctaSecondary: "Contact Me",
     featuredTitle: "Featured Projects",
     skillsTitle: "Technical Expertise",
