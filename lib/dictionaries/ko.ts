@@ -7,11 +7,11 @@ const ko: Dictionary = {
     about: "소개",
   },
   home: {
-    eyebrow: "백엔드 엔지니어",
-    headline: "백엔드 시스템을 설계하고\n운영합니다",
+    eyebrow: "프로덕트 엔지니어 · 실시간 시스템",
+    headline: "실시간 시스템을 기반으로\n확장 가능한 제품을 만듭니다",
     subheadline:
-      "실시간 시스템, 분산 아키텍처, 인프라 성능 최적화 전문 백엔드 엔지니어입니다.",
-    cta: "프로젝트 보기",
+      "실시간 시스템과 분산 아키텍처를 기반으로 제품의 성능, 확장성, 사용자 경험을 개선하는 프로덕트 엔지니어입니다.",
+    cta: "프로젝트 사례 보기",
     featuredTitle: "주요 프로젝트",
     skillsTitle: "기술 역량",
     contactTitle: "연락하기",

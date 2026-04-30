@@ -7,11 +7,11 @@ const en: Dictionary = {
     about: "About",
   },
   home: {
-    eyebrow: "Backend Engineer",
-    headline: "Designing and operating\nbackend systems",
+    eyebrow: "Product Engineer · Real-time Systems",
+    headline: "Building scalable products powered by\nreal-time systems",
     subheadline:
-      "Backend engineer specializing in real-time systems, distributed architecture, and infrastructure performance.",
-    cta: "View Projects",
+      "Product engineer specializing in real-time systems and distributed architecture, building high-throughput systems that improve product performance, scalability, and user experience.",
+    cta: "View Project Case Studies",
     featuredTitle: "Featured Projects",
     skillsTitle: "Technical Expertise",
     contactTitle: "Get in Touch",
