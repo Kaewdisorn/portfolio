@@ -425,12 +425,12 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 15.1 Vercel Setup
 
-- [ ] Push repository to GitHub
-- [ ] Connect GitHub repo to Vercel (Import Project)
-- [ ] Set Framework Preset to `Next.js` (auto-detected)
-- [ ] Confirm build command: `next build`
-- [ ] Confirm output directory: `.next`
-- [ ] Trigger first deploy — confirm it succeeds
+- [x] Push repository to GitHub
+- [x] Connect GitHub repo to Vercel (Import Project)
+- [x] Set Framework Preset to `Next.js` (auto-detected)
+- [x] Confirm build command: `next build`
+- [x] Confirm output directory: `.next`
+- [x] Trigger first deploy — confirm it succeeds
 
 ### 15.2 Post-Deploy Checks
 
