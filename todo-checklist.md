@@ -249,20 +249,20 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 7.3 Project Card
 
-- [ ] Create `components/ui/ProjectCard.tsx`
-- [ ] Props: `project: Project`, `locale: Locale`
-- [ ] Render: title, summary, stack tags, impact snippet
-- [ ] Link wraps entire card — `<Link href={localePath(locale, /projects/${project.slug})}>`
-- [ ] Hover state: subtle border or shadow change only — no animations
-- [ ] Stack tags: small pills, neutral background
-- [ ] No `any` prop types
+- [x] Create `components/ui/ProjectCard.tsx`
+- [x] Props: `project: Project`, `locale: Locale`
+- [x] Render: title, summary, stack tags, impact snippet
+- [x] Link wraps entire card — `<Link href={localePath(locale, /projects/${project.slug})}>`
+- [x] Hover state: subtle border or shadow change only — no animations
+- [x] Stack tags: small pills, neutral background
+- [x] No `any` prop types
 
 ### 7.4 Section Components
 
-- [ ] Create `components/sections/Hero.tsx` — headline, subheading, CTA
-- [ ] Create `components/sections/FeaturedProjects.tsx` — renders up to 2 `ProjectCard`s
-- [ ] Create `components/sections/SkillsSnapshot.tsx` — grouped list of expertise areas
-- [ ] Create `components/sections/ContactSection.tsx` — email, GitHub, LinkedIn links
+- [x] Create `components/sections/Hero.tsx` — headline, subheading, CTA
+- [x] Create `components/sections/FeaturedProjects.tsx` — renders up to 2 `ProjectCard`s
+- [x] Create `components/sections/SkillsSnapshot.tsx` — grouped list of expertise areas
+- [x] Create `components/sections/ContactSection.tsx` — email, GitHub, LinkedIn links
 
 ---
 
@@ -270,41 +270,41 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 8.1 Home Page
 
-- [ ] Create `app/[locale]/page.tsx`
-- [ ] Fetch `getFeaturedProjects(locale)` as a server component
-- [ ] Fetch `getDictionary(locale)` for UI strings
-- [ ] Compose: `<Hero>` + `<FeaturedProjects>` + `<SkillsSnapshot>` + `<ContactSection>`
-- [ ] No `'use client'` — this page is fully static
-- [ ] Generate `metadata` with `generateMetadata({ params })` using locale-specific title/description
+- [x] Create `app/[locale]/page.tsx`
+- [x] Fetch `getFeaturedProjects(locale)` as a server component
+- [x] Fetch `getDictionary(locale)` for UI strings
+- [x] Compose: `<Hero>` + `<FeaturedProjects>` + `<SkillsSnapshot>` + `<ContactSection>`
+- [x] No `'use client'` — this page is fully static
+- [x] Generate `metadata` with `generateMetadata({ params })` using locale-specific title/description
 
 ### 8.2 Projects List Page
 
-- [ ] Create `app/[locale]/projects/page.tsx`
-- [ ] Fetch `getAllProjects(locale)`, sort by `order`
-- [ ] Render a scannable list of `<ProjectCard>` components
-- [ ] Page heading + short description (locale-aware)
-- [ ] Generate `metadata` per locale
-- [ ] No client components needed
+- [x] Create `app/[locale]/projects/page.tsx`
+- [x] Fetch `getAllProjects(locale)`, sort by `order`
+- [x] Render a scannable list of `<ProjectCard>` components
+- [x] Page heading + short description (locale-aware)
+- [x] Generate `metadata` per locale
+- [x] No client components needed
 
 ### 8.3 ⚠️ Project Detail Page
 
-- [ ] Create `app/[locale]/projects/[slug]/page.tsx`
-- [ ] Implement `generateStaticParams()` — returns all `{ locale, slug }` combinations
-- [ ] Fetch `getProject(slug, locale)` — call `notFound()` if missing
-- [ ] Render all required sections using the MDX body via `next-mdx-remote`
-- [ ] Section structure:
-  - [ ] `## Overview` / `## 개요`
-  - [ ] `## Problem` / `## 문제`
-  - [ ] `## My Role` / `## 역할`
-  - [ ] `## Architecture` / `## 아키텍처`
-  - [ ] `## Key Decisions` / `## 핵심 결정`
-  - [ ] `## Challenges and Solutions` / `## 도전과 해결`
-  - [ ] `## Impact` / `## 성과`
-- [ ] Create `components/ui/MdxContent.tsx` — renders MDX with custom component overrides (headings, code blocks, lists)
-- [ ] Style `<pre>` and `<code>` blocks: monospace, muted background, subtle border
-- [ ] Add breadcrumb: `Projects → {title}`
-- [ ] Add locale-switching link at top or in breadcrumb
-- [ ] Generate `metadata` using project `seo.title` and `seo.description`
+- [x] Create `app/[locale]/projects/[slug]/page.tsx`
+- [x] Implement `generateStaticParams()` — returns all `{ locale, slug }` combinations
+- [x] Fetch `getProject(slug, locale)` — call `notFound()` if missing
+- [x] Render all required sections using the MDX body via `next-mdx-remote`
+- [x] Section structure:
+  - [x] `## Overview` / `## 개요`
+  - [x] `## Problem` / `## 문제`
+  - [x] `## My Role` / `## 역할`
+  - [x] `## Architecture` / `## 아키텍처`
+  - [x] `## Key Decisions` / `## 핵심 결정`
+  - [x] `## Challenges and Solutions` / `## 도전과 해결`
+  - [x] `## Impact` / `## 성과`
+- [x] Create `components/ui/MdxContent.tsx` — renders MDX with custom component overrides (headings, code blocks, lists)
+- [x] Style `<pre>` and `<code>` blocks: monospace, muted background, subtle border
+- [x] Add breadcrumb: `Projects → {title}`
+- [x] Add locale-switching link at top or in breadcrumb
+- [x] Generate `metadata` using project `seo.title` and `seo.description`
 
 > **Copilot prompt:** "Generate `app/[locale]/projects/[slug]/page.tsx` for a Next.js App Router portfolio. It must: call `generateStaticParams` with all locale+slug combos, fetch project content via `getProject(slug, locale)`, call `notFound()` for missing slugs, render MDX body, and generate locale-aware metadata. Use server components only."
 
@@ -319,13 +319,13 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ## 9. MDX Rendering
 
-- [ ] Create `components/ui/MdxContent.tsx` — wraps `next-mdx-remote` with custom components
-- [ ] Override `h2` — styled as section heading, includes anchor ID
-- [ ] Override `h3` — styled as sub-heading
-- [ ] Override `code` (inline) — monospace, small background
-- [ ] Override `pre` — terminal-style code block, muted surface, subtle border
-- [ ] Override `ul` / `ol` — consistent spacing, readable line-height
-- [ ] Override `a` — opens external links in new tab with `rel="noopener noreferrer"`
+- [x] Create `components/ui/MdxContent.tsx` — wraps `next-mdx-remote` with custom components
+- [x] Override `h2` — styled as section heading, includes anchor ID
+- [x] Override `h3` — styled as sub-heading
+- [x] Override `code` (inline) — monospace, small background
+- [x] Override `pre` — terminal-style code block, muted surface, subtle border
+- [x] Override `ul` / `ol` — consistent spacing, readable line-height
+- [x] Override `a` — opens external links in new tab with `rel="noopener noreferrer"`
 - [ ] Test: all overrides render correctly with the sample MDX content
 
 > **Copilot prompt:** "Generate a `MdxContent` React component for Next.js that uses `next-mdx-remote/rsc` and provides custom renderers for h2, h3, p, ul, ol, pre, code, and a. Style with Tailwind. Headings should have anchor IDs. External links open in new tab. No `any`."
@@ -346,11 +346,11 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 ### 11.1 Metadata
 
 - [ ] Implement `generateMetadata` in `app/[locale]/layout.tsx` — base title template
-- [ ] Implement `generateMetadata` in `app/[locale]/page.tsx` — home page title/description per locale
-- [ ] Implement `generateMetadata` in `app/[locale]/projects/page.tsx`
-- [ ] Implement `generateMetadata` in `app/[locale]/projects/[slug]/page.tsx` — use `project.seo`
-- [ ] Add `alternates.canonical` pointing to current locale URL
-- [ ] Add `alternates.languages` with `ko` and `en` URLs for each page (hreflang)
+- [x] Implement `generateMetadata` in `app/[locale]/page.tsx` — home page title/description per locale
+- [x] Implement `generateMetadata` in `app/[locale]/projects/page.tsx`
+- [x] Implement `generateMetadata` in `app/[locale]/projects/[slug]/page.tsx` — use `project.seo`
+- [x] Add `alternates.canonical` pointing to current locale URL
+- [x] Add `alternates.languages` with `ko` and `en` URLs for each page (hreflang)
 
 ### 11.2 Image Optimization
 
