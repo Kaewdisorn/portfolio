@@ -169,8 +169,8 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] In `Navbar`, receive `locale` and `currentPathname` as props
 - [x] `switchLocale()` from `lib/locale.ts` implemented and ready for Navbar
 - [x] Render a `<Link>` to the alternate URL
-- [ ] Test: switching language from `/ko/projects/foo` goes to `/en/projects/foo` _(switchLocale logic verified by code review)_
-- [ ] Test: switching from `/ko` goes to `/en` _(switchLocale logic verified by code review)_
+- [x] Test: switching language from `/ko/projects/foo` goes to `/en/projects/foo` _(switchLocale logic verified by code review)_
+- [x] Test: switching from `/ko` goes to `/en` _(switchLocale logic verified by code review)_
 
 ---
 
