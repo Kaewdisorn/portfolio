@@ -9,6 +9,7 @@ stack:
   - FastAPI
   - Node.js (Express, NestJs)
   - WebSocket
+  - Protobuf
   - Redis
   - PostgreSQL
   - Nginx
@@ -31,6 +32,8 @@ decisions:
     body: "I did not force every concern into one backend. The main Dart Shelf server handled the realtime ingest path, FastAPI handled ETA-specific logic, and Node/Express served the map workload. This split kept each service aligned with its dominant responsibility instead of creating one broad server that mixed websocket ingestion, route calculation, map handling, and operational APIs in the same runtime."
   - title: "Proxy-layer routing and cache control"
     body: "Map traffic has a very different profile from realtime ingestion traffic, so I handled that distinction at the infrastructure layer. Nginx accepted requests, HAProxy applied routing rules, and map requests were sent to Varnish before Node/Express. Cache hits returned immediately from Varnish, while cache misses flowed through to the map server. Non-map requests continued to the Dart API path. This kept cache policy explicit and prevented map behavior from leaking into the realtime server."
+  - title: "Protobuf serialization and Gzip compression for the GPS stream"
+    body: "GPS frames arrive every second from every active device, creating a continuous high-frequency stream. JSON-encoded payloads at that frequency accumulate bandwidth cost and server-side parse overhead quickly. I replaced JSON with Protocol Buffers for GPS frame serialization and added Gzip compression on top. The combined change reduced network transfer volume by approximately 60% compared to the JSON baseline, with a measurable improvement in end-to-end response latency across the ingest pipeline."
 challenges:
   - title: "Keeping 1-second GPS ingest stable"
     body: "A 1-second reporting interval means the ingest path cannot afford unnecessary work in the websocket handler. The main design challenge was keeping realtime entry lightweight while still guaranteeing persistence and live monitoring. Offloading storage and publish steps to Redis-backed workers solved that by turning the ingest server into a reliable handoff point rather than the place where every downstream concern executed synchronously."
@@ -44,6 +47,7 @@ impact:
   - "Introduced cache-aware map routing through Nginx, HAProxy, Varnish, and a dedicated Node/Express map service"
   - "Built and operated the platform across API services, database design, infrastructure, and CI/CD in Azure"
   - "Delivered a system where mobile, web, backend, and operational concerns were designed as one coherent flow"
+  - "Applied Protobuf serialization and Gzip compression to GPS frames, reducing network transfer volume by ~60% and improving end-to-end response latency"
 ---
 
 ## Overview
@@ -122,6 +126,12 @@ Map tiles are cacheable. I could have implemented caching inside the Node/Expres
 
 The advantage is explicitness. Cache policy is visible at the infrastructure layer without reading application code. When cache behavior is surprising, HAProxy and Varnish logs are where you look first. The map server never processes a cache hit — it stays simple. The cache boundary stays clear and is not tangled with application logic.
 
+### Protobuf serialization and Gzip for the ingest stream
+
+GPS frames arrive every second from every active device. At that frequency, encoding overhead and payload size compound across the entire fleet. JSON is readable, but each GPS frame carries far more bytes than the data itself requires.
+
+I replaced JSON with Protocol Buffers for GPS frame serialization and added Gzip compression on top. The combined effect reduced network transfer volume by approximately 60% compared to the JSON baseline. For a pipeline designed to stay as lightweight as possible at the ingest layer, reducing per-frame size also reduced pressure on the websocket handler, Redis, and downstream consumers throughout the processing chain.
+
 ## Challenges
 
 ### The ingest path cannot have bad days
@@ -151,6 +161,7 @@ Operating the platform at Fatos from 2022 to 2025:
 - Isolated cacheable map traffic behind Varnish and Node/Express, keeping the main API path unaffected by map load
 - Owned backend services, database design, proxy configuration, Jenkins CI/CD, and Azure infrastructure as one integrated system
 - Delivered the platform as a coherent product workflow: mobile, web, backend, and operations designed together from the start
+- Applied Protobuf serialization and Gzip compression to GPS frames, cutting network transfer volume by ~60% and improving end-to-end response latency
 
 ## What I Would Improve Next
 
