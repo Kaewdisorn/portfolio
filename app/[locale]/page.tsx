@@ -18,7 +18,7 @@ export async function generateMetadata(
     locale === "ko"
       ? "백엔드 엔지니어 포트폴리오"
       : "Backend Engineer Portfolio";
-  const description = dict.home.subheadline;
+  const description = dict.home.subheadline.replace(/\n/g, " ");
   const url = `https://portfolio.example.com/${locale}`;
   return {
     title,
