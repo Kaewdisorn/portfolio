@@ -144,31 +144,31 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ### 4.1 ⚠️ Locale-Aware Path Helper
 
-- [ ] Create `lib/locale.ts`
-- [ ] Export `function localePath(locale: Locale, path: string): string` — prepends `/${locale}`
-- [ ] Export `function switchLocale(currentPath: string, targetLocale: Locale): string` — replaces the leading locale segment without breaking the rest of the path
-- [ ] Write unit tests or at least inline test cases for `switchLocale`
-  - `/ko/projects/mobility` → `/en/projects/mobility`
-  - `/en` → `/ko`
-  - `/ko` → `/en`
+- [x] Create `lib/locale.ts`
+- [x] Export `function localePath(locale: Locale, path: string): string` — prepends `/${locale}`
+- [x] Export `function switchLocale(currentPath: string, targetLocale: Locale): string` — replaces the leading locale segment without breaking the rest of the path
+- [x] Inline test cases verified for `switchLocale`:
+  - `/ko/projects/mobility` → `/en/projects/mobility` ✓
+  - `/en` → `/ko` ✓
+  - `/ko` → `/en` ✓
 
 ### 4.2 Dictionary / UI Strings
 
-- [ ] Create `lib/dictionaries/ko.ts` and `lib/dictionaries/en.ts`
-- [ ] Define a shared `Dictionary` interface in `types/locale.ts`
-- [ ] Include keys for: nav labels, page titles, section headings, CTA labels, footer text, 404 message
-- [ ] Create `lib/getDictionary.ts` — returns the correct dictionary object given a `Locale`
-- [ ] Use this dictionary everywhere — no hardcoded strings in components
+- [x] Create `lib/dictionaries/ko.ts` and `lib/dictionaries/en.ts`
+- [x] Define a shared `Dictionary` interface in `types/locale.ts`
+- [x] Include keys for: nav labels, page titles, section headings, CTA labels, footer text, 404 message
+- [x] Create `lib/getDictionary.ts` — returns the correct dictionary object given a `Locale`
+- [ ] Use this dictionary everywhere — no hardcoded strings in components (enforced as pages are built)
 
 > **Copilot prompt:** "Generate a type-safe dictionary system for a Next.js i18n app with locales `ko` and `en`. Create a `Dictionary` interface, two locale files, and a `getDictionary(locale)` function. All keys must be present in both files."
 
 ### 4.3 ⚠️ Language Switcher Logic
 
-- [ ] In `Navbar`, receive `locale` and `currentPathname` as props
-- [ ] Use `switchLocale()` from `lib/locale.ts` to compute the alternate URL
-- [ ] Render a `<Link>` to the alternate URL — do NOT use `router.push` with string replacement
-- [ ] Test: switching language from `/ko/projects/foo` goes to `/en/projects/foo`
-- [ ] Test: switching from `/ko` goes to `/en`
+- [ ] In `Navbar`, receive `locale` and `currentPathname` as props — deferred to step 7
+- [x] `switchLocale()` from `lib/locale.ts` implemented and ready for Navbar
+- [ ] Render a `<Link>` to the alternate URL — deferred to step 7
+- [ ] Test: switching language from `/ko/projects/foo` goes to `/en/projects/foo` — deferred to step 7
+- [ ] Test: switching from `/ko` goes to `/en` — deferred to step 7
 
 ---
 
