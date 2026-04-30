@@ -52,23 +52,6 @@ export default function Hero({ locale, home }: HeroProps) {
 
           {/* ── Left column: text ── */}
           <div className="w-full max-w-[52ch] lg:max-w-[44ch]">
-            {/* Available badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium"
-              style={{
-                borderColor: "var(--color-border-strong)",
-                background: "var(--color-surface-2)",
-                color: "var(--color-text-muted)",
-              }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-                  style={{ background: "rgb(74 222 128)" }} />
-                <span className="relative inline-flex h-2 w-2 rounded-full"
-                  style={{ background: "rgb(74 222 128)" }} />
-              </span>
-              {home.availableBadge}
-            </div>
-
             {/* Headline */}
             <h1
               className="mb-6 font-bold leading-[1.12] tracking-tight"
@@ -102,36 +85,22 @@ export default function Hero({ locale, home }: HeroProps) {
               {home.subheadline}
             </p>
 
-            {/* CTA buttons */}
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href={localePath(locale, "/projects")}
-                className="group inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.03] hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
-                style={{
-                  background: "linear-gradient(135deg, var(--color-accent) 0%, #7c3aed 100%)",
-                  boxShadow: "0 4px 24px rgb(99 102 241 / 0.35)",
-                }}
-              >
-                {home.cta}
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"
-                  className="transition-transform group-hover:translate-x-0.5">
-                  <path d="M1 7h12M8 3l5 4-5 4" stroke="currentColor" strokeWidth="1.5"
-                    strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-
-              <Link
-                href={localePath(locale, "/#contact")}
-                className="inline-flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm font-semibold transition-all hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
-                style={{
-                  borderColor: "var(--color-border-strong)",
-                  color: "var(--color-text)",
-                  background: "var(--color-surface-2)",
-                }}
-              >
-                {home.ctaSecondary}
-              </Link>
-            </div>
+            {/* CTA */}
+            <Link
+              href={localePath(locale, "/projects")}
+              className="group inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.03] hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+              style={{
+                background: "linear-gradient(135deg, var(--color-accent) 0%, #7c3aed 100%)",
+                boxShadow: "0 4px 24px rgb(99 102 241 / 0.35)",
+              }}
+            >
+              {home.cta}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"
+                className="transition-transform group-hover:translate-x-0.5">
+                <path d="M1 7h12M8 3l5 4-5 4" stroke="currentColor" strokeWidth="1.5"
+                  strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
           </div>
 
           {/* ── Right column: avatar ── */}
