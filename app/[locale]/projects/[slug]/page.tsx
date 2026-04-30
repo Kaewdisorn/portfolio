@@ -58,7 +58,7 @@ export default async function ProjectDetailPage(
   if (!project) notFound();
 
   return (
-    <main>
+    <main id="main-content">
       <article className="py-12 sm:py-16">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           {/* Breadcrumb */}

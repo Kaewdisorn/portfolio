@@ -1,0 +1,94 @@
+---
+title: "Distributed API Gateway and Rate Limiting System"
+summary: "Designed a distributed rate limiting system processing millions of API requests per second across multiple regions. Achieved sub-3ms p99 latency using Redis Lua-based token bucket algorithm while maintaining 99.97% enforcement accuracy."
+role: "Backend Engineer (Tech Lead)"
+period: "2022.09 – 2023.03"
+stack:
+  - Go
+  - Redis Cluster
+  - gRPC
+  - Nginx
+  - Kubernetes
+  - Prometheus
+featured: true
+order: 2
+seo:
+  title: "Distributed API Gateway and Rate Limiting System | Portfolio"
+  description: "Multi-region Redis Cluster token bucket rate limiter achieving sub-3ms p99 latency and 99.97% enforcement accuracy across a multi-tenant API platform."
+problem: "As the platform scaled to multiple regions, a noisy neighbor problem emerged where specific partners were overwhelming the API with burst traffic, degrading response times for all other tenants. The existing single-Redis counter was a single point of failure and provided no meaningful enforcement once we deployed across regions — each region enforced limits independently with no global awareness."
+architecture: "Each region runs an independent Redis Cluster for local token bucket decisions. A Go sidecar proxy intercepts all inbound traffic per pod and executes token bucket operations atomically via Lua scripts. For global limits, a gRPC stream periodically synchronizes token consumption between regions every 5 seconds. Nginx upstream health checks integrate with the sidecar to reject over-limit requests immediately at the edge."
+decisions:
+  - title: "Token Bucket vs. Sliding Window"
+    body: "Sliding window is more accurate but requires storing a timestamp per request, causing memory growth that is hard to predict at high request volumes. Token bucket state is exactly two integers per tenant — current tokens and last refill time. This makes memory usage predictable regardless of traffic volume. The natural burst allowance also matched real API traffic patterns better than a strict sliding window."
+  - title: "Regional Local vs. Global Synchronization"
+    body: "Fully synchronous global enforcement would add inter-region RTT (average 80ms) to every rate limit decision, violating the 5ms latency SLO. We chose eventually consistent global sync at 5-second intervals. Most abuse patterns persist for tens of seconds, so the window is acceptable. Short bursts are permitted per-region; sustained overuse is caught globally within seconds."
+  - title: "Sidecar Proxy Pattern"
+    body: "Embedding an SDK in each service creates version management complexity and requires coordinated deployments. The sidecar pattern decouples rate limiting logic from application code entirely. We used Unix domain sockets for sidecar-to-service communication to eliminate TCP stack overhead, keeping the added latency under 0.1ms."
+challenges:
+  - title: "Redis Cluster Slot Rebalancing Errors"
+    body: "During slot migration, MOVED responses caused some requests to bypass enforcement. We added MOVED-aware retry logic in the Go client and implemented an in-memory counter fallback for affected key ranges during rebalancing. The client automatically returns to Redis once migration completes. Accuracy loss during fallback was measured at under 0.01%."
+  - title: "Lua Script Blocking"
+    body: "Complex Lua scripts could block Redis's single thread and delay other commands. We split the logic into two minimal atomic operations and pipelined the rest. Timeout policy is fail-open to protect latency SLO. Production timeout rate is under 0.001%."
+impact:
+  - "p99 rate limit decision latency under 3ms — 67% improvement over single-Redis baseline"
+  - "Enforcement accuracy 99.97% — false rejection rate below 0.03%"
+  - "No enforcement downtime on single Redis node failure — 99.99% availability"
+  - "Noisy neighbor incidents caused by partner API abuse fully eliminated"
+  - "Per-tenant rate limit policies for 5 partners managed self-service with zero operational overhead"
+---
+
+## Overview
+
+Designed and led implementation of a distributed rate limiting system for a multi-tenant API platform. The system processes millions of decisions per second across multiple geographic regions, achieving sub-3ms p99 latency with 99.97% enforcement accuracy. This replaced a single-Redis counter that had become both a reliability risk and a cross-region bottleneck.
+
+## Problem
+
+Two problems converged as the platform expanded across regions.
+
+The existing single-Redis rate limiter was a single point of failure. When Redis was unavailable, the entire enforcement layer dropped — all traffic passed unchecked. More critically, once we deployed to multiple regions, each region enforced limits independently. A tenant could hit the limit in `us-east` while consuming freely in `eu-west`, making global limits meaningless.
+
+Simultaneously, one partner's batch job was generating 30,000 requests per minute during business hours, consuming 60% of API capacity and pushing p99 latency for other tenants above 800ms. The underlying cause was structural: the system had no mechanism to detect or respond to sustained abuse.
+
+## My Role
+
+Tech lead responsible for architecture design and core Go implementation. Worked with a team of three engineers over six months, delivering in three staged rollouts. Designed the integration with the existing Nginx-based infrastructure and wrote the runbook for the Redis Cluster failover procedure.
+
+## Architecture
+
+The system is a two-tier design with regional local decisions as the default path.
+
+**Local tier**: Each region has an independent Redis Cluster. A Go sidecar proxy runs alongside each service pod and intercepts all inbound requests. Token bucket operations execute atomically via a Lua script on Redis. This path adds under 1ms to request latency.
+
+**Global sync tier**: A gRPC stream connects regional agents. Every 5 seconds, each region reports token consumption to a lightweight aggregator, which redistributes adjusted per-region budgets when a tenant approaches the global limit. Regions act independently between sync cycles.
+
+## Key Decisions
+
+### Token Bucket Algorithm
+
+The sliding window algorithm offers exact per-second accuracy but stores one timestamp entry per request. At 1 million requests per minute across thousands of tenants, memory usage becomes unpredictable. Token bucket reduces state to two integers per tenant regardless of traffic volume. The tradeoff — short burst allowance — was acceptable because real API clients send bursty traffic naturally, and the product team agreed the burst window of one second was reasonable.
+
+### Eventually Consistent Global Sync
+
+Synchronous global enforcement requires a round-trip between regions on every decision. With 80ms inter-region RTT, this adds latency that breaks the 5ms SLO. The 5-second sync interval was chosen after analyzing partner traffic patterns: every confirmed abuse case exceeded limits for at least 30 seconds. The window allows a short burst to slip through during a sync cycle, but sustained overuse is caught within two cycles.
+
+### Unix Domain Socket Communication
+
+Initial benchmarking showed TCP loopback between the sidecar and the service pod added 0.4ms per request due to kernel TCP stack processing. Switching to Unix domain sockets reduced this to 0.06ms — below measurement noise. For a system where the total latency budget is 3ms, this 0.34ms saving was significant.
+
+## Challenges and Solutions
+
+### Redis Cluster Slot Rebalancing
+
+Redis Cluster migrates slots between nodes during scaling operations, returning MOVED responses for keys on the old node. Our initial client treated MOVED as an error and failed the rate limit check, causing those requests to bypass enforcement entirely. The fix involved MOVED-aware retry logic that follows the redirect immediately, plus an in-memory token bucket fallback for the affected key range while migration is in progress. Fallback activates automatically and deactivates when the slot stabilizes. Measured accuracy loss during fallback: 0.01%.
+
+### Lua Script Latency Spikes
+
+Under high load, Lua script execution time varied from 0.3ms to 12ms depending on Redis server CPU state. Redis executes scripts atomically, so a slow script blocks all other commands. We refactored the script to only cover the minimum atomic section — the compare-and-decrement — and moved the refill calculation to the application side. The script went from 18 lines to 7 lines. Worst-case execution time dropped to 1.2ms. We also added a 2ms script timeout with fail-open fallback to protect the latency SLO.
+
+## Impact
+
+- p99 rate limit decision latency under 3ms — 67% faster than single-Redis baseline
+- Enforcement accuracy 99.97% — false rejection rate below 0.03%
+- Zero enforcement downtime on single Redis node failure — 99.99% availability maintained
+- Noisy neighbor incidents from partner API abuse fully eliminated after rollout
+- Five partner tenants operate under individual rate limit policies with no ongoing operational overhead

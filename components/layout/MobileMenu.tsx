@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 interface MobileMenuProps {
   links: { href: string; label: string }[];
@@ -11,11 +12,6 @@ interface MobileMenuProps {
 export default function MobileMenu({ links }: MobileMenuProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-
-  // Close on route change
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -55,16 +51,30 @@ export default function MobileMenu({ links }: MobileMenuProps) {
         >
           <nav aria-label="Mobile navigation">
             <ul className="flex flex-col gap-1" role="list">
-              {links.map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="block rounded px-3 py-2 text-sm text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface-2)] hover:text-[var(--color-text)]"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
+              {links.map(({ href, label }) => {
+                const isActive =
+                  href.endsWith("/")
+                    ? pathname === href || pathname === href.slice(0, -1)
+                    : pathname === href || pathname.startsWith(href + "/");
+
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      onClick={() => setOpen(false)}
+                      aria-current={isActive ? "page" : undefined}
+                      className={clsx(
+                        "block rounded px-3 py-2 text-sm transition-colors",
+                        isActive
+                          ? "bg-[var(--color-surface-2)] text-[var(--color-text)] font-medium"
+                          : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-text)]",
+                      )}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </div>

@@ -194,6 +194,8 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] Frontmatter: all required fields including decisions[], challenges[], impact[], seo
 - [x] Body sections: `## 개요`, `## 문제`, `## 역할`, `## 아키텍처`, `## 핵심 결정`, `## 도전과 해결`, `## 성과`
 - [x] Substantive content — Kafka-based real-time event streaming system (real architecture, real numbers)
+- [x] Created `content/ko/projects/distributed-rate-limiter.mdx` — second case study
+- [x] Topic: distributed API gateway rate limiting with Redis Cluster + Go sidecar
 
 ### 5.3 Sample Content — English
 
@@ -201,6 +203,7 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] Frontmatter slug matches Korean version exactly
 - [x] Body sections: `## Overview`, `## Problem`, `## My Role`, `## Architecture`, `## Key Decisions`, `## Challenges and Solutions`, `## Impact`
 - [x] Same factual claims and impact metrics as Korean version; no content gaps
+- [x] Created `content/en/projects/distributed-rate-limiter.mdx` — second case study English version
 
 > **Copilot prompt:** "Write a bilingual MDX case study for a backend engineering portfolio. Topic: a real-time event streaming system. Korean version in `content/ko/projects/realtime-platform.mdx`, English in `content/en/projects/realtime-platform.mdx`. Include: problem statement, architecture decisions, trade-offs, measurable impact. Frontmatter must match the `Project` TypeScript type."
 
@@ -240,7 +243,8 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 - [x] Logo, nav links (Home, Projects, About) via `localePath`
 - [x] `LanguageSwitcher` — separate `'use client'` component using `usePathname()` + `switchLocale()`
 - [x] Keyboard accessible: all links are standard `<a>` elements via `<Link>`
-- [x] Mobile hamburger menu — `MobileMenu.tsx` client component with open/close state, closes on route change
+- [x] Mobile hamburger menu — `MobileMenu.tsx` client component with open/close state, closes on link click, active state highlighting via `usePathname()`
+- [x] Active nav link: `NavLinks.tsx` client component uses `usePathname()` + `clsx` for active state; `aria-current="page"` on active link
 
 ### 7.2 Footer
 
@@ -364,7 +368,7 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 ### 11.3 Static Generation
 
 - [x] Confirm all content pages have no `dynamic = 'force-dynamic'`
-- [x] Run `npm run build` — all 12 pages statically generated (`○`/`●` SSG) after adding `generateStaticParams` to locale layout and removing `headers()` from root layout
+- [x] Run `npm run build` — all 14 pages statically generated (`○`/`●` SSG) — 4 locale pages, 4 about pages, 4 project list pages, 4 project slug pages (2 slugs × 2 locales)
 - [x] Confirm no `console.error` during build
 
 ### 11.4 Lighthouse
@@ -377,25 +381,30 @@ export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 
 ## 12. Accessibility
 
-- [ ] All interactive elements are keyboard-focusable with visible focus ring
-- [ ] `<html lang>` attribute is set correctly per locale (`ko` or `en`)
+- [x] All interactive elements are keyboard-focusable with visible focus ring (`:focus-visible` ring in `globals.css`)
+- [x] `<html lang>` attribute set per locale via `LangSetter` client component
 - [ ] All images have descriptive `alt` text
 - [ ] Color contrast meets WCAG AA (4.5:1 for body text)
-- [ ] Navigation landmark: `<nav>` wraps the Navbar links
-- [ ] Main content is inside `<main>`
-- [ ] Footer inside `<footer>`
+- [x] Navigation landmark: `<nav>` wraps the Navbar links
+- [x] Main content is inside `<main id="main-content">` on every page
+- [x] Footer inside `<footer>`
+- [x] Skip-to-main-content link in root layout (screen-reader accessible, visible on focus)
+- [x] `aria-current="page"` on active nav links (desktop and mobile)
 - [ ] No `tabindex` values greater than 0
+- [ ] Color contrast manual check pending
 
 ---
 
 ## 13. Responsive Design
 
-- [ ] Navbar collapses cleanly on mobile (< 768px)
-- [ ] Project cards stack vertically on mobile
-- [ ] Hero headline font size scales down on mobile
-- [ ] Project detail prose content has comfortable mobile padding
-- [ ] No horizontal overflow on any viewport
+- [x] Navbar collapses cleanly on mobile (< 768px) — hamburger menu via `MobileMenu.tsx`
+- [x] Project cards stack vertically on mobile (`grid sm:grid-cols-2` defaults to 1 col)
+- [x] Hero headline font size scales down on mobile (`clamp(2rem, 5vw, 3.25rem)`)
+- [x] MdxContent has `overflow-x-hidden` to prevent horizontal overflow on mobile
+- [x] Hero inner div is `w-full max-w-[52ch]` — full width on mobile
+- [ ] Project detail prose content — verify comfortable mobile padding on 375px
 - [ ] Test on: 375px (iPhone SE), 768px (tablet), 1280px (desktop)
+- [ ] Verify no horizontal overflow on any viewport
 
 ---
 

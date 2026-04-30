@@ -43,7 +43,7 @@ export default async function HomePage(props: PageProps<"/[locale]">) {
   ]);
 
   return (
-    <main>
+    <main id="main-content">
       <Hero locale={locale} home={dict.home} />
       <FeaturedProjects locale={locale} home={dict.home} projects={featured} />
       <SkillsSnapshot home={dict.home} />

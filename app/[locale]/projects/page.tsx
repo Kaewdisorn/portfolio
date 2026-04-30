@@ -37,7 +37,7 @@ export default async function ProjectsPage(
   ]);
 
   return (
-    <main>
+    <main id="main-content">
       <section className="py-16 sm:py-20">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           <header className="mb-12 max-w-[52ch]">

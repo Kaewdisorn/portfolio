@@ -40,7 +40,7 @@ export default async function LocaleLayout(props: LayoutProps<"/[locale]">) {
       <div className="flex min-h-full flex-col">
         <Navbar locale={locale as Locale} nav={dict.nav} />
         <div className="flex-1">{props.children}</div>
-        <Footer locale={locale as Locale} footer={dict.footer} />
+        <Footer footer={dict.footer} />
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import type { DictionaryNav } from "@/types/locale";
 import Container from "./Container";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MobileMenu from "./MobileMenu";
+import NavLinks from "./NavLinks";
 
 interface NavbarProps {
   locale: Locale;
@@ -33,19 +34,8 @@ export default function Navbar({ locale, nav }: NavbarProps) {
             Portfolio
           </Link>
 
-          {/* Desktop page links */}
-          <ul className="hidden sm:flex items-center gap-1" role="list">
-            {links.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className="rounded px-3 py-1.5 text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Desktop page links — active state via usePathname */}
+          <NavLinks links={links} />
 
           <div className="flex items-center gap-2">
             {/* Language switcher */}

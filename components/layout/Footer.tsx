@@ -1,14 +1,12 @@
 import Link from "next/link";
-import type { Locale } from "@/types/locale";
 import type { DictionaryFooter } from "@/types/locale";
 import Container from "./Container";
 
 interface FooterProps {
-  locale: Locale;
   footer: DictionaryFooter;
 }
 
-export default function Footer({ locale: _locale, footer }: FooterProps) {
+export default function Footer({ footer }: FooterProps) {
   return (
     <footer className="border-t border-[var(--color-border)] py-8 text-sm text-[var(--color-text-muted)]">
       <Container>

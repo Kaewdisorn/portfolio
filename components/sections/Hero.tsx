@@ -14,7 +14,7 @@ export default function Hero({ locale, home }: HeroProps) {
   return (
     <section className="py-20 sm:py-28">
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
-        <div className="max-w-[52ch]">
+        <div className="w-full max-w-[52ch]">
           <h1 className="mb-5 font-semibold leading-tight tracking-tight text-[var(--color-text)]" style={{ fontSize: "var(--text-display)" }}>
             {headline.map((line, i) => (
               <span key={i}>

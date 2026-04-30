@@ -88,7 +88,7 @@ interface MdxContentProps {
 
 export default function MdxContent({ source }: MdxContentProps) {
   return (
-    <div className="max-w-[var(--max-w-reading)]">
+    <div className="w-full max-w-[var(--max-w-reading)] overflow-x-hidden">
       <MDXRemote source={source} components={components} />
     </div>
   );
