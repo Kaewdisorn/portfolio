@@ -7,9 +7,17 @@ interface ProjectCardProps {
   project: ProjectMeta;
   locale: Locale;
   headingLevel?: 2 | 3;
+  readMoreLabel?: string;
+  productionLabel?: string;
 }
 
-export default function ProjectCard({ project, locale, headingLevel = 3 }: ProjectCardProps) {
+export default function ProjectCard({
+  project,
+  locale,
+  headingLevel = 3,
+  readMoreLabel,
+  productionLabel,
+}: ProjectCardProps) {
   const href = localePath(locale, `/projects/${project.slug}`);
   const Heading = `h${headingLevel}` as "h2" | "h3";
 
@@ -33,16 +41,16 @@ export default function ProjectCard({ project, locale, headingLevel = 3 }: Proje
       />
 
       {/* Label row */}
-      <div className="relative mb-5 flex items-center gap-2.5">
-        <span
-          className="h-2.5 w-2.5 shrink-0 rounded-full"
-          style={{ background: "linear-gradient(135deg, var(--color-accent) 0%, #a78bfa 100%)" }}
-          aria-hidden="true"
-        />
-        <span className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+      <div className="relative mb-5 flex flex-wrap items-center gap-2.5">
+        {productionLabel && (
+          <span className="rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
+            {productionLabel}
+          </span>
+        )}
+        <span className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text)]/88">
           {project.role}
         </span>
-        <span className="flex-1 border-t border-[var(--color-accent)]/20" aria-hidden="true" />
+        <span className="h-3.5 w-px bg-[var(--color-border-strong)]" aria-hidden="true" />
         <span className="text-xs font-mono text-[var(--color-text-faint)]">{project.period}</span>
       </div>
 
@@ -54,28 +62,33 @@ export default function ProjectCard({ project, locale, headingLevel = 3 }: Proje
         {project.summary}
       </p>
 
-      <div className="relative flex items-end justify-between gap-4">
-        {project.stack.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {project.stack.slice(0, 5).map((tech) => (
-              <span
-                key={tech}
-                className="rounded-md px-2.5 py-1 text-xs font-mono bg-[var(--color-surface-3)] text-[var(--color-text)] border border-[var(--color-border-strong)]"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        )}
-        <span
-          className="shrink-0 text-[var(--color-accent)] opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0.5"
-          aria-hidden="true"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </span>
-      </div>
+      {/* Stack tags */}
+      {project.stack.length > 0 && (
+        <div className="relative mb-5 flex flex-wrap gap-1.5">
+          {project.stack.slice(0, 5).map((tech) => (
+            <span
+              key={tech}
+              className="rounded-md px-2.5 py-1 text-xs font-sans bg-[var(--color-surface-3)] text-[var(--color-text)] border border-[var(--color-border-strong)]"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* CTA divider — only shown when readMoreLabel is provided */}
+      {readMoreLabel && (
+        <div className="relative mt-auto flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-4">
+          <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--color-text-faint)] transition-colors duration-200 group-hover:text-[var(--color-accent)]">
+            {readMoreLabel}
+          </span>
+          <span className="flex items-center gap-1.5 text-xs font-medium text-[var(--color-text-faint)] transition-colors duration-200 group-hover:text-[var(--color-accent)]">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </div>
+      )}
     </Link>
   );
 }

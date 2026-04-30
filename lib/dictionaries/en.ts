@@ -24,7 +24,10 @@ const en: Dictionary = {
   projects: {
     pageTitle: "Projects",
     pageDescription:
-      "Technical case studies focused on architecture decisions, trade-offs, and measurable outcomes.",
+      "Production projects delivered in company environments, focused on system design, operational constraints, and measurable impact.",
+    eyebrow: "Projects & Case studies",
+    readMore: "View project details",
+    productionLabel: "Production",
   },
   project: {
     overviewHeading: "Overview",

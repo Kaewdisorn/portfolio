@@ -24,7 +24,10 @@ const ko: Dictionary = {
   projects: {
     pageTitle: "프로젝트",
     pageDescription:
-      "설계 결정, 트레이드오프, 그리고 측정 가능한 성과를 중심으로 정리한 기술 케이스 스터디입니다.",
+      "재직 중 실제 서비스 환경에서 설계·개발·운영한 프로젝트를 정리했습니다. 아키텍처 판단, 운영 제약, 그리고 측정 가능한 성과에 초점을 맞췄습니다.",
+    eyebrow: "프로젝트 & 케이스 스터디",
+    readMore: "프로젝트 상세 보기",
+    productionLabel: "실서비스",
   },
   project: {
     overviewHeading: "개요",

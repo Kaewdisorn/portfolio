@@ -28,6 +28,9 @@ export interface DictionaryHome {
 export interface DictionaryProjects {
   pageTitle: string;
   pageDescription: string;
+  eyebrow: string;
+  readMore: string;
+  productionLabel: string;
 }
 
 export interface DictionaryProject {
