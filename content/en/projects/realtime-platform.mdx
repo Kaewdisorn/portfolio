@@ -1,108 +1,118 @@
 ---
-title: "Real-Time Event Streaming Platform"
-summary: "Designed and operated a real-time streaming pipeline handling hundreds of thousands of events per second. Migrating from a monolithic batch processor to a Kafka-based multi-consumer architecture cut processing latency by 95% and brought availability to 99.95%."
-role: "Backend Engineer (Individual Contributor)"
-period: "2023.04 – 2024.02"
+title: "Real-Time Mobility Tracking Platform"
+summary: "Designed and operated a WebSocket-based GPS streaming pipeline for a B2B fleet management platform. Introduced Protobuf serialization and Gzip compression to cut network transfer volume by ~60%. Deployed HAProxy load balancing and Varnish caching to sustain service availability under fleet growth."
+role: "Senior Backend Engineer"
+period: "2022.01 – 2025.10"
 stack:
-  - Apache Kafka
-  - Go
+  - Node.js (NestJS)
+  - WebSocket
+  - PostgreSQL (PostGIS)
   - Redis
-  - PostgreSQL
-  - Kubernetes
-  - Prometheus
+  - HAProxy
+  - Varnish
+  - GCP
+  - Azure
 featured: true
 order: 1
 seo:
-  title: "Real-Time Event Streaming Platform | Portfolio"
-  description: "How a Kafka-based multi-consumer architecture scaled event processing from 8K to 240K events per second while eliminating data loss entirely."
-problem: "A monolithic, batch-polling event processor could not keep pace with traffic growth. At peak hours, thousands of events backed up in the queue, average processing latency reached 12 seconds, and 0.3% of events were silently dropped due to queue overflow. The architecture had no horizontal scaling path and no durable storage — a service restart meant data loss."
-architecture: "Built Apache Kafka at the center: source-ID-keyed topics feed Go consumer groups deployed on Kubernetes with horizontal pod autoscaling. Each consumer checks Redis before processing (idempotency), then commits atomically to PostgreSQL. The pipeline scales linearly by adding partitions and consumer replicas with no code changes."
+  title: "Real-Time Mobility Tracking Platform | Portfolio"
+  description: "How Protobuf serialization and Gzip compression cut network transfer by ~60% in a high-frequency GPS streaming pipeline built on WebSocket, PostGIS, and Redis."
+problem: "As fleet size grew, raw JSON GPS payloads were generating significant network congestion. PostGIS geospatial queries were hitting the database on every request without a caching layer. The backend had no load distribution — a single process handled all WebSocket connections, creating a hard availability ceiling."
+architecture: "Vehicle GPS updates arrive over persistent WebSocket connections managed by NestJS. Each position update is serialized with Protobuf and compressed with Gzip before transmission. PostGIS stores location history and handles geospatial queries. Redis caches hot-path data (current positions, route snapshots) to reduce database pressure. HAProxy distributes inbound connections across backend nodes with TCP-level health checks. Varnish caches HTTP responses for read-heavy endpoints."
 decisions:
-  - title: "Kafka over RabbitMQ"
-    body: "The two hard requirements were high throughput and the ability to replay events after a consumer failure. RabbitMQ excels at complex routing but deletes messages after consumption, making replay difficult. Kafka retains the log indefinitely, so any consumer can reset its offset and reprocess from any point. That durability was non-negotiable for a financial-adjacent event stream."
-  - title: "Partitioning key strategy"
-    body: "Using source ID as the partition key guarantees ordering within a source and allows linear throughput scaling by simply adding partitions. The tradeoff is hot-partition risk when a single source dominates traffic. We addressed this with virtual sharding: high-traffic sources are split across multiple partition keys (source_id-0, source_id-1, …) based on their measured throughput percentile."
-  - title: "Redis-based idempotency"
-    body: "Kafka's at-least-once delivery means duplicates are possible. A unique constraint in PostgreSQL would work but causes lock contention under high duplicate rates. Using Redis SET NX with a 24-hour TTL lets each consumer claim exclusive processing rights without holding any DB lock. This approach tripled throughput compared to the DB constraint method in load testing."
+  - title: "Protobuf over JSON"
+    body: "GPS updates arrive every few seconds per vehicle. At fleet scale, JSON's verbosity was the dominant driver of network cost. Sampling real traffic showed GPS update messages averaged 340 bytes as JSON; the equivalent Protobuf schema encoded to roughly 60 bytes. Combined with Gzip, total transfer volume dropped by approximately 60%. The tradeoff was a more complex debugging workflow — binary frames require explicit decoding tools. We addressed this with a development-mode JSON fallback and careful schema versioning to support a rolling migration."
+  - title: "Redis caching for current position"
+    body: "The query pattern was strongly bimodal: 'what is the current position of vehicle X' dominated by a wide margin over historical queries. Current position is updated frequently but queried even more often. A 10-second TTL Redis cache in front of PostGIS captured the vast majority of read traffic without trading correctness for speed. We chose shared Redis over per-node in-memory caches to avoid cache coherency issues during rolling deployments."
+  - title: "HAProxy TCP-mode load balancing"
+    body: "HTTP-mode proxies commonly impose idle connection timeouts that interrupt WebSocket sessions. We configured HAProxy in TCP mode to pass WebSocket traffic without intervention. Health checks ran on a dedicated HTTP endpoint per node, and HAProxy removed unhealthy nodes from rotation within 10 seconds of failure. This allowed rolling deployments without clients experiencing connection loss, as long as new nodes were healthy before old ones were drained."
 challenges:
-  - title: "Event loss during consumer rebalancing"
-    body: "During Kubernetes rolling deployments, Kafka rebalanced partition assignments between pods. Messages that had been fetched but not yet committed were redelivered to the new consumer, causing duplicate processing and, in edge cases, silent drops. Disabling auto-commit and implementing explicit offset commits only after confirmed writes, combined with a 30-second graceful shutdown window, eliminated both problems."
-  - title: "Hot partition saturation"
-    body: "One large enterprise customer generated 30% of total traffic, consistently saturating the single partition their source ID mapped to. We implemented dynamic virtual sharding: a background job measures per-source throughput every 60 seconds and adjusts the shard count accordingly. The top 5% of sources are spread across multiple partition keys. This distributed the hot source's load evenly across 8 partitions."
+  - title: "GeoJSON response bottleneck"
+    body: "API endpoints returning route geometry and zone boundaries produced GeoJSON payloads reaching several hundred kilobytes for complex routes. Client rendering was noticeably delayed. Profiling revealed two issues: PostGIS geometry serialization was blocking the Node.js event loop, and Gzip compression was applied to the fully-assembled response string rather than streamed during assembly. Moving geometry serialization to a worker pool and switching to streaming Gzip reduced peak response time and eliminated event loop blocking on large payloads."
+  - title: "Rolling Protobuf migration with live clients"
+    body: "Shipping Protobuf encoding to a live system required supporting both JSON and Protobuf clients simultaneously. We negotiated encoding format at the WebSocket handshake level using a custom header, so old and new clients could coexist without a coordinated cutover. Schema changes were additive-only until all clients had migrated, then deprecated fields were marked reserved and removed."
 impact:
-  - "Average processing latency: 12 seconds → 600ms (95% reduction)"
-  - "Peak-hour event loss rate: 0.3% → 0% (zero loss over 6 months)"
-  - "System availability: 99.6% → 99.95% (monthly downtime under 15 minutes)"
-  - "Peak throughput: 8,000 → 240,000 events/second (30× increase)"
-  - "Consumer service p99 latency held below 180ms under full load"
+  - "Network transfer volume reduced by ~60% after Protobuf + Gzip rollout"
+  - "PostGIS query load significantly reduced through Redis hot-path caching"
+  - "Service availability improved from single-node fragility to HAProxy-distributed multi-node setup"
+  - "GeoJSON endpoint response time improved after streaming Gzip and worker pool restructuring"
+  - "Infrastructure operated across GCP, Azure, and on-premise environments simultaneously"
 ---
 
 ## Overview
 
-This project was a ground-up redesign of the event processing pipeline for a large B2B SaaS platform — the infrastructure responsible for collecting and routing all user behavior events in real time. The core problem was a batch-polling monolith that had reached its capacity ceiling. The solution was a Kafka-based streaming architecture with Go consumer groups running on Kubernetes.
+This project covers the backend and infrastructure work behind a B2B fleet management platform operated at Fatos — a system that streams real-time GPS data from vehicle devices to fleet operators, dispatchers, and navigation clients simultaneously.
 
-The project spanned ten months: three months of design and prototyping, five months of implementation and incremental rollout, and two months of tuning under production load. The migration ran in parallel with the existing system and required zero downtime.
+The core engineering challenges were network efficiency at scale, geospatial query performance, and service availability under fleet growth. Over the project lifecycle I owned the streaming pipeline, database layer, and infrastructure end-to-end, operating across GCP, Azure, and on-premise environments.
 
 ## Problem
 
-Daily event volume was doubling every few months. The existing system polled a PostgreSQL-backed queue table every few seconds from a single Go process. That design had two structural limits: it could not scale horizontally, and the in-memory queue buffer was lost on every restart.
+Fleet vehicles report GPS position every 1–5 seconds. Those updates fan out to multiple connected clients — dispatcher dashboards, navigation interfaces, analytics pipelines. As the fleet grew, three structural problems compounded each other.
 
-At peak hours (9–10 AM), the queue backlog grew to tens of thousands of events. Average processing latency exceeded 12 seconds. Downstream systems that depended on events — notification delivery, analytics dashboards, billing triggers — were visibly stale. Worse, 0.3% of events were silently dropped when the buffer hit its size limit.
+**Network cost.** All payloads were raw JSON. The bandwidth overhead was tolerable at small fleet sizes but grew proportionally with vehicle count until it became a real operational cost.
+
+**Database pressure.** PostGIS geospatial queries ran on every request with no cache in front. Repeated proximity lookups — "show all vehicles within 500m of this location" — executed the same queries against the database on every poll.
+
+**Single point of failure.** The backend was a single NestJS process handling all WebSocket connections. During peak dispatch hours, this process was both the throughput ceiling and the only failure point.
 
 ## My Role
 
-I owned this project end to end: requirements analysis, Kafka topic design, Go consumer service implementation, Kubernetes deployment configuration, Prometheus monitoring setup, and the zero-downtime migration. No other engineers were allocated to this work. I collaborated with the product team on SLA targets and with the DBA on PostgreSQL write patterns, but all implementation decisions were mine.
+Senior backend engineer with end-to-end ownership across the streaming pipeline, database layer, and infrastructure. I designed and implemented the Protobuf serialization layer, the Redis caching strategy, the HAProxy load balancing configuration, and the Varnish caching setup. I also operated the multi-cloud deployment throughout the project lifecycle.
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    SRC["Event Sources\nIoT / Web"] -->|"Partition key: source ID"| KP["Kafka Producer\n(Go)"]
-    KP --> KC["Kafka Cluster\n24 partitions"]
-    KC --> CG["Go Consumer Group\nK8s HPA · 3-12 pods"]
-    CG --> RD["Redis\nIdempotency check SET NX"]
-    RD --> PG["PostgreSQL\nAtomic event write"]
-    PG --> DS["Notification Service\nAnalytics Pipeline"]
+    VD["Vehicle Devices\nGPS @ 1–5s intervals"] -->|WebSocket| LB["HAProxy\nTCP mode · health checks"]
+    LB --> NJ["NestJS Cluster\nProtobuf + Gzip"]
+    NJ --> RD["Redis\nCurrent position cache\n10s TTL"]
+    NJ --> PG["PostgreSQL (PostGIS)\nLocation history\nGeospatial queries"]
+    RD --> DS["Dispatch Dashboard\nNavigation Clients"]
+    PG --> DS
+    VC["Varnish\nHTTP response cache"] --> DS
+    VC --> NJ
 ```
 
-Producers key messages by source ID, so events from the same source always land on the same partition and arrive in order. The Kafka cluster runs 24 partitions. Consumer groups are Go services deployed via Kubernetes Deployments with HPA configured on consumer group lag — when the lag metric exceeds a threshold, new pods spin up within about 90 seconds. Redis handles idempotency before any database write. PostgreSQL receives the final, deduplicated event record.
+Vehicle devices maintain persistent WebSocket connections through HAProxy to a pool of NestJS servers. Incoming position updates are written to PostGIS for durable storage and simultaneously update the Redis current-position cache. Client-facing HTTP endpoints (route data, zone boundaries, historical queries) pass through Varnish before reaching the application layer.
 
 ## Key Decisions
 
-### Kafka over RabbitMQ
+### Protobuf over JSON
 
-The two hard requirements were high throughput and replayability. RabbitMQ handles complex routing well but deletes messages after consumption, making post-failure replay difficult without external storage. Kafka retains the log by design, so resetting a consumer's offset and replaying from any point is a first-class operation. For a pipeline where data loss has downstream financial consequences, this durability was the deciding factor.
+The decision came from measurement. Sampling real traffic showed GPS update messages averaged 340 bytes as JSON. The equivalent Protobuf schema encoded to roughly 60 bytes — an 82% reduction per message. With Gzip layered on top, total daily transfer volume dropped by approximately 60%.
 
-RabbitMQ would have been a reasonable choice if routing complexity were high and replay were not a requirement — for this workload, it was not the right fit.
+The tradeoff was debugging complexity. Binary frames are not human-readable in standard log output. We added a `x-encoding: json` development-mode header that returned plain JSON when set, keeping local debugging ergonomics acceptable.
 
-### Partition key design
+### Redis caching strategy
 
-Source ID as the partition key guarantees per-source ordering and makes throughput scaling mechanical: add partitions and replicas, processing capacity grows linearly. The known risk is hot partitions. We accepted this tradeoff initially and built the virtual sharding mechanism after observing the hot-source problem in production, rather than over-engineering upfront.
+Analysis of query patterns showed that reads were dominated by current-position lookups — the same vehicle queried repeatedly in a short window. A 10-second TTL Redis cache in front of PostGIS absorbed most of this traffic while keeping position data fresh enough for dispatch use cases.
 
-### Redis idempotency instead of DB constraints
+We chose shared Redis over per-node in-memory caches. Per-node caches are faster but lose their state on node restarts and return inconsistent data in a multi-node setup. Redis as a shared cache is simpler to reason about and easier to monitor.
 
-A unique constraint on the event ID column in PostgreSQL would prevent duplicate rows but creates lock contention when duplicates arrive in bursts (which they do during rebalancing). A Redis SET NX check is lock-free, completes in under 1ms, and can be scaled independently. The TTL of 24 hours covers any plausible redelivery window.
+### HAProxy TCP-mode load balancing
+
+WebSocket connections are long-lived and upgrade from HTTP. HTTP-mode proxies can interrupt idle connections, which drops sessions. TCP-mode HAProxy passes WebSocket traffic transparently while still providing health-check-based routing. We set up a dedicated health endpoint on each node and configured HAProxy to remove unhealthy nodes within 10 seconds of failure, enabling clean rolling deployments.
 
 ## Challenges and Solutions
 
-### Event loss during consumer rebalancing
+### GeoJSON response bottleneck
 
-Kafka rebalances partition assignments whenever a consumer group member joins or leaves. During a rolling deployment, a pod shutting down triggers a rebalance before it has committed all in-flight messages. Those messages are redelivered to a new consumer, which creates duplicates — or in rare cases, if the new assignment happens too quickly, a narrow window where messages are in neither consumer's in-flight set.
+Route geometry and zone boundary endpoints returned GeoJSON payloads that could reach several hundred kilobytes for complex routes. Clients experienced noticeable rendering delays.
 
-The fix was explicit offset management: disable auto-commit, commit only after a confirmed write to PostgreSQL, and on SIGTERM give the pod up to 30 seconds to drain its current batch before exiting. With this change, the rebalance window is bounded to the graceful shutdown duration, and all in-flight messages are either committed or cleanly redelivered.
+Profiling the response path revealed two bottlenecks: PostGIS was serializing geometry to GeoJSON synchronously on the main event loop, and Gzip compression was applied after the full response string was assembled in memory. Moving geometry serialization to a worker pool removed the event loop block. Switching to streaming Gzip — compressing chunks as they were assembled rather than the final string — reduced both response time and peak memory usage on this code path.
 
-### Hot partition saturation
+### Rolling Protobuf migration
 
-One enterprise customer's event volume peaked at 30% of total cluster traffic. That source ID's partition was perpetually saturated while others ran at 15% utilization. The naive fix — increase partition count — would only help if the key distribution changed.
+A hard cutover requiring all clients to update simultaneously was not operationally acceptable. We negotiated encoding format at connection establishment: clients set a `x-encoding: protobuf` header during the WebSocket upgrade handshake, and the server handled both JSON and Protobuf connections throughout the migration window.
 
-The solution was virtual sharding: for any source whose 60-second rolling throughput falls in the top 5%, we append a shard index to its partition key (`source_id-0`, `source_id-1`, …). A background coordinator job calculates shard counts from the measured throughput and publishes them to a shared config store. Consumers and producers read the same config to ensure consistent routing. The hot source's traffic spread evenly across 8 partitions, eliminating the bottleneck.
+Schema changes were restricted to additive-only additions until the migration was complete. After all clients had moved to Protobuf, deprecated fields were marked reserved and removed in a follow-up schema version.
 
 ## Impact
 
-Results measured over six months of production operation following full rollout:
+Measured across production operation at Fatos (2022–2025):
 
-- Average processing latency: **12 seconds → 600ms** (95% reduction)
-- Peak-hour event loss rate: **0.3% → 0%** (no events lost in six months)
-- System availability: **99.6% → 99.95%** (monthly downtime under 15 minutes)
-- Peak throughput: **8,000 → 240,000 events/second** (30× increase)
-- Consumer p99 latency held below **180ms** under full production load
+- Network transfer volume: **~60% reduction** after Protobuf + Gzip rollout
+- PostGIS query pressure: significantly reduced through Redis current-position caching
+- Service availability: improved from single-node fragility to HAProxy-distributed multi-node setup
+- GeoJSON endpoints: response time improved after streaming Gzip and worker pool restructuring
+- Infrastructure: operated across **GCP, Azure, and on-premise** environments simultaneously

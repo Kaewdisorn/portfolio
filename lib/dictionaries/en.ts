@@ -36,14 +36,14 @@ const en: Dictionary = {
     pageTitle: "About",
     pageDescription: "Engineering philosophy and technical interests",
     intro:
-      "I'm a backend engineer with 5+ years of experience building real-time systems, distributed infrastructure, and performance-critical services. My focus is on systems that are not just correct, but operationally trustworthy at scale.",
+      "Senior backend and platform engineer with 5+ years of production experience in real-time systems, distributed architecture, and infrastructure performance. Most of my work has involved end-to-end ownership across backend, infrastructure, and data layers — designing, shipping, and operating systems under real load across GCP, Azure, and on-premise environments.",
     focusTitle: "Technical Focus",
     focus: [
-      "Real-time data pipelines and event streaming",
-      "High-availability distributed system design",
-      "Database performance optimization and query tuning",
-      "Kubernetes-based container infrastructure",
-      "Observability design and SLO engineering",
+      "Real-time GPS and WebSocket-based data streaming pipelines",
+      "High-availability distributed service architecture",
+      "Geospatial data processing with PostgreSQL and PostGIS",
+      "CI/CD automation and containerized multi-cloud infrastructure",
+      "Performance optimization through serialization, compression, and caching",
     ],
     valuesTitle: "Engineering Philosophy",
     values: [

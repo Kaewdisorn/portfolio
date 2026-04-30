@@ -7,20 +7,20 @@ interface SkillArea {
 
 const SKILLS: SkillArea[] = [
   {
-    label: "Backend Systems",
-    items: ["Go", "Node.js", "Python", "gRPC", "REST", "GraphQL"],
+    label: "Backend",
+    items: ["Node.js", "NestJS", "FastAPI", "Express", "Dart"],
   },
   {
-    label: "Data & Messaging",
-    items: ["Apache Kafka", "Redis", "PostgreSQL", "Elasticsearch", "ClickHouse"],
+    label: "Data",
+    items: ["PostgreSQL", "PostGIS", "Redis", "MySQL"],
   },
   {
     label: "Infrastructure",
-    items: ["Kubernetes", "Docker", "Terraform", "AWS", "GCP"],
+    items: ["Docker", "Docker Swarm", "Jenkins", "Nginx", "HAProxy", "Varnish"],
   },
   {
-    label: "Observability",
-    items: ["Prometheus", "Grafana", "OpenTelemetry", "Datadog"],
+    label: "Platform & Protocol",
+    items: ["GCP", "Azure", "WebSocket", "gRPC", "REST"],
   },
 ];
 
