@@ -26,9 +26,9 @@ export default function NavLinks({ links }: NavLinksProps) {
               href={href}
               aria-current={isActive ? "page" : undefined}
               className={clsx(
-                "rounded px-3 py-1.5 text-sm transition-colors",
+                "relative rounded px-3 py-1.5 text-sm transition-colors",
                 isActive
-                  ? "text-[var(--color-text)] font-medium"
+                  ? "text-[var(--color-text)] font-medium after:absolute after:bottom-[-1px] after:left-3 after:right-3 after:h-px after:bg-[var(--color-accent)] after:content-['']"
                   : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
               )}
             >

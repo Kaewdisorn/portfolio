@@ -7,6 +7,7 @@ const en: Dictionary = {
     about: "About",
   },
   home: {
+    eyebrow: "Backend Engineer",
     headline: "Designing and operating\nbackend systems",
     subheadline:
       "Backend engineer specializing in real-time systems, distributed architecture, and infrastructure performance.",

@@ -20,7 +20,7 @@ export default function Navbar({ locale, nav }: NavbarProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-surface)]/90 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 backdrop-blur-md">
       <Container>
         <nav
           aria-label="Main navigation"
@@ -29,8 +29,14 @@ export default function Navbar({ locale, nav }: NavbarProps) {
           {/* Logo / site name */}
           <Link
             href={localePath(locale, "/")}
-            className="text-sm font-semibold tracking-tight text-[var(--color-text)]"
+            className="flex items-center gap-2 text-sm font-semibold tracking-tight text-[var(--color-text)]"
           >
+            <span
+              className="flex h-6 w-6 items-center justify-center rounded bg-[var(--color-accent)] text-[10px] font-bold text-white"
+              aria-hidden="true"
+            >
+              P
+            </span>
             Portfolio
           </Link>
 

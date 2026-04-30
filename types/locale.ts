@@ -12,6 +12,7 @@ export interface DictionaryNav {
 }
 
 export interface DictionaryHome {
+  eyebrow: string;
   headline: string;
   subheadline: string;
   cta: string;

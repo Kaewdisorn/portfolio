@@ -7,6 +7,7 @@ const ko: Dictionary = {
     about: "소개",
   },
   home: {
+    eyebrow: "백엔드 엔지니어",
     headline: "백엔드 시스템을 설계하고\n운영합니다",
     subheadline:
       "실시간 시스템, 분산 아키텍처, 인프라 성능 최적화 전문 백엔드 엔지니어입니다.",
