@@ -92,9 +92,6 @@ export default function SkillsSnapshot({ home }: SkillsSnapshotProps) {
           >
             {home.skillsTitle}
           </h2>
-          <p className="mt-3 max-w-[52ch] text-sm text-[var(--color-text-muted)] leading-relaxed">
-            Tools and technologies I have used to design, build, and operate production systems.
-          </p>
         </div>
 
         {/* Category grid — 2 col, last item spans full width */}
@@ -126,7 +123,7 @@ export default function SkillsSnapshot({ home }: SkillsSnapshotProps) {
                   >
                     {/* Icon or monogram */}
                     <div className="flex h-9 w-9 items-center justify-center">
-                      {skill.icon ? (
+                      {"icon" in skill ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={skill.icon}
