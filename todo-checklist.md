@@ -45,13 +45,13 @@
 
 ⚠️ Set this up before writing any components. Changing it later is painful.
 
-- [ ] Create `app/[locale]/` — all locale-scoped routes live here
-- [ ] Create `components/` — shared UI components
-- [ ] Create `content/ko/projects/` — Korean MDX files
-- [ ] Create `content/en/projects/` — English MDX files
-- [ ] Create `lib/` — content loaders, locale helpers, metadata builders
-- [ ] Create `types/` — shared TypeScript interfaces
-- [ ] Create `public/images/projects/` — project screenshots and diagrams
+- [x] Create `app/[locale]/` — all locale-scoped routes live here
+- [x] Create `components/` — shared UI components
+- [x] Create `content/ko/projects/` — Korean MDX files
+- [x] Create `content/en/projects/` — English MDX files
+- [x] Create `lib/` — content loaders, locale helpers, metadata builders
+- [x] Create `types/` — shared TypeScript interfaces
+- [x] Create `public/images/projects/` — project screenshots and diagrams
 
 Final structure should look like:
 
