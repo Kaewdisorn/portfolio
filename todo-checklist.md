@@ -90,9 +90,9 @@ types/
 
 ### 3.1 ⚠️ Locale Routing Setup
 
-- [ ] Create `middleware.ts` at the project root to redirect `/` → `/ko`
-- [ ] In middleware, detect `Accept-Language` header and redirect to `/ko` or `/en` accordingly
-- [ ] Validate redirect does not loop on already-localed paths
+- [x] ~~Create `middleware.ts`~~ → Created `proxy.ts` (`middleware` is deprecated in Next.js 16; renamed to `proxy`)
+- [x] In proxy, detect `Accept-Language` header and redirect to `/ko` or `/en` accordingly
+- [x] Validate redirect does not loop on already-localed paths
 - [ ] Test: visiting `localhost:3000/` redirects to `localhost:3000/ko`
 - [ ] Test: visiting `localhost:3000/en` stays on `/en`
 
@@ -116,44 +116,25 @@ export function middleware(request: NextRequest) {
 export const config = { matcher: ["/((?!_next|favicon.ico|images).*)"] };
 ```
 
-- [ ] Create `types/locale.ts` — export `Locale = 'ko' | 'en'` and `locales` array
+- [x] Create `types/locale.ts` — export `Locale = 'ko' | 'en'` and `locales` array
 
 ### 3.2 Root Layout
 
-- [ ] Create `app/layout.tsx` — minimal root layout, set `lang` attribute dynamically from locale param
-- [ ] Add Inter font via `next/font/google`
-- [ ] Import `globals.css`
+- [x] Create `app/layout.tsx` — minimal root layout, sets `lang` from `x-locale` request header (set by `proxy.ts`)
+- [x] Add Inter font via `next/font/google`
+- [x] Import `globals.css`
 
 ### 3.3 Locale Layout
 
-- [ ] Create `app/[locale]/layout.tsx` — receives `params: { locale: Locale }`
-- [ ] Validate `locale` param against the `locales` array; call `notFound()` for invalid locales
-- [ ] Render `<Navbar>` and `<Footer>` inside this layout
-- [ ] Pass `locale` as a prop to `Navbar` for language switcher
+- [x] Create `app/[locale]/layout.tsx` — receives `params: { locale: Locale }`
+- [x] Validate `locale` param against the `locales` array; call `notFound()` for invalid locales
+- [ ] Render `<Navbar>` and `<Footer>` inside this layout — deferred to step 7
+- [ ] Pass `locale` as a prop to `Navbar` for language switcher — deferred to step 7
 
 ### 3.4 Type Definitions
 
-- [ ] Create `types/project.ts` — define `Project` interface:
-  ```ts
-  interface Project {
-    slug: string;
-    locale: Locale;
-    title: string;
-    summary: string;
-    role: string;
-    period: string;
-    stack: string[];
-    problem: string;
-    architecture: string;
-    decisions: Decision[];
-    challenges: Challenge[];
-    impact: string[];
-    featured: boolean;
-    order: number;
-    seo: { title: string; description: string };
-  }
-  ```
-- [ ] Export `Decision` and `Challenge` sub-types from the same file
+- [x] Create `types/project.ts` — define `Project` interface (plus `ProjectMeta` for listing-only shape)
+- [x] Export `Decision` and `Challenge` sub-types from the same file
 
 > **Copilot prompt:** "Generate strict TypeScript types for a portfolio project model with fields: slug, locale, title, summary, role, period, stack, featured, order, seo, and structured sub-types for decisions, challenges, and impact. No `any`."
 

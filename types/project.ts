@@ -1,10 +1,21 @@
 import type { Locale } from "./locale";
 
 export interface ProjectSeo {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
 }
 
+export interface Decision {
+  title: string;
+  body: string;
+}
+
+export interface Challenge {
+  title: string;
+  body: string;
+}
+
+/** Metadata-only shape — used for project listing pages. */
 export interface ProjectMeta {
   slug: string;
   locale: Locale;
@@ -15,13 +26,14 @@ export interface ProjectMeta {
   stack: string[];
   featured: boolean;
   order: number;
-  seo?: ProjectSeo;
+  seo: ProjectSeo;
 }
 
-export interface ProjectContent extends ProjectMeta {
+/** Full project shape including structured content fields from frontmatter. */
+export interface Project extends ProjectMeta {
   problem: string;
   architecture: string;
-  decisions: string;
-  challenges: string;
-  impact: string;
+  decisions: Decision[];
+  challenges: Challenge[];
+  impact: string[];
 }
