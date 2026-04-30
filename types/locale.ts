@@ -43,6 +43,7 @@ export interface DictionaryProject {
   challengesHeading: string;
   impactHeading: string;
   breadcrumbProjects: string;
+  repoLabel: string;
 }
 
 export interface DictionaryAbout {

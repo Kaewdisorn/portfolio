@@ -39,6 +39,7 @@ const en: Dictionary = {
     challengesHeading: "Challenges and Solutions",
     impactHeading: "Impact",
     breadcrumbProjects: "Projects",
+    repoLabel: "View on GitHub",
   },
   about: {
     pageTitle: "About",

@@ -164,6 +164,12 @@ function parseFrontmatter(
   slug: string,
   locale: Locale,
 ): Project {
+  const repoUrlRaw = data["repoUrl"];
+  const repoUrl =
+    typeof repoUrlRaw === "string" && repoUrlRaw.trim() !== ""
+      ? repoUrlRaw.trim()
+      : undefined;
+
   return {
     slug,
     locale,
@@ -181,6 +187,7 @@ function parseFrontmatter(
     decisions: requireDecisions(data, slug),
     challenges: requireChallenges(data, slug),
     impact: requireStringArray(data, "impact", slug),
+    repoUrl,
   };
 }
 

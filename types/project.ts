@@ -30,6 +30,7 @@ export interface ProjectMeta {
   featured: boolean;
   order: number;
   seo: ProjectSeo;
+  repoUrl?: string;
 }
 
 /** Full project shape including structured content fields from frontmatter. */

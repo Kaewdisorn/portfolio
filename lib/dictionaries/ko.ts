@@ -39,6 +39,7 @@ const ko: Dictionary = {
     challengesHeading: "도전과 해결",
     impactHeading: "성과",
     breadcrumbProjects: "프로젝트",
+    repoLabel: "GitHub에서 보기",
   },
   about: {
     pageTitle: "소개",
