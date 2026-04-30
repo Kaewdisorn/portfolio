@@ -8,10 +8,12 @@ const en: Dictionary = {
   },
   home: {
     eyebrow: "Product Engineer · Real-time Systems",
-    headline: "Building scalable products powered by\nreal-time systems",
+    availableBadge: "Available for New Opportunities",
+    headline: "Building scalable products with\nreal-time systems",
     subheadline:
-      "Product engineer specializing in real-time systems and distributed architecture, building high-throughput systems that improve product performance, scalability, and user experience.",
+      "Product engineer specializing in real-time systems and distributed architecture, improving performance, scalability, and user experience.",
     cta: "View Project Case Studies",
+    ctaSecondary: "Contact Me",
     featuredTitle: "Featured Projects",
     skillsTitle: "Technical Expertise",
     contactTitle: "Get in Touch",

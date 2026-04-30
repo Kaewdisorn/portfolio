@@ -6,19 +6,19 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
 
-  /* Color palette — neutral base + single accent */
-  --color-surface:       #ffffff;
-  --color-surface-2:     #f6f6f5;   /* muted card / code block background */
-  --color-surface-3:     #efefed;   /* deeper callout surface */
-  --color-border:        #e4e4e1;
-  --color-border-strong: #d0d0cc;
-  --color-text:          #17171a;
-  --color-text-muted:    #636360;
-  --color-text-faint:    #9d9d98;
-  --color-accent:        #4f46e5;   /* indigo-600 — used sparingly */
-  --color-accent-hover:  #4338ca;   /* indigo-700 */
-  --color-accent-subtle: rgb(79 70 229 / 0.07);  /* faint accent tint */
-  --color-accent-glow:   rgb(79 70 229 / 0.12);  /* hover glow shadow */
+  /* Color palette — dark theme + single accent */
+  --color-surface:       #0b0b12;
+  --color-surface-2:     #13131d;   /* muted card / code block background */
+  --color-surface-3:     #1c1c2a;   /* deeper callout surface */
+  --color-border:        #1e1e2e;
+  --color-border-strong: #2a2a3d;
+  --color-text:          #e8e8f0;
+  --color-text-muted:    #8585a0;
+  --color-text-faint:    #55556a;
+  --color-accent:        #6366f1;   /* indigo-500 — used sparingly */
+  --color-accent-hover:  #818cf8;   /* indigo-400, lighter on dark bg */
+  --color-accent-subtle: rgb(99 102 241 / 0.09);  /* faint accent tint */
+  --color-accent-glow:   rgb(99 102 241 / 0.25);  /* hover glow shadow */
 
   /* Reading width */
   --max-w-reading: 68ch;

@@ -13,9 +13,11 @@ export interface DictionaryNav {
 
 export interface DictionaryHome {
   eyebrow: string;
+  availableBadge: string;
   headline: string;
   subheadline: string;
   cta: string;
+  ctaSecondary: string;
   featuredTitle: string;
   skillsTitle: string;
   contactTitle: string;

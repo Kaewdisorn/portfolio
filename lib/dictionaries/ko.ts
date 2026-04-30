@@ -8,10 +8,12 @@ const ko: Dictionary = {
   },
   home: {
     eyebrow: "프로덕트 엔지니어 · 실시간 시스템",
-    headline: "실시간 시스템 기반\n확장 가능한 제품을\n만듭니다",
+    availableBadge: "새로운 기회에 열려 있습니다",
+    headline: "실시간 시스템으로\n확장 가능한 제품을\n만듭니다",
     subheadline:
       "실시간 시스템과 분산 아키텍처를 기반으로 제품의 성능, 확장성, 사용자 경험을 개선하는 프로덕트 엔지니어입니다.",
     cta: "프로젝트 사례 보기",
+    ctaSecondary: "연락하기",
     featuredTitle: "주요 프로젝트",
     skillsTitle: "기술 역량",
     contactTitle: "연락하기",
