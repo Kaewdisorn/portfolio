@@ -41,6 +41,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+  background-color: var(--color-surface);
 }
 
 body {
