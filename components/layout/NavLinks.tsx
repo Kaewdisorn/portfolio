@@ -12,7 +12,7 @@ export default function NavLinks({ links }: NavLinksProps) {
   const pathname = usePathname();
 
   return (
-    <ul className="hidden sm:flex items-center gap-1" role="list">
+    <ul className="hidden sm:flex items-center gap-0.5" role="list">
       {links.map(({ href, label }) => {
         // Active: exact match for home, prefix match for others
         const isActive =
@@ -26,9 +26,9 @@ export default function NavLinks({ links }: NavLinksProps) {
               href={href}
               aria-current={isActive ? "page" : undefined}
               className={clsx(
-                "relative rounded px-3 py-1.5 text-sm transition-colors",
+                "relative rounded px-4 py-2 text-[0.9375rem] font-medium transition-colors",
                 isActive
-                  ? "text-[var(--color-text)] font-medium after:absolute after:bottom-[-1px] after:left-3 after:right-3 after:h-px after:bg-[var(--color-accent)] after:content-['']"
+                  ? "text-[var(--color-text)] after:absolute after:bottom-[-2px] after:left-4 after:right-4 after:h-[2px] after:rounded-full after:bg-[var(--color-accent)] after:content-['']"
                   : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
               )}
             >

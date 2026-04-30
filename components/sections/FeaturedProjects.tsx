@@ -59,7 +59,7 @@ export default function FeaturedProjects({
             <Link
               key={project.slug}
               href={localePath(locale, `/projects/${project.slug}`)}
-              className="group relative overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] px-8 py-8 transition-all duration-300 hover:border-[var(--color-accent)] hover:shadow-[0_0_48px_rgb(99_102_241_/_0.18)]"
+              className="group relative overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] px-5 py-6 sm:px-8 sm:py-8 transition-all duration-300 hover:border-[var(--color-accent)] hover:shadow-[0_0_48px_rgb(99_102_241_/_0.18)]"
             >
               {/* Left gradient border */}
               <span
@@ -75,11 +75,11 @@ export default function FeaturedProjects({
                 aria-hidden="true"
               />
 
-              {/* Large faint ordinal number — top right */}
+              {/* Large faint ordinal number — hidden on mobile, top right on desktop */}
               <span
-                className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 select-none font-bold leading-none"
+                className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 select-none font-bold leading-none sm:block"
                 style={{
-                  fontSize: "clamp(6rem, 12vw, 9rem)",
+                  fontSize: "clamp(5rem, 10vw, 8rem)",
                   color: "rgb(99 102 241 / 0.05)",
                   fontVariantNumeric: "tabular-nums",
                 }}
@@ -88,9 +88,9 @@ export default function FeaturedProjects({
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              {/* Arrow — absolute bottom right, clear of the number */}
+              {/* Arrow — hidden on mobile to avoid overlap, visible on sm+ */}
               <span
-                className="absolute bottom-6 right-8 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] text-[var(--color-text-muted)] transition-all duration-200 group-hover:border-[var(--color-accent)] group-hover:bg-[var(--color-accent-subtle)] group-hover:text-[var(--color-accent)] group-hover:translate-x-0.5"
+                className="absolute bottom-6 right-6 hidden h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] text-[var(--color-text-muted)] transition-all duration-200 group-hover:border-[var(--color-accent)] group-hover:bg-[var(--color-accent-subtle)] group-hover:text-[var(--color-accent)] group-hover:translate-x-0.5 sm:flex"
                 aria-hidden="true"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -113,7 +113,7 @@ export default function FeaturedProjects({
                   </div>
 
                   {/* Title */}
-                  <h3 className="mb-3 text-2xl font-bold leading-snug tracking-tight text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
+                  <h3 className="mb-3 text-xl font-bold leading-snug tracking-tight text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)] sm:text-2xl">
                     {project.title}
                   </h3>
 
@@ -128,7 +128,7 @@ export default function FeaturedProjects({
                       {project.stack.slice(0, 6).map((tech) => (
                         <span
                           key={tech}
-                          className="rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-2.5 py-1 font-mono text-xs text-[var(--color-text)]"
+                          className="rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-2.5 py-1 font-sans text-xs text-[var(--color-text)]"
                         >
                           {tech}
                         </span>

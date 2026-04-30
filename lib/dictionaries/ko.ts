@@ -13,7 +13,7 @@ const ko: Dictionary = {
     headline: "제품 성능의 한계를\n확장하는\n실시간 시스템",
     subheadline:
       "실시간 시스템과 분산 아키텍처를 설계하고 운영하며, 성능·확장성·안정성을 균형 있게 개선해 왔습니다.",
-    cta: "프로젝트 사례 보기",
+    cta: "프로젝트 보기",
     ctaSecondary: "연락하기",
     featuredTitle: "주요 프로젝트",
     skillsTitle: "기술 역량",

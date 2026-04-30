@@ -25,7 +25,7 @@ export default function Navbar({ locale, nav }: NavbarProps) {
       <Container>
         <nav
           aria-label="Main navigation"
-          className="flex h-14 items-center justify-between gap-6"
+          className="flex h-16 items-center justify-between gap-6"
         >
           {/* Logo / site name */}
           <Link
