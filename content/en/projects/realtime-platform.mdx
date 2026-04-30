@@ -1,13 +1,13 @@
 ---
 title: "Real-Time Mobility Tracking Platform"
-summary: "Designed and built a real-time fleet tracking platform at Fatos across mobile, web, backend, database, infrastructure, and CI/CD layers. Defined the end-to-end workflow from 1-second mobile GPS ingest to live browser monitoring, using Redis-backed decoupling, dedicated API services, and proxy-layer cache routing in Azure."
+summary: "Designed and built a real-time fleet tracking platform at Fatos across mobile, web, backend, database, infrastructure, and CI/CD layers. Defined the end-to-end workflow for roughly 20-30 active devices reporting GPS every second, including offline backfill after reconnect, Protobuf/Gzip transport for GeoJSON-heavy payloads, live browser monitoring, and downloadable driving-data reports in Azure."
 role: "Senior Software Engineer"
 period: "2022.01 – 2025.10"
 stack:
-  - Flutter
+  - Flutter / Flutter Web
   - Dart Shelf
   - FastAPI
-  - Node.js (Express, NestJs)
+  - Node.js (Express -> NestJS)
   - WebSocket
   - Protobuf
   - Redis
@@ -23,48 +23,52 @@ order: 1
 seo:
   title: "Real-Time Mobility Tracking Platform | Portfolio"
   description: "Architecture and ownership notes for a Fatos real-time mobility platform spanning Flutter clients, Dart and Python services, Redis-backed ingest, PostgreSQL persistence, and Nginx/HAProxy/Varnish routing in Azure."
-problem: "The platform had to ingest GPS updates from mobile devices every second, persist them reliably, and reflect live movement in a browser monitoring tool without forcing the websocket entrypoint to do all the work itself. At the same time, the system needed a clear routing strategy for cacheable map traffic, dedicated services for ETA and map workloads, and a delivery process that could be operated consistently in Azure."
-architecture: "Flutter mobile clients send GPS frames every second over WebSocket to a Dart Shelf server. That server immediately LPUSHes messages to Redis. Dart workers BRPOP the queue, persist records to PostgreSQL, and publish live updates through Redis Pub/Sub. A monitoring server subscribes to those updates and pushes them over WebSocket to the Flutter web dashboard. Nginx fronts the system, HAProxy applies routing rules, Varnish handles cacheable map requests, Node/Express serves map responses, and FastAPI handles ETA-specific logic."
+problem: "The platform had to ingest GPS updates every second from roughly 20-30 active devices, persist them reliably, and reflect live movement in a browser monitoring tool without forcing the websocket entrypoint to do all the work itself. Devices also needed to buffer GPS locally when offline and replay missed data after reconnect without corrupting ordering or freshness. At the same time, the system needed compressed transport for GeoJSON-heavy payloads, a clear routing strategy for cacheable map traffic, dedicated services for ETA and report workloads, and a delivery process that could be operated consistently in Azure."
+architecture: "Flutter mobile clients send GPS frames every second over WebSocket to a Dart Shelf server using Protobuf and Gzip to reduce GeoJSON-heavy payload size. If a device is offline, GPS is buffered locally and replayed after reconnect. The server immediately LPUSHes messages to Redis. Dart workers BRPOP the queue, persist records to PostgreSQL, and publish live updates through Redis Pub/Sub. A monitoring server subscribes to those updates and pushes them over WebSocket to the Flutter web dashboard. Nginx fronts the system, HAProxy applies routing rules, Varnish handles cacheable map requests, Node.js services first built with Express and later refactored toward NestJS serve map and report workloads, and FastAPI handles ETA-specific logic."
 decisions:
   - title: "Redis queue between ingest and persistence"
     body: "I kept the websocket ingest server intentionally thin. Its job was to receive high-frequency GPS frames and push them into Redis with LPUSH, not to perform parsing, persistence, or downstream fan-out inline. That separation reduced the chance that database latency or secondary processing would affect the ingest path. Dart workers consumed the queue with BRPOP, which made persistence and live publishing independently scalable from the socket entrypoint."
   - title: "Dedicated services by workload"
-    body: "I did not force every concern into one backend. The main Dart Shelf server handled the realtime ingest path, FastAPI handled ETA-specific logic, and Node/Express served the map workload. This split kept each service aligned with its dominant responsibility instead of creating one broad server that mixed websocket ingestion, route calculation, map handling, and operational APIs in the same runtime."
+    body: "I did not force every concern into one backend. The main Dart Shelf server handled the realtime ingest path, FastAPI handled ETA-specific logic, and Node.js services handled map and report workloads. That Node.js surface started in Express and was later refactored toward NestJS as the service boundaries became broader and needed more structure. This split kept each service aligned with its dominant responsibility instead of creating one broad server that mixed websocket ingestion, route calculation, reporting, map handling, and operational APIs in the same runtime."
   - title: "Proxy-layer routing and cache control"
     body: "Map traffic has a very different profile from realtime ingestion traffic, so I handled that distinction at the infrastructure layer. Nginx accepted requests, HAProxy applied routing rules, and map requests were sent to Varnish before Node/Express. Cache hits returned immediately from Varnish, while cache misses flowed through to the map server. Non-map requests continued to the Dart API path. This kept cache policy explicit and prevented map behavior from leaking into the realtime server."
-  - title: "Protobuf serialization and Gzip compression for the GPS stream"
-    body: "GPS frames arrive every second from every active device, creating a continuous high-frequency stream. JSON-encoded payloads at that frequency accumulate bandwidth cost and server-side parse overhead quickly. I replaced JSON with Protocol Buffers for GPS frame serialization and added Gzip compression on top. The combined change reduced network transfer volume by approximately 60% compared to the JSON baseline, with a measurable improvement in end-to-end response latency across the ingest pipeline."
+  - title: "Protobuf serialization and Gzip compression for communication payloads"
+    body: "Location and GeoJSON-heavy payloads were exchanged continuously between clients and backend services. JSON at that frequency and shape accumulates both bandwidth cost and parse overhead quickly. I standardized those communication paths around Protocol Buffers with Gzip compression. The combined change reduced network transfer volume by approximately 60% compared to the JSON baseline and improved end-to-end response latency across the ingest and monitoring flow."
 challenges:
   - title: "Keeping 1-second GPS ingest stable"
     body: "A 1-second reporting interval means the ingest path cannot afford unnecessary work in the websocket handler. The main design challenge was keeping realtime entry lightweight while still guaranteeing persistence and live monitoring. Offloading storage and publish steps to Redis-backed workers solved that by turning the ingest server into a reliable handoff point rather than the place where every downstream concern executed synchronously."
   - title: "Serving live monitoring and persisted history together"
     body: "The browser monitoring experience needed live updates quickly, but the platform also needed an authoritative history in PostgreSQL. I used Redis Pub/Sub for live fan-out and PostgreSQL for stored records so that the live path and the historical path stayed connected but not tightly coupled. That reduced pressure to choose between immediacy and durability in a single code path."
+  - title: "Handling offline buffering and delayed GPS replay"
+    body: "Field connectivity was not reliable enough to assume a permanent connection. When a device went offline, the mobile app stored GPS locally and sent the backlog after reconnect. That meant the backend had to accept delayed telemetry without confusing older replayed points with fresh live movement. I treated replay as part of the normal pipeline instead of as an edge case so missed data could still be persisted and reflected correctly."
   - title: "Coordinating frontend, backend, and infrastructure boundaries"
     body: "Because I worked across Flutter mobile, Flutter web, backend services, database design, and infrastructure, the architecture had to be understandable end to end. WebSocket message flow, database schema design, HAProxy and Varnish behavior, and Jenkins deployment steps all had to line up. The challenge was less about one difficult algorithm and more about building a system whose boundaries stayed clear across multiple stacks."
 impact:
-  - "Established a clear realtime workflow from 1-second mobile GPS ingest to live browser monitoring"
-  - "Separated ingest, persistence, and live fan-out through Redis Lists and Pub/Sub rather than one overloaded websocket server"
-  - "Introduced cache-aware map routing through Nginx, HAProxy, Varnish, and a dedicated Node/Express map service"
-  - "Built and operated the platform across API services, database design, infrastructure, and CI/CD in Azure"
-  - "Delivered a system where mobile, web, backend, and operational concerns were designed as one coherent flow"
-  - "Applied Protobuf serialization and Gzip compression to GPS frames, reducing network transfer volume by ~60% and improving end-to-end response latency"
+  - "Sustained a realtime GPS pipeline for roughly 20-30 concurrently active devices reporting every second"
+  - "Separated ingest, persistence, live fan-out, ETA, and reporting concerns through dedicated services rather than one overloaded websocket server"
+  - "Handled offline buffering and replay so GPS collected during connection loss could be delivered after reconnect instead of being dropped"
+  - "Applied Protobuf serialization and Gzip compression across communication paths carrying GeoJSON-heavy payloads, reducing network transfer volume by ~60% and improving end-to-end response latency"
+  - "Delivered downloadable driving reports including driving score, driving data, and sudden-stop history from persisted telemetry"
+  - "Built and operated the platform across API services, database design, infrastructure, and CI/CD in Azure as one coherent system"
 ---
 
 ## Overview
 
-Built at Fatos across 2022–2025, this platform tracked vehicle fleets in real time. A Flutter mobile app reported GPS every second. A browser-based dashboard showed live vehicle positions. Multiple backend services, a Redis pipeline, PostgreSQL, and a proxy/cache stack wired it all together in Azure.
+Built at Fatos across 2022–2025, this platform tracked vehicle fleets in real time. Roughly 20-30 active devices reported GPS every second from the field. The mobile app transmitted location data, buffered it locally during connectivity loss, and replayed missed points after reconnect. A browser dashboard showed live vehicle positions, and the backend also generated downloadable driving reports such as driving score, driving data, and sudden-stop history.
 
-The engineering challenge was not any single hard problem — it was the combination. Ingest that could not afford to be slow. A live feed and a durable history that needed to coexist without coupling. Three fundamentally different traffic profiles — streaming writes, CPU-bound computation, cacheable tile requests — sharing one infrastructure. I owned the full platform within a three-person team: client code, API design, database schema, proxy rules, cache behavior, CI/CD.
+The engineering challenge was not any single hard problem. It was the combination: a constant ingest stream that could not afford to stall, delayed telemetry arriving after reconnect, live monitoring that needed to stay fresh, and GeoJSON-heavy payloads that were too expensive to move around as plain JSON. I owned the full platform within a three-person team: client code, API design, database schema, proxy rules, cache behavior, CI/CD, and cross-service contracts.
 
 Source code cannot be shared. This case study focuses on architecture and design decisions.
 
 ## Problem
 
-**GPS arrives every second and cannot wait.** Mobile devices sent location updates at a fixed 1-second interval. At that frequency, any latency introduced inside the websocket handler compounds immediately across every active device. The ingest server had to receive and hand off data — not process, persist, or fan out inline.
+**GPS arrives every second and cannot wait.** Roughly 20-30 active devices sent location updates at a fixed 1-second interval. At that frequency, any latency introduced inside the websocket handler compounds quickly across the whole fleet. The ingest server had to receive and hand off data, not process, persist, or fan out inline.
 
-**The same data needs to go two places simultaneously.** Every GPS frame had to end up in PostgreSQL as authoritative history and reach a live browser dashboard as fast as possible. The obvious approach — write to the database, then push to monitoring — directly ties dashboard latency to database write latency. That was not acceptable.
+**Connectivity in the field is unreliable.** Devices could go offline or lose connection temporarily. The mobile app therefore had to keep GPS in local storage and replay it later, and the backend had to distinguish delayed backfill from fresh live movement instead of treating everything as if it arrived in perfect order.
 
-**Three traffic types, one infrastructure.** Realtime API, ETA calculations, and map tile requests behaved so differently that treating them identically at the application or proxy layer would cause them to interfere with each other. Map tiles are cacheable and large. Websocket frames are tiny and continuous. ETA logic is CPU-bound. Mixing them without routing discipline means a slow day on one path becomes a slow day everywhere.
+**The same telemetry powers live monitoring and historical outputs.** GPS data had to end up in PostgreSQL as authoritative history, reach the browser dashboard as fast as possible, and support downloadable reports such as driving score, driving data, and sudden-stop history. The obvious approach — write to the database, then make every consumer read from there — directly ties dashboard freshness and reporting latency to the same storage path.
+
+**Three traffic types, one infrastructure.** Realtime API, ETA calculations, and map/report requests behaved so differently that treating them identically at the application or proxy layer would cause them to interfere with each other. Map responses are cacheable and large. Realtime frames are tiny and continuous. ETA logic is CPU-bound. Mixing them without routing discipline means a slow day on one path becomes a slow day everywhere.
 
 ## My Role
 
@@ -72,12 +76,13 @@ Within a three-person team — me, one frontend engineer, the CTO — I designed
 
 - The main Dart Shelf API server and its Redis ingest pipeline
 - Dart workers for queue consumption, database writes, and Pub/Sub publishing
-- The FastAPI ETA service and the Node/Express map server
+- The FastAPI ETA service and the Node.js map/report service, later refactored from Express toward NestJS
 - PostgreSQL schema design
 - Nginx, HAProxy, and Varnish configuration
 - Jenkins CI/CD and Azure infrastructure setup
-- The WebSocket path in the Flutter mobile app
+- The WebSocket path in the Flutter mobile app, including offline GPS buffering and replay after reconnect
 - The GPS data receiving path in the Flutter web dashboard
+- Downloadable report generation for driving score, driving data, sudden-stop data, and related telemetry exports
 
 In practice, I was responsible for the system as a coherent product flow, not just a backend service.
 
@@ -100,9 +105,9 @@ flowchart TD
     HP -->|ETA request| ETA["FastAPI ETA Server"]
 ```
 
-GPS leaves the phone every second over WebSocket. The Dart Shelf server receives the frame, immediately queues it in Redis with LPUSH, and does nothing else. Dart workers pull from that queue with BRPOP, write to PostgreSQL, and publish to Redis Pub/Sub in the same processing step. The monitoring server subscribes and pushes to the Flutter web dashboard.
+GPS leaves the phone every second over WebSocket using Protobuf plus Gzip to keep GeoJSON-heavy payloads smaller. If connectivity drops, the mobile app stores GPS locally and replays the backlog after reconnect. The Dart Shelf server receives each frame, immediately queues it in Redis with LPUSH, and does nothing else. Dart workers pull from that queue with BRPOP, write to PostgreSQL, and publish to Redis Pub/Sub in the same processing step. The monitoring server subscribes and pushes to the Flutter web dashboard.
 
-The HTTP path runs separately. Nginx receives requests, HAProxy routes them by type, and traffic splits from there. Map requests hit Varnish first — cache hits return immediately, misses continue to Node/Express. ETA requests go to FastAPI. Everything else reaches the Dart server.
+The HTTP path runs separately. Nginx receives requests, HAProxy routes them by type, and traffic splits from there. Map requests hit Varnish first — cache hits return immediately, misses continue to the Node.js map service. ETA requests go to FastAPI. Report download requests are served from the Node.js reporting surface backed by persisted driving data. Everything else reaches the Dart server.
 
 The separation matters because these two paths have nothing in common operationally. One is a continuous stream of small, high-frequency writes where latency compounds fast. The other is a mix of CPU-bound computation and large, infrequently-changing responses. Routing them into the same surface would make each one harder to understand and tune.
 
@@ -114,11 +119,11 @@ The most straightforward design has the ingest server write GPS to PostgreSQL an
 
 I made the Dart server a handoff point instead. Receive the frame, LPUSH to Redis, done. Workers handle everything else with BRPOP. This added components, but it created a meaningful fault boundary: database slowdowns and monitoring subscriber load can no longer pull down GPS reception. The ingest server's job became simple enough that it rarely has bad days.
 
-### Running three separate services instead of one
+### Running separate services and refactoring the Node.js surface as it grew
 
-Combining realtime ingest, ETA logic, and map serving into one backend was an option. Deployment would have been simpler. I chose against it because the failure modes and scaling characteristics are genuinely different.
+Combining realtime ingest, ETA logic, reporting, and map serving into one backend was an option. Deployment would have been simpler. I chose against it because the failure modes and scaling characteristics are genuinely different.
 
-A websocket server under continuous GPS load behaves differently from a FastAPI service doing route calculations. Map serving is dominated by cache hit rates, not CPU or I/O in the usual sense. Running them together means any one workload can degrade the others in ways that are hard to isolate during an incident. Separate services made each component's behavior independently observable and tunable.
+A websocket server under continuous GPS load behaves differently from a FastAPI service doing route calculations. Map and report serving are shaped by cache hit rates, file generation, and query patterns rather than by the same realtime constraints. The Node.js service started in Express and was later refactored toward NestJS as the surface area became broader and needed more structure. Keeping these workloads separate made each component's behavior independently observable and tunable.
 
 ### Putting cache logic in the infrastructure layer, not the application
 
@@ -126,11 +131,11 @@ Map tiles are cacheable. I could have implemented caching inside the Node/Expres
 
 The advantage is explicitness. Cache policy is visible at the infrastructure layer without reading application code. When cache behavior is surprising, HAProxy and Varnish logs are where you look first. The map server never processes a cache hit — it stays simple. The cache boundary stays clear and is not tangled with application logic.
 
-### Protobuf serialization and Gzip for the ingest stream
+### Protobuf serialization and Gzip for communication payloads
 
-GPS frames arrive every second from every active device. At that frequency, encoding overhead and payload size compound across the entire fleet. JSON is readable, but each GPS frame carries far more bytes than the data itself requires.
+Location and GeoJSON-heavy payloads were exchanged continuously across the platform. JSON is convenient, but at a 1-second reporting interval it carries far more bytes than the data itself requires and adds avoidable parse overhead.
 
-I replaced JSON with Protocol Buffers for GPS frame serialization and added Gzip compression on top. The combined effect reduced network transfer volume by approximately 60% compared to the JSON baseline. For a pipeline designed to stay as lightweight as possible at the ingest layer, reducing per-frame size also reduced pressure on the websocket handler, Redis, and downstream consumers throughout the processing chain.
+I standardized those communication paths around Protocol Buffers with Gzip compression. The combined effect reduced network transfer volume by approximately 60% compared to the JSON baseline. For a system that depends on keeping both mobile uplink and the ingest pipeline lightweight, shrinking each payload reduced pressure on the websocket handler, Redis, and downstream consumers throughout the chain.
 
 ## Challenges
 
@@ -146,9 +151,15 @@ The dashboard needed to feel live. The database needed authoritative records. Th
 
 The resolution was to never route live updates through the database read path. Workers write to PostgreSQL and publish to Pub/Sub in the same step. The monitoring server subscribes to Pub/Sub, not to database queries. The dashboard stays close to real time; the database accumulates a clean history. Neither path has to wait for the other.
 
-### Maintaining coherence across six technology layers alone
+### Offline buffering and replay after reconnect
 
-The hardest operational challenge was keeping contracts consistent across Flutter, Dart, Python, Node, PostgreSQL, and the proxy stack — inside a three-person team where I owned most of it. A WebSocket message format change, a schema migration, a HAProxy rule update: each had to propagate consistently across the entire chain.
+Field connectivity was not reliable enough to assume a permanent connection. When a device went offline, the mobile app stored GPS locally and sent the backlog once the connection recovered. That created a second class of traffic: delayed telemetry that was still valid but no longer "live" in the same sense as newly captured points.
+
+I treated replay as part of the normal pipeline instead of as an edge case. That meant the backend could accept delayed updates, persist them correctly, and keep the monitoring flow from confusing backfilled data with fresh movement. The outcome was simple: GPS data captured during connection loss was not discarded.
+
+### Maintaining coherence as the primary cross-stack owner
+
+The hardest operational challenge was keeping contracts consistent across Flutter, Dart, Python, Node, PostgreSQL, and the proxy stack inside a three-person team where I owned most of the cross-stack integration. A WebSocket message format change, a schema migration, a HAProxy rule update, or a report export change each had to propagate consistently across the entire chain.
 
 This is the kind of work that does not fit neatly into a task list. It is the judgment required to keep a multi-stack system understandable when there is no large team to catch drift.
 
@@ -156,12 +167,12 @@ This is the kind of work that does not fit neatly into a task list. It is the ju
 
 Operating the platform at Fatos from 2022 to 2025:
 
-- Established a clean GPS pipeline from mobile ingest to live browser monitoring, with Redis as the explicit handoff layer between them
-- Separated five distinct concerns — ingest, persistence, live fan-out, ETA logic, map serving — into services with clear operational boundaries
-- Isolated cacheable map traffic behind Varnish and Node/Express, keeping the main API path unaffected by map load
-- Owned backend services, database design, proxy configuration, Jenkins CI/CD, and Azure infrastructure as one integrated system
-- Delivered the platform as a coherent product workflow: mobile, web, backend, and operations designed together from the start
-- Applied Protobuf serialization and Gzip compression to GPS frames, cutting network transfer volume by ~60% and improving end-to-end response latency
+- Sustained a realtime GPS pipeline for roughly 20-30 concurrently active devices reporting every second
+- Established a clean flow from mobile ingest to live browser monitoring, with Redis as the explicit handoff layer between them
+- Handled offline buffering and replay so GPS captured during connection loss could be sent after reconnect instead of being dropped
+- Applied Protobuf serialization and Gzip compression across communication paths carrying GeoJSON-heavy payloads, cutting network transfer volume by ~60% and improving end-to-end response latency
+- Delivered downloadable driving reports including driving score, driving data, and sudden-stop history from persisted telemetry
+- Built and operated backend services, database design, proxy configuration, Jenkins CI/CD, and Azure infrastructure as one integrated system
 
 ## What I Would Improve Next
 
