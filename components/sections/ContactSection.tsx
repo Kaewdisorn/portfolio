@@ -1,3 +1,4 @@
+import { siteConfig } from "@/config/site";
 import type { DictionaryHome } from "@/types/locale";
 
 interface ContactSectionProps {
@@ -7,7 +8,7 @@ interface ContactSectionProps {
 const LINKS = [
   {
     label: "GitHub",
-    href: "https://github.com",
+    href: siteConfig.githubUrl,
     external: true,
   },
   {
