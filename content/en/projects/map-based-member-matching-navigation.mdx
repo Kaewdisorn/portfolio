@@ -1,0 +1,155 @@
+---
+title: "Map-Based Member Management, Matching, and Navigation System"
+summary: "Designed and built a cross-platform map-based member management, matching, and navigation system at Fatos by unifying three related projects under one reusable architecture. Using Flutter, Node.js, and Dart Shelf, I structured user, location, and matching data around PostgreSQL and Redis, then established Jenkins-based CI/CD and Azure operations to improve reuse, consistency, and long-term scalability."
+role: "Senior Software Engineer"
+period: "2022.06 – 2023.12"
+stack:
+  - Flutter
+  - Node.js
+  - Dart Shelf
+  - PostgreSQL
+  - Redis
+  - Jenkins
+  - Azure
+  - REST API
+  - Location Services
+type: company
+featured: true
+order: 2
+seo:
+  title: "Map-Based Member Management, Matching, and Navigation System | Portfolio"
+  description: "A Fatos case study on consolidating three map-based member management and matching projects into a shared architecture using Flutter, Node.js, Dart Shelf, PostgreSQL, Redis, Jenkins, and Azure."
+problem: "This was not just a greenfield product build. The core challenge was to consolidate three similar projects that all required map-based member management, location lookup, matching, and navigation into one reusable architecture. The system had to manage users, location data, and matching state consistently while serving both user-facing location workflows and operational requirements such as reporting and service metrics. At the same time, it needed enough flexibility to absorb project-specific differences without fragmenting the codebase or deployment model again."
+architecture: "Flutter clients handled map interaction, member lookup, matching requests, and navigation flows. Node.js and Dart Shelf services exposed APIs for user state, location handling, matching workflows, and operational statistics. PostgreSQL served as the system of record for users, members, location history, and matching records. Redis supported fast-access state and lookup paths where immediate responsiveness mattered. Jenkins automated build and release flows, Azure hosted the deployed services, and shared domain and API patterns allowed the three projects to evolve on the same architectural foundation."
+decisions:
+  - title: "Unify three related projects under one architecture"
+    body: "The three projects had different screens and specific requirements, but their core domain was largely the same: user management, location-aware lookup, matching, and navigation. Instead of letting each project continue growing as an independent system, I defined a shared domain model and API structure first, then allowed project-specific differences to be handled through composition and configuration. That improved delivery speed for future changes and reduced long-term maintenance cost."
+  - title: "Separate the roles of PostgreSQL and Redis"
+    body: "Location-driven systems need both authoritative history and fast response paths. I used PostgreSQL for durable records such as members, users, matching history, and location data, while Redis supported frequently-read state and response-sensitive lookup paths. This split let the platform preserve data integrity while still serving location and matching features quickly."
+  - title: "Treat reporting and operational metrics as part of the product scope"
+    body: "This system was not limited to end-user map features. Service metrics, statistics, and reporting were operationally necessary, so I designed them into the platform from the beginning instead of treating them as a later add-on. That created a stronger foundation for understanding usage patterns and comparing operational outcomes across projects."
+  - title: "Standardize delivery to support reuse"
+    body: "Multiple similar projects lose much of their reuse value if each one is built, deployed, and operated differently. I established Jenkins-based CI/CD and standardized Azure deployment flows so that project-specific differences could exist without changing the core delivery model. That reduced repeated manual work and lowered release risk."
+challenges:
+  - title: "Balancing shared structure with project-specific differences"
+    body: "The three projects were similar, but not identical. Over-generalizing would have increased complexity, while too many per-project branches would have undermined the whole point of consolidation. I kept the shared domain and data model strong, then isolated only the parts that genuinely needed configuration or modular variation."
+  - title: "Maintaining responsiveness for map-based lookup and matching"
+    body: "Map-driven member lookup, matching, and navigation are features where latency is immediately visible to users. I adjusted the data model and lookup paths so that frequently-accessed state could be served quickly, using Redis as a supporting layer where low-latency responses mattered most."
+  - title: "Designing operational visibility alongside product features"
+    body: "A service is not truly operable if features work but metrics and reports are absent. I treated statistics and reporting as first-class operational capabilities and designed the supporting data flows early, which made it possible to observe feature usage and compare how each project performed in practice."
+  - title: "Building for reuse without limiting future expansion"
+    body: "The goal of consolidation was not just to remove present-day duplication. It was to reduce the cost of future changes. I organized API patterns, deployment flows, and data structures so that the shared foundation could support later projects with similar needs instead of being tightly bound only to the first three."
+impact:
+  - "Consolidated three related projects involving map-based member management, location lookup, matching, and navigation onto one shared architecture"
+  - "Designed and implemented a cross-platform system using Flutter, Node.js, and Dart Shelf"
+  - "Structured user, location, and matching data with PostgreSQL and Redis and improved performance on response-sensitive lookup paths"
+  - "Built Jenkins-based CI/CD and Azure deployment workflows for repeatable operations"
+  - "Implemented service metrics, statistics, and reporting capabilities to improve operational visibility"
+  - "Created a reusable foundation that improved extensibility across similar future projects"
+---
+
+## Overview
+
+This project, delivered at Fatos from June 2022 to December 2023, was a map-based member management, matching, and navigation system built across three closely related products. The real engineering value was not in treating them as three isolated deliveries, but in identifying their common domain and consolidating them into one reusable foundation.
+
+I designed the system across Flutter clients, Node.js and Dart Shelf services, PostgreSQL and Redis data structures, Jenkins-based CI/CD, and Azure operations. The result was a platform that supported member lookup, location-based workflows, matching, navigation, and reporting while also improving reuse and reducing repeated implementation effort across similar products.
+
+Source code cannot be shared. This case study focuses on system structure and engineering judgment.
+
+### At a Glance
+
+- Period: 2022.06 - 2023.12
+- Scope: shared architecture for three related map-based products
+- Ownership: system design, backend, data model, CI/CD, deployment, and operations
+- Core value: reuse, consistency, responsiveness, and operational visibility
+
+## Problem
+
+The challenge was not just to ship a single feature set. There were multiple similar projects with overlapping needs, and maintaining each of them as an isolated implementation would have made every new feature and every operational change more expensive over time.
+
+At the same time, map-based member lookup, matching, and navigation are response-sensitive workflows. Users notice latency immediately. Operational stakeholders also needed metrics, statistics, and reporting. The platform therefore had to balance responsive user-facing behavior with a maintainable operating model across multiple projects.
+
+The key question was how to preserve a shared foundation without ignoring the differences between projects, and how to support both user workflows and operational visibility inside one coherent system.
+
+## My Role
+
+I was directly responsible for:
+
+- Designing and building the system with Flutter, Node.js, and Dart Shelf
+- Structuring PostgreSQL and Redis data models and improving response-sensitive lookup performance
+- Implementing location-aware services, member lookup, matching, and navigation flows
+- Building service metrics, statistics, and reporting capabilities
+- Establishing Jenkins-based CI/CD
+- Deploying and operating the system in Azure
+- Defining the shared architecture that made similar projects reusable instead of isolated
+
+This was not only a feature implementation role. It was a system-level ownership role focused on turning several related projects into a maintainable product family.
+
+## Architecture
+
+```mermaid
+flowchart TD
+    FL["Flutter Clients"] --> API["Node.js / Dart Shelf APIs"]
+    API --> PG["PostgreSQL\nUsers / Locations / Matching History"]
+    API --> RD["Redis\nFast state / lookup support"]
+    API --> RP["Metrics / Report Services"]
+    RP --> PG
+    CI["Jenkins CI/CD"] --> AZ["Azure Deployment"]
+    API --> NAV["Navigation / Matching Logic"]
+    API --> MAP["Map-based Member Lookup"]
+```
+
+Flutter clients handled the map UI, member lookup, matching requests, and navigation flows. Backend APIs built with Node.js and Dart Shelf served user state, location lookup, matching logic, and operational statistics. PostgreSQL acted as the system of record for users, members, matching history, and location data. Redis supported quick-access state and response-sensitive lookup behavior.
+
+The architectural goal was not just technical separation. It was to preserve a clear shared domain and delivery model so all three projects could evolve from the same base instead of diverging into separate systems again. Jenkins and Azure were part of that same standardization effort: reuse had to exist in operations, not only in source code.
+
+## Key Decisions
+
+### Unifying three projects under one shared model
+
+Building similar features separately can feel faster in the short term, but it accumulates maintenance cost quickly. I chose to define shared domain models and API patterns first, then let project-specific differences live at the composition or configuration level.
+
+That decision mattered because it created durable boundaries. It made it easier to tell which parts of the system were genuinely shared and which parts were project-specific extensions.
+
+### Splitting durable data from fast-access state
+
+Location-oriented systems need both correctness and speed. PostgreSQL is strong for durable records and historical tracking. Redis is useful when some response paths need faster access to current or frequently-used state.
+
+I used PostgreSQL as the authoritative store for users, locations, and matching history, while Redis supported quick lookup paths where responsiveness mattered. That division made optimization work more targeted and easier to reason about.
+
+### Designing operations into the product
+
+Metrics and reporting are often deferred until after launch, but that creates blind spots. I included service metrics, statistics, and reporting within the platform scope from the beginning.
+
+That made the system more operable and gave the team a way to understand usage patterns and compare outcomes across related projects, rather than relying only on anecdotal feedback.
+
+### Standardizing CI/CD and deployment
+
+If three similar projects are built and shipped differently, the value of architectural reuse drops quickly. I built Jenkins-based CI/CD and standardized Azure delivery flows so that teams could keep the release model consistent even when project requirements varied.
+
+This reduced repeated operational work and lowered the chance that project-specific deployment drift would erode the benefits of consolidation.
+
+## Challenges
+
+### Consolidation without over-generalization
+
+The projects were similar enough to share a foundation, but not identical enough to force into one rigid implementation. Too much generalization would have added unnecessary complexity. Too little would have recreated the original duplication problem.
+
+I handled that by keeping shared domain and data structures strong while isolating only the parts that truly needed variation.
+
+### Responsiveness in map-based workflows
+
+Member lookup, location-driven flows, matching, and navigation are all features where latency is immediately visible. I structured the data model and lookup paths to keep response-sensitive behavior efficient, using Redis to support the paths where faster access mattered most.
+
+### Operational visibility across multiple related products
+
+A system is harder to run when the only thing you know is whether the UI appears to work. By designing metrics, statistics, and reporting into the platform, I made it possible to understand feature usage and project behavior at the operational level as well.
+
+## Impact
+
+- Consolidated three related map-based products onto one shared architecture
+- Built a cross-platform system with Flutter, Node.js, and Dart Shelf
+- Structured user, location, and matching data with PostgreSQL and Redis and improved response-sensitive lookup performance
+- Established repeatable Jenkins-based CI/CD and Azure deployment operations
+- Added metrics, statistics, and reporting to improve service visibility
+- Improved reuse and long-term extensibility across similar future projects
