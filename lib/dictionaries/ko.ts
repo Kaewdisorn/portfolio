@@ -143,6 +143,29 @@ const ko: Dictionary = {
     primaryCta: "프로젝트 보기",
     secondaryCta: "연락하기",
   },
+  contactPage: {
+    pageTitle: "연락",
+    pageDescription: "GitHub과 이메일로 연락할 수 있는 페이지입니다.",
+    eyebrow: "Contact",
+    intro:
+      "현재는 GitHub과 이메일 두 채널만 열어두었습니다. 프로젝트, 협업, 기술적인 이야기 모두 편하게 보내주시면 확인 후 답변드리겠습니다.",
+    channelsTitle: "연락 채널",
+    github: {
+      title: "GitHub",
+      description:
+        "개인 프로젝트와 공개 저장소를 가장 먼저 확인할 수 있는 채널입니다.",
+      actionLabel: "GitHub 열기",
+    },
+    email: {
+      title: "Email",
+      description:
+        "협업 제안이나 자세한 이야기처럼 조금 더 직접적인 연락은 이메일이 가장 빠릅니다.",
+      actionLabel: "이메일 보내기",
+    },
+    noteTitle: "추가 채널은 이후 확장 예정",
+    noteBody:
+      "필요에 따라 다른 연락 채널도 나중에 추가할 수 있도록 페이지 구조를 단순하게 유지했습니다.",
+  },
   footer: {
     copyright: "© 2025. All rights reserved.",
     sourceCode: "소스 코드",

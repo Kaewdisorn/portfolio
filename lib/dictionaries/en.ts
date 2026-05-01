@@ -145,6 +145,29 @@ const en: Dictionary = {
     primaryCta: "View Projects",
     secondaryCta: "Contact Me",
   },
+  contactPage: {
+    pageTitle: "Contact",
+    pageDescription: "Reach out through GitHub or email.",
+    eyebrow: "Contact",
+    intro:
+      "For now, I am keeping this page focused on two channels only: GitHub and email. Whether it is about projects, collaboration, or a technical conversation, feel free to reach out through whichever is more convenient.",
+    channelsTitle: "Contact Channels",
+    github: {
+      title: "GitHub",
+      description:
+        "The best place to browse public code, personal projects, and the repositories I choose to share openly.",
+      actionLabel: "Open GitHub",
+    },
+    email: {
+      title: "Email",
+      description:
+        "The most direct option for collaboration inquiries, role discussions, or longer technical conversations.",
+      actionLabel: "Send Email",
+    },
+    noteTitle: "Designed to expand later",
+    noteBody:
+      "The page is intentionally minimal now, so other contact channels can be added later without changing the overall structure.",
+  },
   footer: {
     copyright: "© 2025. All rights reserved.",
     sourceCode: "Source Code",

@@ -91,6 +91,24 @@ export interface DictionaryAbout {
   secondaryCta: string;
 }
 
+export interface DictionaryContactChannel {
+  title: string;
+  description: string;
+  actionLabel: string;
+}
+
+export interface DictionaryContact {
+  pageTitle: string;
+  pageDescription: string;
+  eyebrow: string;
+  intro: string;
+  channelsTitle: string;
+  github: DictionaryContactChannel;
+  email: DictionaryContactChannel;
+  noteTitle: string;
+  noteBody: string;
+}
+
 export interface DictionaryFooter {
   copyright: string;
   sourceCode: string;
@@ -102,6 +120,7 @@ export interface Dictionary {
   projects: DictionaryProjects;
   project: DictionaryProject;
   about: DictionaryAbout;
+  contactPage: DictionaryContact;
   footer: DictionaryFooter;
   notFound: string;
 }
