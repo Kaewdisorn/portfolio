@@ -1,0 +1,145 @@
+---
+title: "Nomi AI System"
+summary: "Designed a personal AI ecosystem built around a memory-driven assistant and a specialized agent workforce, all running on a shared execution backbone. The public snapshot focuses on a NestJS gRPC execution engine, provider-agnostic LLM abstraction, Zod-based structured validation, retry and fallback control, Prisma-backed cost tracking, and shared protobuf contracts with structured logging separated into reusable packages."
+role: "Personal Project"
+period: "2026.03 – Present"
+stack:
+  - TypeScript
+  - NestJS
+  - gRPC
+  - Vercel AI SDK
+  - Zod
+  - Prisma
+  - PostgreSQL
+  - Pino
+  - Protobuf
+  - Vitest
+type: personal
+featured: true
+order: 5
+repoUrl: "https://github.com/nomi-labs"
+seo:
+  title: "Nomi AI System | Portfolio"
+  description: "A personal AI system that separates assistant, agent workforce, and execution engine responsibilities with gRPC-based LLM execution, validation, cost tracking, and observability."
+problem: "A personal AI assistant becomes fragile quickly if conversation logic, orchestration, model calls, validation, logging, and cost tracking all live in the same layer. I wanted an architecture where the user-facing assistant, the specialized worker agents, and the LLM execution infrastructure each had a distinct responsibility. At the same time, the system needed to remain provider-agnostic, support retries and fallback behavior, validate structured outputs, trace every request, and record usage costs. The core problem was therefore not 'how to call an LLM', but how to design a reusable execution model that could support personalization and future multi-agent expansion without collapsing into one tightly coupled service."
+architecture: "Nomi is designed as a layered system. Nomi Company is the planned workforce layer made of specialized stateless agents for research, news, data, writing, and coding tasks. Nomi Biseo is the personal assistant layer that interacts with the user directly, uses memory to understand requests, and decides when to decompose and delegate work. Under both sits nomi-core, a NestJS gRPC microservice that executes AI requests through provider adapters, applies Zod-based structured validation, handles retries and fallback, and records costs through Prisma and PostgreSQL. The public snapshot also includes nomi-shared for shared protobuf contracts and types, and nomi-logger for structured logging across services."
+decisions:
+  - title: "Separate interaction, orchestration, and execution into layers"
+    body: "Personal AI systems often start by blending chat behavior, task logic, model invocation, and operational concerns into one code path. I explicitly split Nomi into Biseo, Company, and Core so the user-facing reasoning layer would not be coupled to the mechanics of provider selection, retries, validation, or cost accounting. That separation makes future agent expansion possible without rewriting the execution backbone."
+  - title: "Route all model execution through a shared gRPC service"
+    body: "If each feature or agent talks to model SDKs directly, provider logic, fallback rules, and observability drift across the codebase. I centralized execution in nomi-core and exposed it through a shared protobuf contract over gRPC. That keeps callers focused on task intent and expected output shape instead of provider-specific implementation details."
+  - title: "Make validation, retry, fallback, and cost tracking engine-level defaults"
+    body: "AI failures are not edge cases. Invalid structure, transient provider failures, and runaway cost all need to be handled as first-class concerns. I therefore built Zod validation, exponential-backoff retries, fallback-provider handling, and per-user and per-feature cost recording into the execution engine itself rather than leaving those policies to individual features."
+  - title: "Package shared contracts and logging as separate reusable modules"
+    body: "A multi-service architecture becomes inconsistent fast when every service defines its own request types, log format, or trace metadata. I split shared protobuf contracts and common types into nomi-shared, and standardized structured logging in nomi-logger. That gave the system a cleaner boundary between service-specific logic and ecosystem-wide infrastructure rules."
+challenges:
+  - title: "Designing execution infrastructure before building more AI features"
+    body: "The tempting path in AI projects is to ship visible features first and clean up the execution model later. That usually leaves retries, logging, validation, and provider policies scattered across product code. I took the opposite route and designed the execution layer first so later assistant and agent features could inherit a consistent runtime model."
+  - title: "Keeping the system provider-agnostic without making it abstract-only"
+    body: "Provider abstraction is easy to oversimplify. It only matters if operational behavior such as retries, fallback decisions, validation, and cost accounting also remains consistent across providers. I paired adapter-based provider isolation with a central execution service so those operational rules lived in one place."
+  - title: "Preparing for multi-agent growth without coupling agent logic to infrastructure"
+    body: "A memory-driven personal assistant and a stateless worker agent do not have the same responsibilities. Treating them as one layer would blur context handling, decision-making, and execution control. I kept Biseo focused on user interaction and memory, while positioning Company as a specialized workforce layer over the same core execution engine."
+  - title: "Making observability a default rather than post hoc tooling"
+    body: "It is not enough to know whether an AI request succeeded. For debugging and product decisions, I also need to know which feature invoked it, which user it belonged to, what trace it was part of, and how much it cost. I standardized traceId, userId, and featureId across logging and cost records so execution behavior could be inspected coherently."
+impact:
+  - "Designed a layered personal AI system separating assistant, agent workforce, and execution engine responsibilities"
+  - "Built `nomi-core` as a NestJS gRPC execution service to centralize LLM access"
+  - "Embedded structured validation, retry, fallback, and cost recording into the execution backbone"
+  - "Standardized cross-service protobuf contracts and structured logging through `nomi-shared` and `nomi-logger`"
+  - "Established a provider-agnostic foundation for future memory-driven assistant and multi-agent expansion"
+---
+
+## Overview
+
+Nomi AI System is a personal project aimed at building a long-lived AI ecosystem rather than a single chat interface. The core idea is to separate the memory-driven personal assistant, the specialized worker agents, and the LLM execution infrastructure into distinct layers so the system can grow without collapsing into one tightly coupled application.
+
+The public repository is intentionally a showcase snapshot rather than the full product. In the visible code, I focused on the execution foundation through `nomi-core`, `nomi-shared`, and `nomi-logger`. Those packages define how AI requests are executed, validated, traced, and measured, while the higher-level Biseo and Company layers sit above them as the user-facing and delegation-oriented architecture.
+
+### At a Glance
+
+- Period: 2026.03 - Present
+- Product type: personal AI ecosystem for assistant-driven and agent-driven work
+- Public snapshot scope: execution engine, shared contracts, and structured logging
+- Core value: provider-agnostic execution, structured validation, observability, and clear architectural boundaries
+
+## Problem
+
+Most AI applications begin by wiring a model call directly into a user-facing feature. That works for demos, but it breaks down once the system needs memory, delegation, multiple task types, fallback behavior, and cost control. A personal AI system that is meant to understand a user and orchestrate specialized agents cannot treat execution infrastructure as an afterthought.
+
+I wanted a structure where the assistant layer could focus on understanding the user, memory, and intent; where worker agents could remain specialized and stateless; and where the execution layer could remain responsible for provider integration, validation, retry behavior, and cost tracking. That meant solving for architecture and operating rules before expanding visible assistant features.
+
+## My Role
+
+I was directly responsible for:
+
+- Designing the layered Nomi system architecture
+- Building `nomi-core` as a NestJS gRPC AI execution engine
+- Implementing provider adapters plus retry and fallback handling
+- Designing Zod-based structured output validation flow
+- Designing Prisma and PostgreSQL-backed cost tracking
+- Defining shared protobuf contracts and common types in `nomi-shared`
+- Standardizing structured logging in `nomi-logger`
+
+The work centered on making the execution foundation reusable and operationally defensible rather than building one isolated assistant feature.
+
+## Architecture
+
+```mermaid
+flowchart TD
+    USER["User"] <--> BISEO["Nomi Biseo\nPersonal Assistant"]
+    BISEO <--> COMPANY["Nomi Company\nAgent Workforce"]
+    BISEO --> CORE["nomi-core\nNestJS gRPC Execution Engine"]
+    COMPANY --> CORE
+    CORE --> PROVIDERS["LLM Provider Adapters"]
+    CORE --> DB["Prisma / PostgreSQL\nCost Tracking"]
+    CORE --> SHARED["nomi-shared\nProto + Shared Types"]
+    CORE --> LOGGER["nomi-logger\nStructured Logging"]
+```
+
+Nomi Biseo is the personal assistant layer and the only direct user interface in the architecture. It is intended to use memory to interpret requests, decide whether work is simple or multi-step, and delegate when necessary. Nomi Company represents the specialized workforce layer: stateless agents for research, news, data handling, writing, and coding tasks.
+
+Beneath both sits `nomi-core`, the execution engine. It receives gRPC requests, resolves the correct provider adapter, applies retry and fallback logic, validates structured outputs when needed, and records cost information. `nomi-shared` defines the shared protobuf contract and common types, while `nomi-logger` provides a standardized structured logging model across services.
+
+## Key Decisions
+
+### Splitting the system by responsibility instead of by feature
+
+The common failure mode in AI projects is feature-first coupling: user interaction, orchestration, and execution policies end up in one code path. I separated Nomi into interaction, workforce, and execution layers so the assistant logic could evolve without dragging provider mechanics and runtime policies with it.
+
+### Centralizing model access through `nomi-core`
+
+If every assistant feature or agent integrates its own model SDK, the platform becomes inconsistent in how it retries, validates, records cost, and handles failures. I routed all execution through `nomi-core` so those concerns would stay centralized behind a gRPC contract.
+
+### Treating reliability and cost as part of execution, not add-ons
+
+AI systems fail in ways that are operationally expensive: malformed outputs, transient provider errors, and untracked spend. I designed the engine so validation, retry, fallback, and cost recording were default behaviors of execution rather than optional follow-up work by product features.
+
+### Standardizing contracts and observability across services
+
+Shared types and logging formats tend to drift unless they are explicitly owned. I pulled protobuf contracts and common types into `nomi-shared`, and logging into `nomi-logger`, so the ecosystem would have one execution contract and one observability model across services.
+
+## Challenges
+
+### Building infrastructure before the visible product felt complete
+
+It is harder to justify engine work early because the most visible features arrive later. But postponing execution design usually leads to duplicated provider code, inconsistent retries, and weak observability. I chose to stabilize the runtime model first so the higher layers could be added on a stronger base.
+
+### Making provider abstraction operationally meaningful
+
+An adapter interface alone is not enough. The system also needs one consistent place for retry rules, fallback behavior, validation, and cost measurement. I solved that by pairing provider adapters with a central execution service instead of letting individual callers own their own policies.
+
+### Preserving a clean boundary between memory-driven assistance and worker agents
+
+The personal assistant layer and the worker-agent layer solve different problems. One manages context and user intent; the other performs specialized tasks. I kept those responsibilities distinct so the system can scale toward multi-agent execution without turning the assistant into an all-in-one monolith.
+
+### Ensuring every request is traceable
+
+AI behavior is hard to improve if requests cannot be correlated across logs, features, and costs. I standardized trace metadata and structured logging so each execution can be tracked by user, feature, and trace rather than only by whether it succeeded.
+
+## Impact
+
+- Designed a layered AI system that separates assistant, agent workforce, and execution concerns
+- Built `nomi-core` to centralize model execution behind a NestJS gRPC service
+- Added engine-level validation, retry, fallback, and cost recording as standard execution behavior
+- Standardized protobuf contracts, shared types, and structured logging through reusable packages
+- Created a provider-agnostic foundation for a memory-driven assistant and future multi-agent expansion

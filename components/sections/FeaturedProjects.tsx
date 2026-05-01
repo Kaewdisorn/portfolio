@@ -48,7 +48,13 @@ export default function FeaturedProjects({
               className="group flex min-h-full flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-[0_18px_45px_rgb(70_55_35_/_0.12)] sm:p-6"
             >
               <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
-                <span className="rounded-full bg-[var(--color-accent-subtle)] px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
+                <span
+                  className={
+                    project.type === "personal"
+                      ? "rounded-full border border-[var(--color-warm)]/30 bg-[var(--color-warm-subtle)] px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-warm)]"
+                      : "rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent-subtle)] px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]"
+                  }
+                >
                   {project.role}
                 </span>
                 <span className="font-mono text-xs font-semibold text-[var(--color-text-faint)]">
