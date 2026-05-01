@@ -48,14 +48,47 @@ export interface DictionaryProject {
   repoLabel: string;
 }
 
+export interface DictionaryAboutStat {
+  value: string;
+  label: string;
+  detail: string;
+}
+
+export interface DictionaryAboutDomain {
+  title: string;
+  body: string;
+}
+
+export interface DictionaryAboutExperience {
+  period: string;
+  title: string;
+  body: string;
+}
+
+export interface DictionaryAboutPrinciple {
+  title: string;
+  body: string;
+}
+
 export interface DictionaryAbout {
   pageTitle: string;
   pageDescription: string;
+  eyebrow: string;
   intro: string;
-  focusTitle: string;
-  focus: string[];
-  valuesTitle: string;
-  values: string[];
+  summaryTitle: string;
+  summary: string[];
+  snapshotTitle: string;
+  stats: DictionaryAboutStat[];
+  domainsTitle: string;
+  domains: DictionaryAboutDomain[];
+  experienceTitle: string;
+  experience: DictionaryAboutExperience[];
+  principlesTitle: string;
+  principles: DictionaryAboutPrinciple[];
+  ctaTitle: string;
+  ctaBody: string;
+  primaryCta: string;
+  secondaryCta: string;
 }
 
 export interface DictionaryFooter {
