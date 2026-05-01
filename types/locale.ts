@@ -111,7 +111,6 @@ export interface DictionaryContact {
 
 export interface DictionaryFooter {
   copyright: string;
-  sourceCode: string;
 }
 
 export interface Dictionary {

@@ -169,8 +169,7 @@ const en: Dictionary = {
       "The page is intentionally minimal now, so other contact channels can be added later without changing the overall structure.",
   },
   footer: {
-    copyright: "© 2025. All rights reserved.",
-    sourceCode: "Source Code",
+    copyright: "All rights reserved.",
   },
   notFound: "Page not found.",
 };

@@ -167,8 +167,7 @@ const ko: Dictionary = {
       "필요에 따라 다른 연락 채널도 나중에 추가할 수 있도록 페이지 구조를 단순하게 유지했습니다.",
   },
   footer: {
-    copyright: "© 2025. All rights reserved.",
-    sourceCode: "소스 코드",
+    copyright: "All rights reserved.",
   },
   notFound: "페이지를 찾을 수 없습니다.",
 };
