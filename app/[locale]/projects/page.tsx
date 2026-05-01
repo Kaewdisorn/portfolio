@@ -44,7 +44,7 @@ export default async function ProjectsPage(
       <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           <div className="max-w-[56ch]">
-            <p className="eyebrow mb-4 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+            <p className="eyebrow mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {dict.projects.eyebrow}
             </p>
             <h1
