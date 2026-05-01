@@ -46,7 +46,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
             aria-hidden="true"
           />
           <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_360px] lg:items-start">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(400px,0.9fr)] lg:items-start xl:grid-cols-[minmax(0,1.15fr)_minmax(440px,0.95fr)]">
               <header className="relative max-w-[66ch]">
                 <p className="eyebrow mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   {about.eyebrow}
@@ -78,7 +78,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                 </section>
               </header>
 
-              <aside className="relative rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[0_24px_60px_rgb(40_28_16_/_0.08)] sm:p-6">
+              <aside className="relative rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[0_24px_60px_rgb(40_28_16_/_0.08)] sm:p-6 lg:p-7">
                 <div className="mb-5 flex items-center justify-between gap-4">
                   <h2 className="text-base font-bold text-[var(--color-text)]">
                     {about.snapshotTitle}
@@ -148,16 +148,25 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                 {about.experienceTitle}
               </h2>
             </div>
-            <div className="relative space-y-6 before:absolute before:bottom-0 before:left-3.5 before:top-2 before:w-px before:bg-[var(--color-border)] sm:before:left-[8.6rem]">
+            <div className="space-y-6 sm:space-y-7">
               {about.experience.map((item) => (
-                <section key={`${item.period}-${item.title}`} className="relative grid gap-3 sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-6">
-                  <div className="relative pl-8 sm:pl-0">
-                    <span className="absolute left-[0.45rem] top-2.5 h-3 w-3 rounded-full border-2 border-[var(--color-surface)] bg-[var(--color-accent)] shadow-[0_0_0_4px_var(--color-accent-subtle)] sm:left-auto sm:right-[-1.1rem]" aria-hidden="true" />
-                    <p className="font-mono text-xs font-bold uppercase tracking-[0.12em] text-[var(--color-text-faint)]">
+                <section
+                  key={`${item.period}-${item.title}`}
+                  className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-4 sm:grid-cols-[9rem_2rem_minmax(0,1fr)] sm:gap-x-6"
+                >
+                  <div className="hidden sm:block pt-1">
+                    <p className="text-sm font-semibold tracking-[0.01em] text-[var(--color-text)]">
                       {item.period}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
+                  <div className="relative flex justify-center sm:justify-center">
+                    <span className="absolute bottom-[-1.75rem] left-1/2 top-0 w-px -translate-x-1/2 bg-[var(--color-border)] last:hidden" aria-hidden="true" />
+                    <span className="relative top-2 inline-flex h-3 w-3 rounded-full border-2 border-[var(--color-surface)] bg-[var(--color-accent)] shadow-[0_0_0_4px_var(--color-accent-subtle)]" aria-hidden="true" />
+                  </div>
+                  <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm sm:p-6">
+                    <p className="mb-3 text-sm font-semibold tracking-[0.01em] text-[var(--color-text)] sm:hidden">
+                      {item.period}
+                    </p>
                     <h3 className="text-lg font-bold text-[var(--color-text)] sm:text-xl">
                       {item.title}
                     </h3>

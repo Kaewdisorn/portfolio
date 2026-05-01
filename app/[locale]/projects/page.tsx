@@ -41,21 +41,29 @@ export default async function ProjectsPage(
 
   return (
     <main id="main-content">
-      <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-70"
+          style={{
+            background:
+              "radial-gradient(circle at top left, var(--color-accent-glow), transparent 42%), radial-gradient(circle at top right, rgb(180 83 9 / 0.12), transparent 36%)",
+          }}
+          aria-hidden="true"
+        />
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
-          <div className="max-w-[56ch]">
+          <div className="max-w-[62ch]">
             <p className="eyebrow mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {dict.projects.eyebrow}
             </p>
-            <h1
-              className="font-bold leading-tight text-[var(--color-text)]"
-              style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
-            >
+            <h1 className="mb-5 text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-5xl">
               {dict.projects.pageTitle}
             </h1>
+            <p className="max-w-[58ch] text-base font-medium leading-8 text-[var(--color-text-muted)] sm:text-lg">
+              {dict.projects.pageDescription}
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Projects grouped by type */}
       <section className="py-12 sm:py-16">

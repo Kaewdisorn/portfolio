@@ -24,7 +24,7 @@ const en: Dictionary = {
   projects: {
     pageTitle: "Projects",
     pageDescription:
-      "Production projects delivered in company environments, focused on system design, operational constraints, and measurable impact.",
+      "A mix of company and personal projects, organized as case studies around system design, operational constraints, technical decisions, and measurable impact.",
     eyebrow: "Projects & Case studies",
     readMore: "View project details",
     companyLabel: "Company",
