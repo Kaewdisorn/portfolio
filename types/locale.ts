@@ -32,6 +32,8 @@ export interface DictionaryProjects {
   readMore: string;
   companyLabel: string;
   personalLabel: string;
+  companySectionTitle: string;
+  personalSectionTitle: string;
 }
 
 export interface DictionaryProject {

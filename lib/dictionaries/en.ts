@@ -29,6 +29,8 @@ const en: Dictionary = {
     readMore: "View project details",
     companyLabel: "Company",
     personalLabel: "Personal",
+    companySectionTitle: "Company Projects",
+    personalSectionTitle: "Personal Projects",
   },
   project: {
     overviewHeading: "Overview",

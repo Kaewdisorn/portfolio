@@ -50,7 +50,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
             >
               <h2
                 id="focus-heading"
-                className="mb-5 text-sm font-mono font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]"
+                className="eyebrow mb-5 text-sm font-mono font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]"
               >
                 {about.focusTitle}
               </h2>
@@ -76,7 +76,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
             >
               <h2
                 id="values-heading"
-                className="mb-5 text-sm font-mono font-bold uppercase tracking-[0.14em] text-[var(--color-warm)]"
+                className="eyebrow mb-5 text-sm font-mono font-bold uppercase tracking-[0.14em] text-[var(--color-warm)]"
               >
                 {about.valuesTitle}
               </h2>

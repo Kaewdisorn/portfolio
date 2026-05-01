@@ -29,6 +29,8 @@ const ko: Dictionary = {
     readMore: "프로젝트 상세 보기",
     companyLabel: "회사",
     personalLabel: "개인",
+    companySectionTitle: "회사 프로젝트",
+    personalSectionTitle: "개인 프로젝트",
   },
   project: {
     overviewHeading: "개요",

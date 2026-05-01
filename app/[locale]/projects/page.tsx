@@ -36,12 +36,15 @@ export default async function ProjectsPage(
     getAllProjects(locale),
   ]);
 
+  const companyProjects = projects.filter((p) => p.type === "company");
+  const personalProjects = projects.filter((p) => p.type === "personal");
+
   return (
     <main id="main-content">
       <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           <div className="max-w-[56ch]">
-            <p className="mb-4 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+            <p className="eyebrow mb-4 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {dict.projects.eyebrow}
             </p>
             <h1
@@ -50,14 +53,11 @@ export default async function ProjectsPage(
             >
               {dict.projects.pageTitle}
             </h1>
-            <p className="mt-4 text-base font-medium leading-8 text-[var(--color-text-muted)]">
-              {dict.projects.pageDescription}
-            </p>
           </div>
         </div>
       </div>
 
-      {/* Projects grid */}
+      {/* Projects grouped by type */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           {projects.length === 0 ? (
@@ -65,20 +65,56 @@ export default async function ProjectsPage(
               {dict.notFound}
             </p>
           ) : (
-            <ul className="grid gap-5 sm:grid-cols-2 lg:gap-6" role="list">
-              {projects.map((project) => (
-                <li key={project.slug}>
-                  <ProjectCard
-                    project={project}
-                    locale={locale}
-                    headingLevel={2}
-                    readMoreLabel={dict.projects.readMore}
-                    companyLabel={dict.projects.companyLabel}
-                    personalLabel={dict.projects.personalLabel}
-                  />
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-14">
+              {companyProjects.length > 0 && (
+                <div>
+                  <div className="mb-6 flex items-center gap-3">
+                    <span className="h-5 w-1 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
+                    <h2 className="eyebrow text-sm font-bold uppercase tracking-[0.14em] text-[var(--color-text)]">
+                      {dict.projects.companySectionTitle}
+                    </h2>
+                  </div>
+                  <ul className="grid gap-5 sm:grid-cols-2 lg:gap-6" role="list">
+                    {companyProjects.map((project) => (
+                      <li key={project.slug}>
+                        <ProjectCard
+                          project={project}
+                          locale={locale}
+                          headingLevel={3}
+                          readMoreLabel={dict.projects.readMore}
+                          companyLabel={dict.projects.companyLabel}
+                          personalLabel={dict.projects.personalLabel}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {personalProjects.length > 0 && (
+                <div>
+                  <div className="mb-6 flex items-center gap-3">
+                    <span className="h-5 w-1 rounded-full bg-[var(--color-warm)]" aria-hidden="true" />
+                    <h2 className="eyebrow text-sm font-bold uppercase tracking-[0.14em] text-[var(--color-text)]">
+                      {dict.projects.personalSectionTitle}
+                    </h2>
+                  </div>
+                  <ul className="grid gap-5 sm:grid-cols-2 lg:gap-6" role="list">
+                    {personalProjects.map((project) => (
+                      <li key={project.slug}>
+                        <ProjectCard
+                          project={project}
+                          locale={locale}
+                          headingLevel={3}
+                          readMoreLabel={dict.projects.readMore}
+                          companyLabel={dict.projects.companyLabel}
+                          personalLabel={dict.projects.personalLabel}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </section>

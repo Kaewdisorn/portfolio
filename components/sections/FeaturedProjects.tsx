@@ -22,7 +22,7 @@ export default function FeaturedProjects({
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
         <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-[58ch]">
-            <p className="eyebrow mb-3 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+            <p className="eyebrow mb-3 text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               Featured
             </p>
             <h2

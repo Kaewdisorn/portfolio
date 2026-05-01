@@ -82,7 +82,7 @@ export default function SkillsSnapshot({ home }: SkillsSnapshotProps) {
     <section className="py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
         <div className="mb-10 max-w-[58ch]">
-          <p className="eyebrow mb-3 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+          <p className="eyebrow mb-3 text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
             Technical Stack
           </p>
           <h2
