@@ -70,7 +70,7 @@ export default async function ProjectsPage(
                 <div>
                   <div className="mb-6 flex items-center gap-3">
                     <span className="h-5 w-1 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
-                    <h2 className="eyebrow text-sm font-bold uppercase tracking-[0.14em] text-[var(--color-text)]">
+                    <h2 className="eyebrow text-base font-extrabold tracking-[0.06em] text-[var(--color-text)]">
                       {dict.projects.companySectionTitle}
                     </h2>
                   </div>
@@ -94,7 +94,7 @@ export default async function ProjectsPage(
                 <div>
                   <div className="mb-6 flex items-center gap-3">
                     <span className="h-5 w-1 rounded-full bg-[var(--color-warm)]" aria-hidden="true" />
-                    <h2 className="eyebrow text-sm font-bold uppercase tracking-[0.14em] text-[var(--color-text)]">
+                    <h2 className="eyebrow text-base font-extrabold tracking-[0.06em] text-[var(--color-text)]">
                       {dict.projects.personalSectionTitle}
                     </h2>
                   </div>

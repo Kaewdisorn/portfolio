@@ -25,6 +25,12 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
       mermaid.render(id, chart).then(({ svg }) => {
         if (!cancelled && ref.current) {
           ref.current.innerHTML = svg;
+          const svgEl = ref.current.querySelector("svg");
+          if (svgEl) {
+            svgEl.setAttribute("width", "100%");
+            svgEl.style.height = "auto";
+            svgEl.style.maxWidth = "100%";
+          }
         }
       });
     });
