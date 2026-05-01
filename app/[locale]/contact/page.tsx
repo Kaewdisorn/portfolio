@@ -70,12 +70,12 @@ export default async function ContactPage(
 
   return (
     <main id="main-content">
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[rgb(255_255_255_/_0.025)] py-14 sm:py-20">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-70"
           style={{
             background:
-              "radial-gradient(circle at top left, var(--color-accent-glow), transparent 42%), radial-gradient(circle at top right, rgb(180 83 9 / 0.12), transparent 36%)",
+              "linear-gradient(120deg, var(--color-accent-glow), transparent 42%, var(--color-violet-subtle) 72%, transparent)",
           }}
           aria-hidden="true"
         />
@@ -106,7 +106,7 @@ export default async function ContactPage(
             {channels.map((channel) => (
               <section
                 key={channel.key}
-                className="rounded-[1.75rem] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-[0_18px_45px_rgb(70_55_35_/_0.08)] sm:p-7"
+                className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-[0_20px_50px_rgb(0_0_0_/_0.18)] backdrop-blur-xl transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-3)] sm:p-7"
               >
                 <div className="mb-5 flex items-center gap-3">
                   <span className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl ${channel.accentClass}`}>
@@ -131,7 +131,7 @@ export default async function ContactPage(
                   {...(channel.external
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-5 text-sm font-bold text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-5 text-sm font-bold text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
                 >
                   {channel.actionLabel}
                 </Link>
@@ -139,7 +139,7 @@ export default async function ContactPage(
             ))}
           </div>
 
-          <section className="mt-8 rounded-[1.75rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm sm:p-7">
+          <section className="mt-8 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-sm backdrop-blur-xl sm:p-7">
             <p className="eyebrow mb-3 text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
               Note
             </p>

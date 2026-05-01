@@ -43,7 +43,7 @@ export default function ContactSection({ home }: ContactSectionProps) {
   return (
     <section className="py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
-        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] px-5 py-8 shadow-sm sm:px-8 sm:py-10">
+        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] px-5 py-8 shadow-[0_20px_50px_rgb(0_0_0_/_0.18)] backdrop-blur-xl sm:px-8 sm:py-10">
           <div className="max-w-[48ch]">
             <p className="mb-3 text-[var(--text-label)] font-mono font-bold uppercase tracking-widest text-[var(--color-accent)]">
               Contact
@@ -62,7 +62,7 @@ export default function ContactSection({ home }: ContactSectionProps) {
                   {...(link.external
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
-                  className="inline-flex min-h-10 items-center gap-2 rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 py-2 text-sm font-bold text-[var(--color-text)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:shadow-sm"
+                  className="inline-flex min-h-10 items-center gap-2 rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-4 py-2 text-sm font-bold text-[var(--color-text)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:shadow-sm"
                 >
                   {link.icon}
                   {link.label}

@@ -36,12 +36,12 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
   return (
     <main id="main-content">
       <article>
-        <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
+        <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[rgb(255_255_255_/_0.025)] py-14 sm:py-20">
           <div
             className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-70"
             style={{
               background:
-                "radial-gradient(circle at top left, var(--color-accent-glow), transparent 42%), radial-gradient(circle at top right, rgb(180 83 9 / 0.12), transparent 36%)",
+                "linear-gradient(120deg, var(--color-accent-glow), transparent 42%, var(--color-violet-subtle) 72%, transparent)",
             }}
             aria-hidden="true"
           />
@@ -69,7 +69,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                     {about.summary.map((item) => (
                       <p
                         key={item}
-                        className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-4 text-sm font-medium leading-7 text-[var(--color-text)] shadow-sm"
+                        className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] px-5 py-4 text-sm font-medium leading-7 text-[var(--color-text)] shadow-sm backdrop-blur-xl"
                       >
                         {item}
                       </p>
@@ -78,7 +78,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                 </section>
               </header>
 
-              <aside className="relative rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[0_24px_60px_rgb(40_28_16_/_0.08)] sm:p-6 lg:p-7">
+              <aside className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-[0_24px_70px_rgb(0_0_0_/_0.22)] backdrop-blur-xl sm:p-6 lg:p-7">
                 <div className="mb-5 flex items-center justify-between gap-4">
                   <h2 className="text-base font-bold text-[var(--color-text)]">
                     {about.snapshotTitle}
@@ -91,7 +91,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                   {about.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4"
+                      className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-3)] p-4"
                     >
                       <p className="text-2xl font-bold tracking-tight text-[var(--color-text)]">
                         {stat.value}
@@ -121,7 +121,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
               {about.domains.map((item, index) => (
                 <section
                   key={item.title}
-                  className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm sm:p-6"
+                  className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm backdrop-blur-xl transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-3)] sm:p-6"
                 >
                   <span
                     className={
@@ -163,7 +163,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                     <span className="absolute bottom-[-1.75rem] left-1/2 top-0 w-px -translate-x-1/2 bg-[var(--color-border)] last:hidden" aria-hidden="true" />
                     <span className="relative top-2 inline-flex h-3 w-3 rounded-full border-2 border-[var(--color-surface)] bg-[var(--color-accent)] shadow-[0_0_0_4px_var(--color-accent-subtle)]" aria-hidden="true" />
                   </div>
-                  <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm sm:p-6">
+                  <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm backdrop-blur-xl sm:p-6">
                     <p className="mb-3 text-sm font-semibold tracking-[0.01em] text-[var(--color-text)] sm:hidden">
                       {item.period}
                     </p>
@@ -189,7 +189,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
               {about.principles.map((item, index) => (
                 <section
                   key={item.title}
-                  className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm sm:p-6"
+                  className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm backdrop-blur-xl transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-3)] sm:p-6"
                 >
                   <div className="mb-4 flex items-center gap-3">
                     <span
@@ -214,7 +214,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
           </section>
 
           <section className="py-14 sm:py-18">
-            <div className="rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-[0_24px_60px_rgb(40_28_16_/_0.08)] sm:p-8">
+            <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-[0_24px_70px_rgb(0_0_0_/_0.22)] backdrop-blur-xl sm:p-8">
               <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div className="max-w-[56ch]">
                   <p className="eyebrow mb-3 text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
@@ -230,13 +230,13 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                 <div className="flex flex-wrap gap-3 lg:justify-end">
                   <Link
                     href={linkPrimary}
-                    className="inline-flex min-h-11 items-center justify-center rounded-md bg-[var(--color-accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
+                    className="inline-flex min-h-11 items-center justify-center rounded-md bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-violet)] px-5 text-sm font-bold text-white shadow-[0_14px_32px_rgb(63_140_255_/_0.28)] transition hover:-translate-y-0.5 hover:bg-[var(--color-accent-hover)]"
                   >
                     {about.primaryCta}
                   </Link>
                   <Link
                     href={linkSecondary}
-                    className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-5 text-sm font-bold text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                    className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-5 text-sm font-bold text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
                   >
                     {about.secondaryCta}
                   </Link>

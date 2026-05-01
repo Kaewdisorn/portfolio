@@ -26,11 +26,11 @@ export default function ProjectCard({
   return (
     <Link
       href={href}
-      className="group relative flex min-h-full flex-col overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-[0_18px_45px_rgb(70_55_35_/_0.12)] sm:p-6"
+      className="group relative flex min-h-full flex-col overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-3)] hover:shadow-[0_20px_50px_rgb(63_140_255_/_0.18)] sm:p-6"
     >
       <span
         className="absolute inset-x-0 top-0 h-1 opacity-80 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: "var(--color-accent)" }}
+        style={{ background: "linear-gradient(90deg, var(--color-accent), var(--color-violet))" }}
         aria-hidden="true"
       />
 
@@ -66,7 +66,7 @@ export default function ProjectCard({
           {project.stack.map((tech) => (
             <span
               key={tech}
-              className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text)]"
+              className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-3)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text)]"
             >
               {tech}
             </span>

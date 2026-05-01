@@ -21,7 +21,7 @@ export default function Navbar({ locale, nav }: NavbarProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-surface-2)]/90 shadow-sm backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[rgb(10_22_40_/_0.82)] shadow-[0_10px_40px_rgb(0_0_0_/_0.2)] backdrop-blur-xl">
       <Container>
         <nav
           aria-label="Main navigation"
@@ -33,7 +33,7 @@ export default function Navbar({ locale, nav }: NavbarProps) {
             className="flex items-center gap-2 text-sm font-bold tracking-tight text-[var(--color-text)]"
           >
             <span
-              className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--color-text)] text-[10px] font-bold text-[var(--color-surface-2)]"
+              className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-violet)] text-[10px] font-bold text-white shadow-[0_0_24px_var(--color-accent-glow)]"
               aria-hidden="true"
             >
               P

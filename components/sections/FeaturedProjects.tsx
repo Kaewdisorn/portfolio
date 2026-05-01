@@ -18,7 +18,7 @@ export default function FeaturedProjects({
   if (projects.length === 0) return null;
 
   return (
-    <section className="border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-16 sm:py-20">
+    <section className="border-b border-[var(--color-border)] bg-[rgb(255_255_255_/_0.025)] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
         <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-[58ch]">
@@ -34,7 +34,7 @@ export default function FeaturedProjects({
           </div>
           <Link
             href={localePath(locale, "/projects")}
-            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 text-sm font-bold text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:shrink-0"
+            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] px-4 text-sm font-bold text-[var(--color-text)] backdrop-blur-xl transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:shrink-0"
           >
             {home.cta}
           </Link>
@@ -45,7 +45,7 @@ export default function FeaturedProjects({
             <Link
               key={project.slug}
               href={localePath(locale, `/projects/${project.slug}`)}
-              className="group flex min-h-full flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-[0_18px_45px_rgb(70_55_35_/_0.12)] sm:p-6"
+              className="group flex min-h-full flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-3)] hover:shadow-[0_20px_50px_rgb(63_140_255_/_0.18)] sm:p-6"
             >
               <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
                 <span
@@ -75,7 +75,7 @@ export default function FeaturedProjects({
                   {project.stack.map((tech) => (
                     <span
                       key={tech}
-                      className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text)]"
+                      className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-3)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text)]"
                     >
                       {tech}
                     </span>

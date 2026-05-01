@@ -77,7 +77,7 @@ const components = {
     }
     return (
       <pre
-        className="mb-4 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 font-mono text-sm leading-7 text-[var(--color-text)]"
+        className="mb-4 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 font-mono text-sm leading-7 text-[var(--color-text)] shadow-sm backdrop-blur-xl"
         {...props}
       />
     );

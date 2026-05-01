@@ -29,7 +29,7 @@ export default function MobileMenu({ links }: MobileMenuProps) {
         aria-expanded={open}
         aria-controls="mobile-nav"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex h-9 w-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] sm:hidden"
+        className="flex h-9 w-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] text-[var(--color-text-muted)] backdrop-blur-xl hover:text-[var(--color-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] sm:hidden"
       >
         {open ? (
           // X icon
@@ -47,7 +47,7 @@ export default function MobileMenu({ links }: MobileMenuProps) {
       {open && (
         <div
           id="mobile-nav"
-          className="absolute left-0 right-0 top-16 z-50 border-b border-[var(--color-border)] bg-[var(--color-surface-2)] px-5 pb-4 pt-2 shadow-lg sm:hidden"
+          className="absolute left-0 right-0 top-16 z-50 border-b border-[var(--color-border)] bg-[rgb(10_22_40_/_0.96)] px-5 pb-4 pt-2 shadow-lg backdrop-blur-xl sm:hidden"
         >
           <nav aria-label="Mobile navigation">
             <ul className="flex flex-col gap-1" role="list">

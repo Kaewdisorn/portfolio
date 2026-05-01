@@ -25,13 +25,14 @@ export default function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
       style={{
         borderColor: "var(--color-border-strong)",
         background: "var(--color-surface-2)",
+        backdropFilter: "blur(16px)",
       }}
     >
       {/* Sliding thumb */}
       <span
         className="absolute h-7 w-7 rounded-full shadow-sm transition-all duration-200"
         style={{
-          background: "var(--color-accent)",
+          background: "linear-gradient(135deg, var(--color-accent), var(--color-violet))",
           left: isKo ? "4px" : "calc(100% - 32px)",
         }}
       />

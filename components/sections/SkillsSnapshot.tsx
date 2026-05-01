@@ -16,7 +16,7 @@ interface Category {
 const CATEGORIES: Category[] = [
   {
     label: "Backend & API",
-    color: "#0f766e",
+    color: "#3f8cff",
     skills: [
       { name: "Node.js", icon: `${DEVICON}/nodejs/nodejs-original.svg` },
       { name: "NestJS", icon: `${DEVICON}/nestjs/nestjs-original.svg` },
@@ -28,7 +28,7 @@ const CATEGORIES: Category[] = [
   },
   {
     label: "Data & Storage",
-    color: "#b45309",
+    color: "#ffab00",
     skills: [
       { name: "PostgreSQL", icon: `${DEVICON}/postgresql/postgresql-original.svg` },
       { name: "PostGIS", mono: "GIS" },
@@ -39,7 +39,7 @@ const CATEGORIES: Category[] = [
   },
   {
     label: "Infrastructure & DevOps",
-    color: "#6d5f50",
+    color: "#7c6df2",
     skills: [
       { name: "Docker", icon: `${DEVICON}/docker/docker-original.svg` },
       { name: "Jenkins", icon: `${DEVICON}/jenkins/jenkins-original.svg` },
@@ -52,7 +52,7 @@ const CATEGORIES: Category[] = [
   },
   {
     label: "Platform & Cloud",
-    color: "#2563eb",
+    color: "#36d399",
     skills: [
       { name: "GCP", icon: `${DEVICON}/googlecloud/googlecloud-original.svg` },
       { name: "Azure", icon: `${DEVICON}/azure/azure-original.svg` },
@@ -62,7 +62,7 @@ const CATEGORIES: Category[] = [
   },
   {
     label: "Frontend & Mobile",
-    color: "#be185d",
+    color: "#ff6b9a",
     wide: true,
     skills: [
       { name: "React", icon: `${DEVICON}/react/react-original.svg` },
@@ -97,7 +97,7 @@ export default function SkillsSnapshot({ home }: SkillsSnapshotProps) {
           {CATEGORIES.map((cat) => (
             <div
               key={cat.label}
-              className={`rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 shadow-sm sm:p-5 lg:p-5 ${
+              className={`rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 shadow-sm backdrop-blur-xl transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-3)] sm:p-5 lg:p-5 ${
                 cat.wide ? "lg:col-span-2" : ""
               }`}
             >
@@ -116,7 +116,7 @@ export default function SkillsSnapshot({ home }: SkillsSnapshotProps) {
                 {cat.skills.map((skill) => (
                   <div
                     key={skill.name}
-                    className="flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-3 text-center lg:min-h-[82px] lg:px-2 lg:py-2.5"
+                    className="flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface-3)] px-2 py-3 text-center transition hover:-translate-y-0.5 hover:border-[var(--color-border-strong)] lg:min-h-[82px] lg:px-2 lg:py-2.5"
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center lg:h-7 lg:w-7">
                       {"icon" in skill ? (

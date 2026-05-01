@@ -41,12 +41,12 @@ export default async function ProjectsPage(
 
   return (
     <main id="main-content">
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[rgb(255_255_255_/_0.025)] py-14 sm:py-20">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-70"
           style={{
             background:
-              "radial-gradient(circle at top left, var(--color-accent-glow), transparent 42%), radial-gradient(circle at top right, rgb(180 83 9 / 0.12), transparent 36%)",
+              "linear-gradient(120deg, var(--color-accent-glow), transparent 42%, var(--color-violet-subtle) 72%, transparent)",
           }}
           aria-hidden="true"
         />
@@ -77,7 +77,7 @@ export default async function ProjectsPage(
               {companyProjects.length > 0 && (
                 <div>
                   <div className="mb-6 flex items-center gap-3">
-                    <span className="h-5 w-1 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
+                    <span className="h-5 w-1 rounded-full bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-violet)]" aria-hidden="true" />
                     <h2 className="eyebrow text-base font-extrabold tracking-[0.06em] text-[var(--color-text)]">
                       {dict.projects.companySectionTitle}
                     </h2>

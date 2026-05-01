@@ -2,22 +2,27 @@
 
 @theme inline {
   --font-sans: var(--font-inter), var(--font-noto-kr), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), var(--font-inter), var(--font-noto-kr), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
 
-  --color-surface:       #f7f3ec;
-  --color-surface-2:     #fffdf8;
-  --color-surface-3:     #eee7db;
-  --color-border:        #ddd2c3;
-  --color-border-strong: #c7b8a6;
-  --color-text:          #1e1b18;
-  --color-text-muted:    #5b534a;
-  --color-text-faint:    #81766a;
-  --color-accent:        #0f766e;
-  --color-accent-hover:  #0b5f59;
-  --color-accent-subtle: rgb(15 118 110 / 0.1);
-  --color-accent-glow:   rgb(15 118 110 / 0.18);
-  --color-warm:          #b45309;
-  --color-warm-subtle:   rgb(180 83 9 / 0.1);
+  --color-surface:       #0a1628;
+  --color-surface-2:     rgb(255 255 255 / 0.055);
+  --color-surface-3:     rgb(255 255 255 / 0.09);
+  --color-border:        rgb(255 255 255 / 0.11);
+  --color-border-strong: rgb(255 255 255 / 0.22);
+  --color-text:          #f8fbff;
+  --color-text-muted:    #a3b3c9;
+  --color-text-faint:    #71829b;
+  --color-accent:        #3f8cff;
+  --color-accent-hover:  #67a3ff;
+  --color-accent-subtle: rgb(63 140 255 / 0.15);
+  --color-accent-glow:   rgb(63 140 255 / 0.24);
+  --color-warm:          #ffab00;
+  --color-warm-subtle:   rgb(255 171 0 / 0.14);
+  --color-violet:        #7c6df2;
+  --color-violet-subtle: rgb(124 109 242 / 0.16);
+  --color-success:       #36d399;
+  --color-success-subtle: rgb(54 211 153 / 0.14);
 
   --max-w-reading: 68ch;
   --max-w-layout: 1120px;
@@ -37,19 +42,42 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  color-scheme: light;
+  color-scheme: dark;
   background-color: var(--color-surface);
 }
 
 body {
   margin: 0;
   background:
-    linear-gradient(180deg, #fffaf1 0%, var(--color-surface) 42%, #f1eadf 100%);
+    linear-gradient(135deg, #07101f 0%, var(--color-surface) 42%, #0f1d32 100%);
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.72;
   -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(120deg, rgb(63 140 255 / 0.18), transparent 32%, rgb(124 109 242 / 0.14) 64%, transparent),
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: auto, 72px 72px, 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
 }
 
 :focus-visible {
@@ -59,7 +87,7 @@ body {
 }
 
 ::selection {
-  background: rgb(15 118 110 / 0.22);
+  background: rgb(63 140 255 / 0.3);
 }
 
 /* Korean locale: override eyebrow labels to use sans-serif with tighter tracking */

@@ -28,7 +28,7 @@ export default function NavLinks({ links }: NavLinksProps) {
               className={clsx(
                 "relative rounded-md px-4 py-2 text-[0.9375rem] font-semibold transition-colors",
                 isActive
-                  ? "bg-[var(--color-accent-subtle)] text-[var(--color-accent)]"
+                  ? "bg-[var(--color-accent-subtle)] text-[var(--color-accent)] shadow-[inset_0_0_0_1px_rgb(63_140_255_/_0.18)]"
                   : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-3)] hover:text-[var(--color-text)]",
               )}
             >
