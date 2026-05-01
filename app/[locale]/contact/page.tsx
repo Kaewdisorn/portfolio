@@ -33,7 +33,7 @@ export default async function ContactPage(
   const dict = await getDictionary(locale);
 
   return (
-    <main id="main-content" className="py-16 sm:py-20">
+    <main id="main-content" className="py-6 sm:py-10">
       <ContactSection home={dict.home} />
     </main>
   );

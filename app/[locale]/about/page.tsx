@@ -32,22 +32,25 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
 
   return (
     <main id="main-content">
-      <article className="py-16 sm:py-20">
+      <article className="py-14 sm:py-20">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           <header className="mb-12 max-w-[52ch]">
-            <h1 className="mb-3 text-3xl font-semibold text-[var(--color-text)]">
+            <h1 className="mb-4 text-3xl font-bold leading-tight text-[var(--color-text)] sm:text-4xl">
               {about.pageTitle}
             </h1>
-            <p className="text-base text-[var(--color-text-muted)] leading-relaxed">
+            <p className="text-base font-medium leading-8 text-[var(--color-text-muted)]">
               {about.intro}
             </p>
           </header>
 
-          <div className="grid gap-12 sm:grid-cols-2">
-            <section aria-labelledby="focus-heading">
+          <div className="grid gap-5 md:grid-cols-2">
+            <section
+              aria-labelledby="focus-heading"
+              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm sm:p-6"
+            >
               <h2
                 id="focus-heading"
-                className="mb-5 text-sm font-mono uppercase tracking-wide text-[var(--color-text-muted)]"
+                className="mb-5 text-sm font-mono font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]"
               >
                 {about.focusTitle}
               </h2>
@@ -55,10 +58,10 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                 {about.focus.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-2 text-sm text-[var(--color-text)] leading-relaxed"
+                    className="flex items-start gap-3 text-sm font-medium leading-7 text-[var(--color-text)]"
                   >
                     <span
-                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
+                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"
                       aria-hidden="true"
                     />
                     {item}
@@ -67,10 +70,13 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
               </ul>
             </section>
 
-            <section aria-labelledby="values-heading">
+            <section
+              aria-labelledby="values-heading"
+              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm sm:p-6"
+            >
               <h2
                 id="values-heading"
-                className="mb-5 text-sm font-mono uppercase tracking-wide text-[var(--color-text-muted)]"
+                className="mb-5 text-sm font-mono font-bold uppercase tracking-[0.14em] text-[var(--color-warm)]"
               >
                 {about.valuesTitle}
               </h2>
@@ -78,7 +84,7 @@ export default async function AboutPage(props: PageProps<"/[locale]/about">) {
                 {about.values.map((item) => (
                   <li
                     key={item}
-                    className="text-sm text-[var(--color-text-muted)] leading-relaxed border-l-2 border-[var(--color-border)] pl-4"
+                    className="border-l-2 border-[var(--color-border-strong)] pl-4 text-sm font-medium leading-7 text-[var(--color-text-muted)]"
                   >
                     {item}
                   </li>

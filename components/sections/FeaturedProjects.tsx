@@ -18,126 +18,64 @@ export default function FeaturedProjects({
   if (projects.length === 0) return null;
 
   return (
-    <section className="relative py-16 sm:py-24 border-t border-[var(--color-border)]">
-      {/* Section background glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        <div
-          className="absolute left-1/2 top-1/3 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[160px]"
-          style={{ background: "rgb(99 102 241 / 0.07)" }}
-        />
-      </div>
-
+    <section className="border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
-
-        {/* Section header */}
-        <div className="mb-12">
-          <p className="mb-3 font-mono text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-            Featured
-          </p>
-          <div className="flex items-end justify-between gap-4">
+        <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-[58ch]">
+            <p className="mb-3 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              Featured
+            </p>
             <h2
-              className="font-bold tracking-tight text-[var(--color-text)]"
+              className="font-bold leading-tight text-[var(--color-text)]"
               style={{ fontSize: "var(--text-title)" }}
             >
               {home.featuredTitle}
             </h2>
-            <Link
-              href={localePath(locale, "/projects")}
-              className="shrink-0 hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-accent)]"
-            >
-              {home.cta}
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
           </div>
+          <Link
+            href={localePath(locale, "/projects")}
+            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 text-sm font-bold text-[var(--color-text)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:shrink-0"
+          >
+            {home.cta}
+          </Link>
         </div>
 
-        {/* Featured cards — horizontal editorial layout */}
-        <div className="flex flex-col gap-5">
-          {projects.slice(0, 2).map((project, i) => (
+        <div className="grid gap-5 lg:grid-cols-2">
+          {projects.slice(0, 2).map((project) => (
             <Link
               key={project.slug}
               href={localePath(locale, `/projects/${project.slug}`)}
-              className="group relative overflow-hidden rounded-2xl border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] px-5 py-6 sm:px-8 sm:py-8 transition-all duration-300 hover:border-[var(--color-accent)] hover:shadow-[0_0_48px_rgb(99_102_241_/_0.18)]"
+              className="group flex min-h-full flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-[0_18px_45px_rgb(70_55_35_/_0.12)] sm:p-6"
             >
-              {/* Left gradient border */}
-              <span
-                className="absolute inset-y-0 left-0 w-[3px] rounded-l-2xl opacity-50 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ background: "linear-gradient(180deg, var(--color-accent) 0%, #a78bfa 100%)" }}
-                aria-hidden="true"
-              />
-
-              {/* Inner glow */}
-              <span
-                className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ background: "radial-gradient(ellipse at 0% 50%, rgb(99 102 241 / 0.08) 0%, transparent 60%)" }}
-                aria-hidden="true"
-              />
-
-              {/* Large faint ordinal number — hidden on mobile, top right on desktop */}
-              <span
-                className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 select-none font-bold leading-none sm:block"
-                style={{
-                  fontSize: "clamp(5rem, 10vw, 8rem)",
-                  color: "rgb(99 102 241 / 0.05)",
-                  fontVariantNumeric: "tabular-nums",
-                }}
-                aria-hidden="true"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-
-              {/* Arrow — hidden on mobile to avoid overlap, visible on sm+ */}
-              <span
-                className="absolute bottom-6 right-6 hidden h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] text-[var(--color-text-muted)] transition-all duration-200 group-hover:border-[var(--color-accent)] group-hover:bg-[var(--color-accent-subtle)] group-hover:text-[var(--color-accent)] group-hover:translate-x-0.5 sm:flex"
-                aria-hidden="true"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-
-              <div className="relative flex flex-col gap-5">
-                {/* Main content */}
-                <div className="flex-1 min-w-0">
-                  {/* Meta row */}
-                  <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
-                      {project.role}
-                    </span>
-                    <span className="h-3.5 w-px bg-[var(--color-border-strong)]" aria-hidden="true" />
-                    <span className="font-mono text-xs text-[var(--color-text-faint)]">
-                      {project.period}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="mb-3 text-xl font-bold leading-snug tracking-tight text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)] sm:text-2xl">
-                    {project.title}
-                  </h3>
-
-                  {/* Summary */}
-                  <p className="mb-5 max-w-2xl text-sm leading-relaxed text-[var(--color-text-muted)]">
-                    {project.summary}
-                  </p>
-
-                  {/* Stack tags */}
-                  {project.stack.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.stack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface-3)] px-2.5 py-1 font-sans text-xs text-[var(--color-text)]"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
+              <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span className="rounded-full bg-[var(--color-accent-subtle)] px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
+                  {project.role}
+                </span>
+                <span className="font-mono text-xs font-semibold text-[var(--color-text-faint)]">
+                  {project.period}
+                </span>
               </div>
+
+              <h3 className="text-xl font-bold leading-snug text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)] sm:text-2xl">
+                {project.title}
+              </h3>
+
+              <p className="mt-4 grow text-sm font-medium leading-7 text-[var(--color-text-muted)]">
+                {project.summary}
+              </p>
+
+              {project.stack.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {project.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text)]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              )}
             </Link>
           ))}
         </div>

@@ -1,37 +1,33 @@
 @import "tailwindcss";
 
-/* ─── Design tokens ─────────────────────────────────────────────────────── */
 @theme inline {
-  /* Typography */
   --font-sans: var(--font-inter), var(--font-noto-kr), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
 
-  /* Color palette — dark theme + single accent */
-  --color-surface:       #0b0b12;
-  --color-surface-2:     #13131d;   /* muted card / code block background */
-  --color-surface-3:     #1c1c2a;   /* deeper callout surface */
-  --color-border:        #1e1e2e;
-  --color-border-strong: #2a2a3d;
-  --color-text:          #e8e8f0;
-  --color-text-muted:    #8585a0;
-  --color-text-faint:    #55556a;
-  --color-accent:        #6366f1;   /* indigo-500 — used sparingly */
-  --color-accent-hover:  #818cf8;   /* indigo-400, lighter on dark bg */
-  --color-accent-subtle: rgb(99 102 241 / 0.09);  /* faint accent tint */
-  --color-accent-glow:   rgb(99 102 241 / 0.25);  /* hover glow shadow */
+  --color-surface:       #f7f3ec;
+  --color-surface-2:     #fffdf8;
+  --color-surface-3:     #eee7db;
+  --color-border:        #ddd2c3;
+  --color-border-strong: #c7b8a6;
+  --color-text:          #1e1b18;
+  --color-text-muted:    #5b534a;
+  --color-text-faint:    #81766a;
+  --color-accent:        #0f766e;
+  --color-accent-hover:  #0b5f59;
+  --color-accent-subtle: rgb(15 118 110 / 0.1);
+  --color-accent-glow:   rgb(15 118 110 / 0.18);
+  --color-warm:          #b45309;
+  --color-warm-subtle:   rgb(180 83 9 / 0.1);
 
-  /* Reading width */
   --max-w-reading: 68ch;
-  --max-w-layout:  1100px;
+  --max-w-layout: 1120px;
 
-  /* Custom text sizes */
-  --text-display:    clamp(2.25rem, 5vw, 3.5rem);
-  --text-title:      clamp(1.375rem, 2.5vw, 1.875rem);
-  --text-label:      0.6875rem;     /* small uppercase eyebrow labels */
-  --text-mono:       0.875rem;      /* code and system metadata */
+  --text-display: clamp(2.4rem, 7vw, 4.75rem);
+  --text-title: clamp(1.5rem, 3vw, 2.15rem);
+  --text-label: 0.6875rem;
+  --text-mono: 0.875rem;
 }
 
-/* ─── Base resets ───────────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -41,23 +37,27 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  color-scheme: dark;
+  color-scheme: light;
   background-color: var(--color-surface);
 }
 
 body {
   margin: 0;
-  background-color: var(--color-surface);
+  background:
+    linear-gradient(180deg, #fffaf1 0%, var(--color-surface) 42%, #f1eadf 100%);
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.72;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Focus ring (accessibility) ───────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+::selection {
+  background: rgb(15 118 110 / 0.22);
 }

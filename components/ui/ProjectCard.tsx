@@ -26,35 +26,26 @@ export default function ProjectCard({
   return (
     <Link
       href={href}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] p-6 transition-all duration-300 hover:border-[var(--color-accent)] hover:shadow-[0_0_32px_rgb(99_102_241_/_0.2)]"
+      className="group relative flex min-h-full flex-col overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-[0_18px_45px_rgb(70_55_35_/_0.12)] sm:p-6"
     >
-      {/* Gradient top accent border */}
       <span
-        className="absolute inset-x-0 top-0 h-[2px] rounded-t-xl opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: "linear-gradient(90deg, var(--color-accent) 0%, #a78bfa 100%)" }}
+        className="absolute inset-x-0 top-0 h-1 opacity-80 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: "var(--color-accent)" }}
         aria-hidden="true"
       />
 
-      {/* Faint inner glow on hover */}
-      <span
-        className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: "radial-gradient(ellipse at 50% 0%, rgb(99 102 241 / 0.07) 0%, transparent 70%)" }}
-        aria-hidden="true"
-      />
-
-      {/* Label row */}
       <div className="relative mb-5 flex flex-wrap items-center gap-2.5">
         {project.type === "company" && companyLabel && (
-          <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-400">
+          <span className="rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent-subtle)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">
             {companyLabel}
           </span>
         )}
         {project.type === "personal" && personalLabel && (
-          <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-400">
+          <span className="rounded-full border border-[var(--color-warm)]/30 bg-[var(--color-warm-subtle)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-warm)]">
             {personalLabel}
           </span>
         )}
-        <span className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text)]/88">
+        <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-text)]">
           {project.role}
         </span>
         <span className="h-3.5 w-px bg-[var(--color-border-strong)]" aria-hidden="true" />
@@ -65,7 +56,7 @@ export default function ProjectCard({
         {project.title}
       </Heading>
 
-      <p className="relative mb-6 grow text-sm text-[var(--color-text-muted)] leading-relaxed">
+      <p className="relative mb-6 grow text-sm font-medium leading-7 text-[var(--color-text-muted)]">
         {project.summary}
       </p>
 
@@ -75,7 +66,7 @@ export default function ProjectCard({
           {project.stack.map((tech) => (
             <span
               key={tech}
-              className="rounded-md px-2.5 py-1 text-xs font-sans bg-[var(--color-surface-3)] text-[var(--color-text)] border border-[var(--color-border-strong)]"
+              className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1 text-xs font-semibold text-[var(--color-text)]"
             >
               {tech}
             </span>
@@ -86,7 +77,7 @@ export default function ProjectCard({
       {/* CTA divider — only shown when readMoreLabel is provided */}
       {readMoreLabel && (
         <div className="relative mt-auto flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-4">
-          <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--color-text-faint)] transition-colors duration-200 group-hover:text-[var(--color-accent)]">
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-text-faint)] transition-colors duration-200 group-hover:text-[var(--color-accent)]">
             {readMoreLabel}
           </span>
           <span className="flex items-center gap-1.5 text-xs font-medium text-[var(--color-text-faint)] transition-colors duration-200 group-hover:text-[var(--color-accent)]">

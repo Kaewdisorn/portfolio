@@ -38,28 +38,19 @@ export default async function ProjectsPage(
 
   return (
     <main id="main-content">
-      {/* Page hero header */}
-      <div className="relative overflow-hidden border-b border-[var(--color-border)] py-16 sm:py-24">
-        {/* Background glow */}
-        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-          <div
-            className="absolute left-1/4 top-0 h-[400px] w-[700px] -translate-y-1/2 rounded-full blur-[120px]"
-            style={{ background: "rgb(99 102 241 / 0.08)" }}
-          />
-        </div>
-
+      <div className="border-b border-[var(--color-border)] bg-[var(--color-surface-2)] py-14 sm:py-20">
         <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
           <div className="max-w-[56ch]">
-            <p className="mb-4 font-mono text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+            <p className="mb-4 font-mono text-sm font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {dict.projects.eyebrow}
             </p>
             <h1
-              className="font-bold tracking-tight text-[var(--color-text)]"
+              className="font-bold leading-tight text-[var(--color-text)]"
               style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
             >
               {dict.projects.pageTitle}
             </h1>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-text-muted)]">
+            <p className="mt-4 text-base font-medium leading-8 text-[var(--color-text-muted)]">
               {dict.projects.pageDescription}
             </p>
           </div>
@@ -74,7 +65,7 @@ export default async function ProjectsPage(
               {dict.notFound}
             </p>
           ) : (
-            <ul className="grid gap-6 sm:grid-cols-2" role="list">
+            <ul className="grid gap-5 sm:grid-cols-2 lg:gap-6" role="list">
               {projects.map((project) => (
                 <li key={project.slug}>
                   <ProjectCard

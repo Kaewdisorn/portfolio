@@ -9,7 +9,7 @@ interface FooterProps {
 
 export default function Footer({ footer }: FooterProps) {
   return (
-    <footer className="border-t border-[var(--color-border)] py-8 text-sm text-[var(--color-text-muted)]">
+    <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface-2)] py-8 text-sm font-medium text-[var(--color-text-muted)]">
       <Container>
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <span>{footer.copyright}</span>
@@ -17,7 +17,7 @@ export default function Footer({ footer }: FooterProps) {
             href={siteConfig.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-colors hover:text-[var(--color-text)]"
+            className="font-bold transition-colors hover:text-[var(--color-accent)]"
           >
             {footer.sourceCode}
           </Link>

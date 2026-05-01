@@ -24,21 +24,21 @@ export default function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
       className="group relative inline-flex h-9 w-[4.5rem] items-center rounded-full border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
       style={{
         borderColor: "var(--color-border-strong)",
-        background: "var(--color-surface-3)",
+        background: "var(--color-surface-2)",
       }}
     >
       {/* Sliding thumb */}
       <span
         className="absolute h-7 w-7 rounded-full shadow-sm transition-all duration-200"
         style={{
-          background: "linear-gradient(135deg, var(--color-accent) 0%, #7c3aed 100%)",
+          background: "var(--color-accent)",
           left: isKo ? "4px" : "calc(100% - 32px)",
         }}
       />
       {/* KO label */}
       <span
         className="absolute left-0 w-1/2 text-center text-xs font-bold transition-colors duration-150 select-none"
-        style={{ color: isKo ? "#fff" : "var(--color-text-muted)", zIndex: 1 }}
+        style={{ color: isKo ? "#fff" : "var(--color-text)", zIndex: 1 }}
         aria-hidden="true"
       >
         KO
@@ -46,7 +46,7 @@ export default function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
       {/* EN label */}
       <span
         className="absolute right-0 w-1/2 text-center text-xs font-bold transition-colors duration-150 select-none"
-        style={{ color: !isKo ? "#fff" : "var(--color-text-muted)", zIndex: 1 }}
+        style={{ color: !isKo ? "#fff" : "var(--color-text)", zIndex: 1 }}
         aria-hidden="true"
       >
         EN

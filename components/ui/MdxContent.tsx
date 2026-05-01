@@ -14,7 +14,7 @@ const components = {
     return (
       <h2
         id={id}
-        className="mt-10 mb-4 text-xl font-semibold text-[var(--color-text)] scroll-mt-20 [overflow-wrap:anywhere]"
+        className="mb-4 mt-10 scroll-mt-20 text-2xl font-bold leading-tight text-[var(--color-text)] [overflow-wrap:anywhere]"
         {...props}
       />
     );
@@ -30,26 +30,26 @@ const components = {
     return (
       <h3
         id={id}
-        className="mt-8 mb-3 text-base font-semibold text-[var(--color-text)] scroll-mt-20 [overflow-wrap:anywhere]"
+        className="mb-3 mt-8 scroll-mt-20 text-lg font-bold text-[var(--color-text)] [overflow-wrap:anywhere]"
         {...props}
       />
     );
   },
   p: (props: ComponentPropsWithoutRef<"p">) => (
     <p
-      className="mb-4 text-sm leading-relaxed text-[var(--color-text-muted)] [overflow-wrap:anywhere]"
+      className="mb-4 text-base font-medium leading-8 text-[var(--color-text-muted)] [overflow-wrap:anywhere]"
       {...props}
     />
   ),
   ul: (props: ComponentPropsWithoutRef<"ul">) => (
     <ul
-      className="mb-4 list-disc pl-5 space-y-1.5 text-sm text-[var(--color-text-muted)] leading-relaxed [overflow-wrap:anywhere]"
+      className="mb-4 list-disc space-y-2 pl-5 text-base font-medium leading-8 text-[var(--color-text-muted)] [overflow-wrap:anywhere]"
       {...props}
     />
   ),
   ol: (props: ComponentPropsWithoutRef<"ol">) => (
     <ol
-      className="mb-4 list-decimal pl-5 space-y-1.5 text-sm text-[var(--color-text-muted)] leading-relaxed [overflow-wrap:anywhere]"
+      className="mb-4 list-decimal space-y-2 pl-5 text-base font-medium leading-8 text-[var(--color-text-muted)] [overflow-wrap:anywhere]"
       {...props}
     />
   ),
@@ -58,7 +58,7 @@ const components = {
   ),
   code: (props: ComponentPropsWithoutRef<"code">) => (
     <code
-      className="rounded px-1.5 py-0.5 text-xs font-mono bg-[var(--color-surface-2)] text-[var(--color-text)] border border-[var(--color-border)]"
+      className="rounded border border-[var(--color-border)] bg-[var(--color-surface-3)] px-1.5 py-0.5 font-mono text-sm text-[var(--color-text)]"
       {...props}
     />
   ),
@@ -77,7 +77,7 @@ const components = {
     }
     return (
       <pre
-        className="mb-4 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 text-xs font-mono leading-relaxed text-[var(--color-text)]"
+        className="mb-4 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 font-mono text-sm leading-7 text-[var(--color-text)]"
         {...props}
       />
     );
@@ -87,7 +87,7 @@ const components = {
       typeof props.href === "string" && props.href.startsWith("http");
     return (
       <a
-        className="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]"
+        className="font-semibold text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-accent-hover)]"
         {...(isExternal
           ? { target: "_blank", rel: "noopener noreferrer" }
           : {})}

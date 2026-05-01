@@ -29,7 +29,7 @@ export default function MobileMenu({ links }: MobileMenuProps) {
         aria-expanded={open}
         aria-controls="mobile-nav"
         onClick={() => setOpen((prev) => !prev)}
-        className="sm:hidden flex h-8 w-8 items-center justify-center rounded text-[var(--color-text-muted)] hover:text-[var(--color-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
+        className="flex h-9 w-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] sm:hidden"
       >
         {open ? (
           // X icon
@@ -47,7 +47,7 @@ export default function MobileMenu({ links }: MobileMenuProps) {
       {open && (
         <div
           id="mobile-nav"
-          className="sm:hidden absolute left-0 right-0 top-14 z-50 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-5 pb-4 pt-2"
+          className="absolute left-0 right-0 top-16 z-50 border-b border-[var(--color-border)] bg-[var(--color-surface-2)] px-5 pb-4 pt-2 shadow-lg sm:hidden"
         >
           <nav aria-label="Mobile navigation">
             <ul className="flex flex-col gap-1" role="list">
@@ -64,10 +64,10 @@ export default function MobileMenu({ links }: MobileMenuProps) {
                       onClick={() => setOpen(false)}
                       aria-current={isActive ? "page" : undefined}
                       className={clsx(
-                        "block rounded-lg px-4 py-3 text-base font-medium transition-colors",
+                        "block rounded-md px-4 py-3 text-base font-semibold transition-colors",
                         isActive
-                          ? "bg-[var(--color-surface-2)] text-[var(--color-text)]"
-                          : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-text)]",
+                          ? "bg-[var(--color-accent-subtle)] text-[var(--color-accent)]"
+                          : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-3)] hover:text-[var(--color-text)]",
                       )}
                     >
                       {label}

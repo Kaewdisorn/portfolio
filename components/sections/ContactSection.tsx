@@ -41,17 +41,17 @@ const LINKS = [
 
 export default function ContactSection({ home }: ContactSectionProps) {
   return (
-    <section className="py-16 sm:py-20 border-t border-[var(--color-border)]">
+    <section className="py-16 sm:py-20">
       <div className="mx-auto w-full max-w-[var(--max-w-layout)] px-5 sm:px-8">
-        <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-2)] px-8 py-10 sm:px-12 sm:py-12">
+        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)] px-5 py-8 shadow-sm sm:px-8 sm:py-10">
           <div className="max-w-[48ch]">
-            <p className="mb-2 text-[var(--text-label)] font-mono uppercase tracking-widest text-[var(--color-accent)]">
+            <p className="mb-3 text-[var(--text-label)] font-mono font-bold uppercase tracking-widest text-[var(--color-accent)]">
               Contact
             </p>
-            <h2 className="mb-3 text-xl font-semibold text-[var(--color-text)]">
+            <h2 className="mb-3 text-2xl font-bold leading-tight text-[var(--color-text)]">
               {home.contactTitle}
             </h2>
-            <p className="mb-7 text-sm text-[var(--color-text-muted)] leading-relaxed">
+            <p className="mb-7 text-sm font-medium leading-7 text-[var(--color-text-muted)]">
               {home.contactBody}
             </p>
             <div className="flex flex-wrap gap-3">
@@ -62,7 +62,7 @@ export default function ContactSection({ home }: ContactSectionProps) {
                   {...(link.external
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
-                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-sm font-medium text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] hover:shadow-sm"
+                  className="inline-flex min-h-10 items-center gap-2 rounded-md border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 py-2 text-sm font-bold text-[var(--color-text)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:shadow-sm"
                 >
                   {link.icon}
                   {link.label}
