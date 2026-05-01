@@ -15,8 +15,8 @@ export default function Hero({ locale, home }: HeroProps) {
     <section className="relative overflow-hidden border-b border-[var(--color-border)]">
       <div className="mx-auto grid w-full max-w-[var(--max-w-layout)] gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
         <div className="max-w-[60ch]">
-          <p className="mb-5 inline-flex rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] px-3 py-1 text-[var(--text-label)] font-bold uppercase tracking-[0.18em] text-[var(--color-accent)] shadow-sm">
-            Backend Engineer
+          <p className="eyebrow mb-5 inline-flex rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] px-3 py-1 text-[var(--text-label)] font-bold uppercase tracking-[0.18em] text-[var(--color-accent)] shadow-sm">
+            {home.eyebrow}
           </p>
 
           <h1

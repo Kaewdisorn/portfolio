@@ -61,3 +61,10 @@ body {
 ::selection {
   background: rgb(15 118 110 / 0.22);
 }
+
+/* Korean locale: override eyebrow labels to use sans-serif with tighter tracking */
+:lang(ko) .eyebrow {
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  font-weight: 800;
+}
