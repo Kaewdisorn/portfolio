@@ -8,7 +8,7 @@ const ko: Dictionary = {
     contact: "연락",
   },
   home: {
-    eyebrow: "프로덕트 엔지니어 · 실시간 시스템",
+    eyebrow: "프로덕트 엔지니어",
     availableBadge: "새로운 기회에 열려 있습니다",
     headline: "제품 성능의 한계\n확장하는\n실시간 시스템",
     subheadline:
@@ -20,6 +20,18 @@ const ko: Dictionary = {
     contactTitle: "연락하기",
     contactBody:
       "새로운 기회나 기술적인 논의를 환영합니다. 편하게 연락해 주세요.",
+    consoleEyebrow: "엔지니어링 콘솔",
+    consoleTitle: "포트폴리오 시스템",
+    consoleStatus: "운영 중",
+    consoleMetrics: [
+      { label: "API", body: "안정적인 서비스", value: "98" },
+      { label: "Data", body: "인덱스와 캐시", value: "86" },
+      { label: "Scale", body: "큐와 처리 한계", value: "92" },
+      { label: "Ops", body: "배포 준비 완료", value: "89" },
+    ],
+    consoleFocusTitle: "현재 집중 영역",
+    consoleFocusBody: "운영 경계가 분명한 백엔드 플랫폼을 만들고 있습니다.",
+    consoleVersion: "v2026",
   },
   projects: {
     pageTitle: "프로젝트",

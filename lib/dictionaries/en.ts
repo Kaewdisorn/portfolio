@@ -8,7 +8,7 @@ const en: Dictionary = {
     contact: "Contact",
   },
   home: {
-    eyebrow: "Product Engineer · Real-time Systems",
+    eyebrow: "Product Engineer",
     availableBadge: "Available for New Opportunities",
     headline: "Building scalable\nproducts with\nreal-time data",
     subheadline:
@@ -20,6 +20,18 @@ const en: Dictionary = {
     contactTitle: "Get in Touch",
     contactBody:
       "Open to new opportunities and technical conversations. Feel free to reach out.",
+    consoleEyebrow: "Engineering Console",
+    consoleTitle: "Portfolio Systems",
+    consoleStatus: "Live",
+    consoleMetrics: [
+      { label: "API", body: "Reliable services", value: "98" },
+      { label: "Data", body: "Indexes and caches", value: "86" },
+      { label: "Scale", body: "Queues and limits", value: "92" },
+      { label: "Ops", body: "Deployment ready", value: "89" },
+    ],
+    consoleFocusTitle: "Current focus",
+    consoleFocusBody: "Backend platforms with clear operational boundaries.",
+    consoleVersion: "v2026",
   },
   projects: {
     pageTitle: "Projects",

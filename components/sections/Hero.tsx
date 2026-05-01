@@ -68,24 +68,19 @@ export default function Hero({ locale, home }: HeroProps) {
           <div className="mb-4 flex items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-text-faint)]">
-                Engineering Console
+                {home.consoleEyebrow}
               </p>
               <p className="mt-1 font-heading text-xl font-bold text-[var(--color-text)]">
-                Portfolio Systems
+                {home.consoleTitle}
               </p>
             </div>
             <span className="rounded-full border border-[var(--color-success)]/35 bg-[var(--color-success-subtle)] px-3 py-1 text-xs font-bold text-[var(--color-success)]">
-              Live
+              {home.consoleStatus}
             </span>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              ["API", "Reliable services", "98"],
-              ["Data", "Indexes and caches", "86"],
-              ["Scale", "Queues and limits", "92"],
-              ["Ops", "Deployment ready", "89"],
-            ].map(([label, body, value]) => (
+            {home.consoleMetrics.map(({ label, body, value }) => (
               <div
                 key={label}
                 className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-3)] p-4"
@@ -116,14 +111,14 @@ export default function Hero({ locale, home }: HeroProps) {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-bold text-[var(--color-text)]">
-                  Current focus
+                  {home.consoleFocusTitle}
                 </p>
                 <p className="mt-1 text-sm font-medium text-[var(--color-text-muted)]">
-                  Backend platforms with clear operational boundaries.
+                  {home.consoleFocusBody}
                 </p>
               </div>
               <span className="rounded-full bg-[rgb(255_255_255_/_0.12)] px-3 py-1 font-mono text-xs font-bold text-[var(--color-text)]">
-                v2026
+                {home.consoleVersion}
               </span>
             </div>
           </div>

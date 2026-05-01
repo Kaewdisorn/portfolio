@@ -19,7 +19,7 @@ export async function generateMetadata(
   const isKo = locale === "ko";
   return {
     title: {
-      default: isKo ? "백엔드 엔지니어 포트폴리오" : "Backend Engineer Portfolio",
+      default: isKo ? "프로덕트 엔지니어 포트폴리오" : "Product Engineer Portfolio",
       template: isKo ? "%s | 포트폴리오" : "%s | Portfolio",
     },
   };

@@ -23,6 +23,17 @@ export interface DictionaryHome {
   skillsTitle: string;
   contactTitle: string;
   contactBody: string;
+  consoleEyebrow: string;
+  consoleTitle: string;
+  consoleStatus: string;
+  consoleMetrics: {
+    label: string;
+    body: string;
+    value: string;
+  }[];
+  consoleFocusTitle: string;
+  consoleFocusBody: string;
+  consoleVersion: string;
 }
 
 export interface DictionaryProjects {
